@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore;
     using STM.Common.Constants;
     using STM.Common.Enums;
     using STM.Common.Utilities;
@@ -82,11 +83,11 @@
                     });
         }
 
-        public async Task<RoleDto> FindById(Guid id)
+        public async Task<RoleDto?> FindById(Guid id)
         {
             var queryRole = await this._unitOfWork.GetRepositoryReadOnlyAsync<Role>().QueryAll();
 
-            var role = queryRole.FirstOrDefault(i => i.Id == id);
+            var role = queryRole.Include(x => x.UserRoles).FirstOrDefault(i => i.Id == id);
             if (role == null)
             {
                 return null;
@@ -96,6 +97,8 @@
             {
                 Id = role.Id,
                 Name = role.Name,
+                Status = role.Status,
+                CountUsers = role.UserRoles.Count(),
             };
         }
 
@@ -204,7 +207,7 @@
             {
                 Id = roleId,
                 Name = dto.Name,
-                Status = StatusEnum.Active.AsInt(),
+                Status = dto.Status.HasValue ? dto.Status : StatusEnum.Active.AsInt(),
             };
 
             await roleRep.Add(newRole);
@@ -226,6 +229,7 @@
             }
 
             role.Name = dto.Name;
+            role.Status = dto.Status;
 
             await roleRep.Update(role);
             await this._unitOfWork.SaveChangesAsync();

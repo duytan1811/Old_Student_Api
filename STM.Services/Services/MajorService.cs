@@ -4,6 +4,7 @@
     using OfficeOpenXml;
     using OfficeOpenXml.Style;
     using STM.Common.Constants;
+    using STM.Common.Enums;
     using STM.Common.Utilities;
     using STM.DataTranferObjects.Majors;
     using STM.Entities.Models;
@@ -79,7 +80,7 @@
             var newMajor = new Major
             {
                 Name = dto.Name,
-                Status = dto.Status,
+                Status = dto.Status.HasValue ? dto.Status : StatusEnum.Active.AsInt(),
             };
 
             await majorRep.Add(newMajor);

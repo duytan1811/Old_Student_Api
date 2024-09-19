@@ -1,8 +1,10 @@
 ﻿namespace STM.API.Requests.Roles
 {
+    using STM.Common.Enums;
+
     public class RoleSearchRequest
     {
-        public string? UserName { get; set; }
+        public StatusEnum? Status { get; set; }
 
         public string? Name { get; set; }
 
