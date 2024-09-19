@@ -1,0 +1,15 @@
+.vs/
+STM.Common/obj
+STM.DataAccess/obj/
+STM.DataAccess/bin/
+STM.Entities/bin/
+STM.DataTranferObjects/obj/
+STM.DataTranferObjects/bin/
+STM.Entities/obj/
+STM.Internal/bin/
+STM.Internal/obj/
+STM.Repositories/bin/
+STM.Repositories/obj/
+STM.Services/bin/
+STM.Services/obj/
+STM.Common/bin/
