@@ -3,7 +3,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using STM.Common.Enums;
-    using STM.Common.Utilities;
 
     public class BaseModel
     {
@@ -11,7 +10,7 @@
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        public int? Status { get; set; } = StatusEnum.Active.AsInt();
+        public StatusEnum? Status { get; set; } = StatusEnum.Active;
 
         public DateTime? CreatedAt { get; set; }
 

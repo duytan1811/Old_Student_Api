@@ -6,11 +6,13 @@
     using STM.API.Requests.Base;
     using STM.API.Requests.Roles;
     using STM.API.Requests.Settings;
+    using STM.API.Requests.Students;
     using STM.API.Requests.Tables;
     using STM.API.Requests.Users;
     using STM.API.Responses.Base;
     using STM.API.Responses.Roles;
     using STM.API.Responses.Settings;
+    using STM.API.Responses.Students;
     using STM.API.Responses.Tables;
     using STM.API.Responses.Users;
     using STM.DataTranferObjects.Auth;
@@ -18,7 +20,9 @@
     using STM.DataTranferObjects.Majors;
     using STM.DataTranferObjects.Roles;
     using STM.DataTranferObjects.Settings;
+    using STM.DataTranferObjects.Students;
     using STM.DataTranferObjects.Users;
+    using STM.Entities.Models;
     using STM.ViewModels.Accounts;
 
     public class MappingProfile : Profile
@@ -57,7 +61,12 @@
             this.CreateMap<MajorSaveRequestDto, MajorSaveDto>();
             this.CreateMap<MajorSearchRequestDto, MajorSearchDto>();
             this.CreateMap<MajorDto, MajorResponseDto>();
-            this.CreateMap<MajorImportRequestDto, MajorImportDto>();
+
+            // Student
+            this.CreateMap<StudentSaveRequestDto, StudentSaveDto>();
+            this.CreateMap<StudentSearchRequestDto, StudentSearchDto>();
+            this.CreateMap<Student, StudentDto>();
+            this.CreateMap<StudentDto, StudentResponseDto>();
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using STM.DataAccess.Contexts;
 
@@ -11,9 +12,10 @@ using STM.DataAccess.Contexts;
 namespace STM.DataAccess.Migrations
 {
     [DbContext(typeof(STMDbContext))]
-    partial class STMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240920044630_UpdateDataTypeStatus")]
+    partial class UpdateDataTypeStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,84 +198,84 @@ namespace STM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7a8d8c6f-5757-43ae-9b6a-f1f629cbb1fe"),
+                            Id = new Guid("f7ef1b70-08cc-4e8c-a13d-1741e1562448"),
                             Key = "webName",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("38c5e044-1132-4a3e-8c3b-e3ca72f6061c"),
+                            Id = new Guid("69c765c1-062e-4d6c-aa98-3c37d71e998e"),
                             Key = "phone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("6ebacecc-cc50-4c25-941d-70d45a206ad2"),
+                            Id = new Guid("eceebdb4-41af-4291-a07c-d75cc53b3197"),
                             Key = "email",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("a0bda97a-8128-4cab-80f7-2c87d789e5d6"),
+                            Id = new Guid("018ac162-58e8-4378-a88a-eef6def01ff1"),
                             Key = "emailSupportCustomer",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("aebf2094-e928-4117-ada5-020c8091398c"),
+                            Id = new Guid("dadbd51d-e425-4f31-949b-201218d2f27f"),
                             Key = "province",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("dd3ec825-bb02-40f8-99a2-45282795187e"),
+                            Id = new Guid("90d262ca-9de0-46c9-abdc-08f7dc357600"),
                             Key = "district",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("49d091da-ce2f-4525-bbbf-d313be614c1a"),
+                            Id = new Guid("11d73fcd-56fe-41be-9a90-e5e96cd0c55f"),
                             Key = "village",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("220d63b3-a8b7-4dbf-9d91-bdb865915abd"),
+                            Id = new Guid("8369d33f-daa7-4524-a840-e8074bc326dd"),
                             Key = "Address",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("59727a58-bbc9-4058-85b8-381fe0099006"),
+                            Id = new Guid("6ca79348-8019-4e75-a565-69f1e45f1c4a"),
                             Key = "timeZone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("98bd803e-3ab7-4ffa-b438-c3af09883248"),
+                            Id = new Guid("23807f87-487d-460c-8781-0c8b89cd64ec"),
                             Key = "currency",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("4279eb06-59dc-4cd6-a77d-9df7a07fde50"),
+                            Id = new Guid("a528e3ad-c82a-45d0-aa12-a897e80f19f2"),
                             Key = "orderCodeStartWith",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("d0e29adf-967f-48fe-9e6d-f2026ba66714"),
+                            Id = new Guid("40bfde2b-55d9-47ff-b239-c2a95c64011e"),
                             Key = "orderCodeEndWith",
                             Status = 1,
                             Type = "general"
@@ -287,10 +289,12 @@ namespace STM.DataAccess.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Avatar")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("Birthday")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Birthday")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -299,29 +303,38 @@ namespace STM.DataAccess.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CurrentCompany")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Gender")
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
                         .HasColumnType("int");
 
                     b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("MajorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SchoolYear")
-                        .HasColumnType("int");
+                    b.Property<string>("SchoolYear")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
@@ -335,8 +348,9 @@ namespace STM.DataAccess.Migrations
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("YearOfGraduation")
-                        .HasColumnType("int");
+                    b.Property<string>("YearOfGraduation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -481,7 +495,7 @@ namespace STM.DataAccess.Migrations
                             LockoutEnabled = true,
                             Name = "Admin",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOT2264PoYVpJ7LVrz8dVDu0uLsU53ADGA9TXGqOnF3tW4VScB//r7eTtJUD8aBflQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOR3E65ivnXb/45cWAxk2AHB6hrc0GsZxGoWzXoNEYqR5/XDXg1pKkEiubfc1+nPkQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "ZY5BGSWBARTE74T6ZLO7WKKMMILBEB2E",
                             Status = 1,

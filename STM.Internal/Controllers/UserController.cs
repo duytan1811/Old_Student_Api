@@ -73,7 +73,7 @@
                 if (result.Id == Guid.Empty)
                 {
                     response.Type = GlobalConstants.Error;
-                    response.Key = Messages.NotFound;
+                    response.Message = Messages.NotFound;
                     return response;
                 }
 
@@ -84,7 +84,7 @@
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }
@@ -100,21 +100,28 @@
                 var dto = this.Mapper.Map<UserSaveDto>(request);
                 var result = await this._userService.Create(dto);
 
-                if (result != ActionStatusEnum.Success)
+                if (result == ActionStatusEnum.UserNameExists)
                 {
                     response.Type = GlobalConstants.Error;
-                    response.Key = Messages.NotFound;
+                    response.Message = string.Format(Messages.Exists, "Tài khoản");
                     return response;
                 }
 
-                response.Key = Messages.CreateSuccess;
+                if (result == ActionStatusEnum.EmailExists)
+                {
+                    response.Type = GlobalConstants.Error;
+                    response.Message = string.Format(Messages.Exists, "Email");
+                    return response;
+                }
+
+                response.Message = string.Format(Messages.CreateSuccess, "Tài khoản");
                 return response;
             }
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }
@@ -134,18 +141,18 @@
                 if (result == ActionStatusEnum.NotFound)
                 {
                     response.Type = GlobalConstants.Error;
-                    response.Key = Messages.NotFound;
+                    response.Message = Messages.NotFound;
                     return response;
                 }
 
-                response.Key = Messages.UpdateSuccess;
+                response.Message = string.Format(Messages.UpdateSuccess, "Tài khoản");
                 return response;
             }
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }
@@ -163,18 +170,18 @@
                 if (result == ActionStatusEnum.NotFound)
                 {
                     response.Type = GlobalConstants.Error;
-                    response.Key = Messages.DeleteSuccess;
+                    response.Message = Messages.NotFound;
                     return response;
                 }
 
-                response.Key = Messages.DeleteSuccess;
+                response.Message = string.Format(Messages.DeleteSuccess, "Tài khoản");
                 return response;
             }
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }

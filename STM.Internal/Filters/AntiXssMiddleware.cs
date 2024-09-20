@@ -46,7 +46,7 @@
                         await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(new BaseResponse<bool>()
                         {
                             Type = GlobalConstants.Error,
-                            Key = "XssError",
+                            Message = "XssError",
                         }));
 
                         return;

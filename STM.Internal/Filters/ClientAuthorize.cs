@@ -34,7 +34,7 @@
                     context.Result = new JsonResult(new BaseResponse<bool>
                     {
                         Type = GlobalConstants.Error,
-                        Key = "Unauthorized",
+                        Message = "Unauthorized",
                     });
 
                     return;
@@ -48,7 +48,7 @@
                     context.Result = new JsonResult(new BaseResponse<bool>
                     {
                         Type = GlobalConstants.Error,
-                        Key = StatusCodes.Status401Unauthorized.ToString(),
+                        Message = StatusCodes.Status401Unauthorized.ToString(),
                     });
 
                     return;

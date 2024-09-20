@@ -44,7 +44,7 @@
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }
@@ -66,7 +66,7 @@
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }
@@ -82,14 +82,14 @@
                 var dto = this.Mapper.Map<List<SettingSaveDto>>(request);
                 var result = await this._settingService.Update(dto);
 
-                response.Key = result;
+                response.Message = result;
                 return response;
             }
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }

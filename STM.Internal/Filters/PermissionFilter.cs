@@ -55,7 +55,7 @@
                     context.Result = new JsonResult(new BaseResponse<bool>
                     {
                         Type = GlobalConstants.Error,
-                        Key = "AccessDenied",
+                        Message = "AccessDenied",
                     });
                 }
             }

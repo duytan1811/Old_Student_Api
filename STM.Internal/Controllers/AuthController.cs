@@ -45,7 +45,7 @@
                 if (user == null)
                 {
                     response.Type = GlobalConstants.Error;
-                    response.Key = Messages.LoginUserNotFound;
+                    response.Message = Messages.LoginUserNotFound;
                     return response;
                 }
 
@@ -70,7 +70,7 @@
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.LoginException;
+                response.Message = Messages.LoginException;
             }
 
             return response;
@@ -93,14 +93,14 @@
             if (result.IsLockedOut)
             {
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.LoginUserLocked;
+                response.Message = Messages.LoginUserLocked;
                 return response;
             }
 
             if (!result.Succeeded)
             {
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.LoginIncorrect;
+                response.Message = Messages.LoginIncorrect;
                 return response;
             }
 

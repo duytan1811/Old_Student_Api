@@ -36,11 +36,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Resources\Templates\" />
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	  <Folder Include="Resources\" />
 	</ItemGroup>
 
 </Project>

@@ -6,7 +6,6 @@
     using Microsoft.EntityFrameworkCore;
     using STM.Common.Constants;
     using STM.Common.Enums;
-    using STM.Common.Utilities;
     using STM.DataTranferObjects.Roles;
     using STM.DataTranferObjects.Users;
     using STM.Entities.Models;
@@ -207,7 +206,7 @@
             {
                 Id = roleId,
                 Name = dto.Name,
-                Status = dto.Status.HasValue ? dto.Status : StatusEnum.Active.AsInt(),
+                Status = StatusEnum.Active,
             };
 
             await roleRep.Add(newRole);

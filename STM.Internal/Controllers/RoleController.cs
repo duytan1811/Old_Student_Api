@@ -58,7 +58,7 @@
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }
@@ -91,7 +91,7 @@
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, ex.Message);
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }
@@ -108,7 +108,7 @@
 
                 if (result == null)
                 {
-                    response.Key = Messages.NotFound;
+                    response.Message = Messages.NotFound;
                     return response;
                 }
 
@@ -119,7 +119,7 @@
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }
@@ -138,18 +138,18 @@
                 if (result == ActionStatusEnum.CodeExists)
                 {
                     response.Type = GlobalConstants.Error;
-                    response.Key = Messages.Exists;
+                    response.Message = Messages.Exists;
                     return response;
                 }
 
-                response.Key = Messages.CreateSuccess;
+                response.Message = Messages.CreateSuccess;
                 return response;
             }
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }
@@ -169,25 +169,25 @@
                 if (result == ActionStatusEnum.NotFound)
                 {
                     response.Type = GlobalConstants.Error;
-                    response.Key = Messages.NotFound;
+                    response.Message = Messages.NotFound;
                     return response;
                 }
 
                 if (result == ActionStatusEnum.CodeExists)
                 {
                     response.Type = GlobalConstants.Error;
-                    response.Key = Messages.Exists;
+                    response.Message = Messages.Exists;
                     return response;
                 }
 
-                response.Key = Messages.UpdateSuccess;
+                response.Message = Messages.UpdateSuccess;
                 return response;
             }
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }
@@ -205,17 +205,17 @@
                 if (result == ActionStatusEnum.NotFound)
                 {
                     response.Type = GlobalConstants.Error;
-                    response.Key = Messages.NotFound;
+                    response.Message = Messages.NotFound;
                     return response;
                 }
 
-                response.Key = Messages.DeleteSuccess;
+                response.Message = Messages.DeleteSuccess;
                 return response;
             }
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, ex.Message);
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }
@@ -235,17 +235,17 @@
                 if (result == ActionStatusEnum.NotFound)
                 {
                     response.Type = GlobalConstants.Error;
-                    response.Key = Messages.NotFound;
+                    response.Message = Messages.NotFound;
                     return response;
                 }
 
-                response.Key = Messages.UpdateSuccess;
+                response.Message = Messages.UpdateSuccess;
                 return response;
             }
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, ex.Message);
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }
@@ -265,17 +265,17 @@
                 if (result == ActionStatusEnum.NotFound)
                 {
                     response.Type = GlobalConstants.Error;
-                    response.Key = Messages.NotFound;
+                    response.Message = Messages.NotFound;
                     return response;
                 }
 
-                response.Key = Messages.DeleteSuccess;
+                response.Message = Messages.DeleteSuccess;
                 return response;
             }
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, ex.Message);
-                response.Key = Messages.Exception;
+                response.Message = Messages.Exception;
                 return response;
             }
         }

@@ -14,10 +14,10 @@
         [DataMember(Name = "Type")]
         public string Type { get; set; }
 
-        [DataMember(Name = "key")]
-        public string Key { get; set; }
+        [DataMember(Name = "Message")]
+        public string? Message { get; set; }
 
-        [DataMember(Name = "data")]
+        [DataMember(Name = "Data")]
         public T Data { get; set; }
     }
 }

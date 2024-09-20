@@ -13,9 +13,5 @@
         Task<string> Update(MajorSaveDto dto);
 
         Task<string> Delete(Guid id);
-
-        MemoryStream ExportTemplate();
-
-        Task<string> Import(MajorImportDto dto);
     }
 }

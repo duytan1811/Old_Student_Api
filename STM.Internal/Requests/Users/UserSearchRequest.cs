@@ -1,5 +1,7 @@
 ﻿namespace STM.API.Requests.Users
 {
+    using STM.Common.Enums;
+
     public class UserSearchRequest
     {
         public UserSearchRequest()
@@ -13,7 +15,7 @@
 
         public string? Email { get; set; }
 
-        public int? Status { get; set; }
+        public StatusEnum? Status { get; set; }
 
         public List<Guid> ExistsIds { get; set; }
     }

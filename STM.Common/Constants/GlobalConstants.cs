@@ -28,6 +28,7 @@
             public const string UserRole = "UserRole";
             public const string Product = "Product";
             public const string User = "User";
+            public const string Student = "Student";
         }
     }
 }

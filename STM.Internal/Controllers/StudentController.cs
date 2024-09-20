@@ -4,48 +4,48 @@
     using Microsoft.AspNetCore.Mvc;
     using STM.API.Filters;
     using STM.API.Requests.Base;
-    using STM.API.Requests.Tables;
+    using STM.API.Requests.Students;
     using STM.API.Responses.Base;
-    using STM.API.Responses.Tables;
+    using STM.API.Responses.Students;
     using STM.Common.Constants;
-    using STM.DataTranferObjects.Majors;
+    using STM.DataTranferObjects.Students;
     using STM.Services.IServices;
 
     [ApiController]
-    [Route("api/majors")]
-    public class MajorController : BaseApiController
+    [Route("api/students")]
+    public class StudentController : BaseApiController
     {
-        private readonly IMajorService _majorService;
+        private readonly IStudentService _studentService;
 
-        public MajorController(
-            ILogger<MajorController> logger,
+        public StudentController(
+            ILogger<StudentController> logger,
             IMapper mapper,
             IAccountService accountService,
-            IMajorService majorService)
+            IStudentService studentService)
             : base(logger, mapper, accountService)
         {
-            this._majorService = majorService;
+            this._studentService = studentService;
         }
 
         [HttpPost("search")]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Setting, PermissionConstants.View })]
-        public async Task<BaseTableResponse<MajorResponseDto>> Search(BaseSearchRequest<MajorSearchRequestDto> request)
+        public async Task<BaseTableResponse<StudentResponseDto>> Search(BaseSearchRequest<StudentSearchRequestDto> request)
         {
-            var response = new BaseTableResponse<MajorResponseDto>();
+            var response = new BaseTableResponse<StudentResponseDto>();
 
             try
             {
                 if (request.SearchParams == null)
                 {
-                    request.SearchParams = new MajorSearchRequestDto();
+                    request.SearchParams = new StudentSearchRequestDto();
                 }
 
-                var searchDto = this.Mapper.Map<MajorSearchDto>(request.SearchParams);
+                var searchDto = this.Mapper.Map<StudentSearchDto>(request.SearchParams);
                 searchDto.Column = ColumnNames.Order;
 
-                var allItems = await this._majorService.Search(searchDto);
+                var allItems = await this._studentService.Search(searchDto);
                 var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();
-                response.Items = this.Mapper.Map<List<MajorResponseDto>>(pagedItems);
+                response.Items = this.Mapper.Map<List<StudentResponseDto>>(pagedItems);
                 response.Total = allItems.Count();
 
                 var startIndex = request.Start + 1;
@@ -63,13 +63,13 @@
 
         [HttpGet("{id}")]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Setting, PermissionConstants.View })]
-        public async Task<BaseResponse<MajorResponseDto>> FindById(Guid id)
+        public async Task<BaseResponse<StudentResponseDto>> FindById(Guid id)
         {
-            var response = new BaseResponse<MajorResponseDto>();
+            var response = new BaseResponse<StudentResponseDto>();
 
             try
             {
-                var result = await this._majorService.FindById(id);
+                var result = await this._studentService.FindById(id);
 
                 if (result == null)
                 {
@@ -77,7 +77,7 @@
                     return response;
                 }
 
-                response.Data = this.Mapper.Map<MajorResponseDto>(result);
+                response.Data = this.Mapper.Map<StudentResponseDto>(result);
                 return response;
             }
             catch (Exception ex)
@@ -91,13 +91,13 @@
 
         [HttpPost]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Setting, PermissionConstants.Create })]
-        public async Task<BaseResponse<string>> Create(MajorSaveRequestDto request)
+        public async Task<BaseResponse<string>> Create(StudentSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
             try
             {
-                var dto = this.Mapper.Map<MajorSaveDto>(request);
-                var result = await this._majorService.Create(dto);
+                var dto = this.Mapper.Map<StudentSaveDto>(request);
+                var result = await this._studentService.Create(dto);
 
                 response.Message = result;
                 return response;
@@ -113,15 +113,15 @@
 
         [HttpPut("{id}")]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Setting, PermissionConstants.Edit })]
-        public async Task<BaseResponse<string>> Update(string id, MajorSaveRequestDto request)
+        public async Task<BaseResponse<string>> Update(string id, StudentSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
 
             try
             {
                 request.Id = id;
-                var dto = this.Mapper.Map<MajorSaveDto>(request);
-                var result = await this._majorService.Update(dto);
+                var dto = this.Mapper.Map<StudentSaveDto>(request);
+                var result = await this._studentService.Update(dto);
 
                 response.Message = result;
                 return response;
@@ -143,7 +143,7 @@
 
             try
             {
-                var result = await this._majorService.Delete(id);
+                var result = await this._studentService.Delete(id);
                 response.Message = result;
                 return response;
             }

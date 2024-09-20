@@ -5,5 +5,7 @@
     public interface IDropdownService
     {
         Task<List<SelectListItem>> GetUsers();
+
+        Task<List<SelectListItem>> GetMajors();
     }
 }

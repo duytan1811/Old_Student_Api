@@ -5,7 +5,6 @@
     using Microsoft.EntityFrameworkCore;
     using STM.Common.Constants;
     using STM.Common.Enums;
-    using STM.Common.Utilities;
     using STM.DataTranferObjects.Users;
     using STM.Entities.Models;
     using STM.Repositories;
@@ -97,6 +96,7 @@
         public async Task<ActionStatusEnum> Create(UserSaveDto dto)
         {
             var statusExisted = await this.CheckUserExists(dto);
+            var studentRep = this._unitOfWork.GetRepositoryAsync<Student>();
 
             if (statusExisted != ActionStatusEnum.NotFound)
             {
@@ -113,11 +113,17 @@
                 UserName = dto.UserName,
                 Name = dto.Name,
                 Email = dto.Email,
-                Status = dto.Status.HasValue ? dto.Status : StatusEnum.Active.AsInt(),
+                Status = StatusEnum.Active,
                 CreatedAt = DateTime.Now,
             };
 
-            var result = await this._userManager.CreateAsync(newUser, dto.Password);
+            var newStudent = new Student()
+            {
+                FullName = dto.Name,
+                User = newUser,
+            };
+
+            await studentRep.Add(newStudent);
             await this._unitOfWork.SaveChangesAsync();
 
             return ActionStatusEnum.Success;

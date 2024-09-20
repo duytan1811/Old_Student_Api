@@ -4,7 +4,6 @@
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using STM.Common.Constants;
     using STM.Common.Enums;
-    using STM.Common.Utilities;
     using STM.Entities.Models;
 
     public class SettingConfiguration : IEntityTypeConfiguration<Setting>
@@ -24,7 +23,7 @@
                             Id = Guid.NewGuid(),
                             Type = settingType,
                             Key = settingKey,
-                            Status = StatusEnum.Active.AsInt(),
+                            Status = StatusEnum.Active,
                         });
                     }
                 }

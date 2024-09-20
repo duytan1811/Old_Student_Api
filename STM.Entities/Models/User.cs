@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
     using Microsoft.AspNetCore.Identity;
+    using STM.Common.Enums;
 
     [Table("Users")]
     public class User : IdentityUser<Guid>
@@ -12,7 +13,7 @@
 
         public DateTime? LastLogin { get; set; }
 
-        public int? Status { get; set; }
+        public StatusEnum? Status { get; set; }
 
         public bool IsAdmin { get; set; }
 

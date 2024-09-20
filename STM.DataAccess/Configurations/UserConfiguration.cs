@@ -14,7 +14,6 @@
             builder.HasIndex(user => user.NormalizedEmail).HasDatabaseName("EmailIndex");
             builder.Property(user => user.ConcurrencyStamp).IsConcurrencyToken();
             builder.Property(user => user.UserName).HasMaxLength(256);
-            builder.Property(user => user.Status).HasDefaultValue(256);
             builder.Property(user => user.NormalizedUserName).HasMaxLength(256);
             builder.Property(user => user.Email).HasMaxLength(256);
             builder.Property(user => user.NormalizedEmail).HasMaxLength(256);
@@ -31,6 +30,7 @@
                    NormalizedUserName = "ADMIN",
                    IsAdmin = true,
                    SecurityStamp = "ZY5BGSWBARTE74T6ZLO7WKKMMILBEB2E",
+                   Status = Common.Enums.StatusEnum.Active,
                });
         }
     }

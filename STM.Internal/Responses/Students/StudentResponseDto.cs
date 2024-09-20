@@ -1,17 +1,12 @@
-﻿namespace STM.Entities.Models
+﻿namespace STM.API.Responses.Students
 {
-    using System.ComponentModel.DataAnnotations.Schema;
+    using STM.API.Responses.Base;
 
-    [Table("Students")]
-    public class Student : BaseModel
+    public class StudentResponseDto : BaseItemResponse
     {
         public Guid? UserId { get; set; }
 
-        public virtual User? User { get; set; }
-
         public Guid? MajorId { get; set; }
-
-        public virtual Major? Major { get; set; }
 
         public string FullName { get; set; }
 

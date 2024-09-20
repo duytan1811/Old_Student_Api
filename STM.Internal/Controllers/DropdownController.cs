@@ -37,7 +37,26 @@
             {
                 this.Logger.LogError($"Get dropdown user error: {ex.Message}");
                 resposne.Type = GlobalConstants.Error;
-                resposne.Key = ex.Message;
+                resposne.Message = ex.Message;
+                return resposne;
+            }
+        }
+
+        [HttpGet("majors")]
+        public async Task<BaseResponse<List<SelectListItem>>> GetMajors()
+        {
+            var resposne = new BaseResponse<List<SelectListItem>>();
+
+            try
+            {
+                resposne.Data = await this._dropdownService.GetMajors();
+                return resposne;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError($"Get dropdown major error: {ex.Message}");
+                resposne.Type = GlobalConstants.Error;
+                resposne.Message = ex.Message;
                 return resposne;
             }
         }
