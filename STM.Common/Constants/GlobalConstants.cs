@@ -29,6 +29,7 @@
             public const string Product = "Product";
             public const string User = "User";
             public const string Student = "Student";
+            public const string Achievement = "Thành tích";
         }
     }
 }

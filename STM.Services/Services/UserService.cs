@@ -98,7 +98,7 @@
             var statusExisted = await this.CheckUserExists(dto);
             var studentRep = this._unitOfWork.GetRepositoryAsync<Student>();
 
-            if (statusExisted != ActionStatusEnum.NotFound)
+            if (statusExisted != ActionStatusEnum.Success)
             {
                 return statusExisted;
             }
@@ -123,6 +123,7 @@
                 User = newUser,
             };
 
+            await this._userManager.CreateAsync(newUser, dto.Password);
             await studentRep.Add(newStudent);
             await this._unitOfWork.SaveChangesAsync();
 
@@ -140,7 +141,7 @@
 
             var statusExisted = await this.CheckUserExists(dto);
 
-            if (statusExisted != ActionStatusEnum.NotFound)
+            if (statusExisted != ActionStatusEnum.Success)
             {
                 return statusExisted;
             }
@@ -158,11 +159,18 @@
         public async Task<ActionStatusEnum> Delete(Guid id)
         {
             var userRep = this._unitOfWork.GetRepositoryAsync<User>();
+            var studentRep = this._unitOfWork.GetRepositoryAsync<Student>();
 
             var user = await userRep.Single(x => x.Id == id);
             if (user == null)
             {
                 return ActionStatusEnum.NotFound;
+            }
+
+            var student = await studentRep.Single(x => x.UserId == user.Id);
+            if (student != null)
+            {
+                await studentRep.Delete(student);
             }
 
             await userRep.Delete(user);
@@ -189,7 +197,7 @@
                 return ActionStatusEnum.EmailExists;
             }
 
-            return ActionStatusEnum.NotFound;
+            return ActionStatusEnum.Success;
         }
     }
 }
