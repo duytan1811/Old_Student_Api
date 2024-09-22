@@ -22,7 +22,6 @@
                new User
                {
                    Id = new Guid("0b2863d1-3468-4ad0-8881-ca52cdf1307d"),
-                   Name = "Admin",
                    UserName = "admin",
                    PasswordHash = PasswordUtils.HashPassword("123"),
                    LockoutEnabled = true,

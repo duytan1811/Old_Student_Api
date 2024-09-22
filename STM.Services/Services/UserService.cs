@@ -41,11 +41,6 @@
                 queryUser = queryUser.Where(x => !dto.ExistsIds.Contains(x.Id));
             }
 
-            if (!string.IsNullOrEmpty(dto.Name))
-            {
-                queryUser = queryUser.Where(x => x.Name.Trim().ToLower().Contains(dto.Name.Trim().ToLower()));
-            }
-
             if (!string.IsNullOrEmpty(dto.Email))
             {
                 queryUser = queryUser.Where(x => x.Email.Trim().ToLower().Contains(dto.Email.Trim().ToLower()));
@@ -60,7 +55,6 @@
             {
                 Id = x.Id,
                 UserName = x.UserName,
-                Name = x.Name,
                 Email = x.Email,
                 Status = x.Status,
                 CreatedAt = x.CreatedAt,
@@ -88,8 +82,8 @@
                 Id = user.Id,
                 UserName = user.UserName,
                 Email = user.Email,
-                Name = user.Name,
                 Status = user.Status,
+                UserType = user.UserType,
             };
         }
 
@@ -111,15 +105,15 @@
             var newUser = new User
             {
                 UserName = dto.UserName,
-                Name = dto.Name,
                 Email = dto.Email,
                 Status = StatusEnum.Active,
                 CreatedAt = DateTime.Now,
+                UserType = dto.UserType.HasValue ? dto.UserType : UserTypeEnum.Student,
             };
 
             var newStudent = new Student()
             {
-                FullName = dto.Name,
+                FullName = dto.FullName,
                 User = newUser,
             };
 
@@ -146,9 +140,9 @@
                 return statusExisted;
             }
 
-            user.Name = dto.Name;
             user.Email = dto.Email;
             user.UpdatedAt = DateTime.Now;
+            user.UserType = dto.UserType;
 
             var result = await this._userManager.UpdateAsync(user);
             await this._unitOfWork.SaveChangesAsync();

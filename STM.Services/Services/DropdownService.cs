@@ -23,7 +23,7 @@
             return query.Select(x => new SelectListItem
             {
                 Value = x.Id.ToString().ToLower(),
-                Text = $"{x.UserName} - {x.Name}",
+                Text = $"{x.UserName}",
             }).ToList();
         }
 

@@ -9,13 +9,13 @@
     [Table("Users")]
     public class User : IdentityUser<Guid>
     {
-        public string Name { get; set; }
-
         public DateTime? LastLogin { get; set; }
 
         public StatusEnum? Status { get; set; }
 
         public bool IsAdmin { get; set; }
+
+        public UserTypeEnum? UserType { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
