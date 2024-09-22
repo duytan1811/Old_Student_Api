@@ -26,9 +26,9 @@
                 queryStudentAchievement = queryStudentAchievement.Where(x => x.StudentId == dto.StudentId);
             }
 
-            if (dto.FormDate.HasValue)
+            if (dto.FromDate.HasValue)
             {
-                queryStudentAchievement = queryStudentAchievement.Where(x => x.FormDate == dto.FormDate);
+                queryStudentAchievement = queryStudentAchievement.Where(x => x.FromDate == dto.FromDate);
             }
 
             if (dto.ToDate.HasValue)
@@ -45,7 +45,7 @@
             {
                 Id = x.Id,
                 Name = x.Name,
-                FormDate = x.FormDate,
+                FromDate = x.FromDate,
                 ToDate = x.ToDate,
                 Description = x.Description,
                 Status = x.Status,
@@ -87,9 +87,10 @@
 
             var newStudentAchievement = new StudentAchievement
             {
+                StudentId = dto.StudentId,
                 Name = dto.Name,
                 Description = dto.Description,
-                FormDate = dto.FormDate,
+                FromDate = dto.FromDate,
                 ToDate = dto.ToDate,
                 Status = dto.Status.HasValue ? dto.Status : StatusEnum.Active,
             };
@@ -112,7 +113,7 @@
             }
 
             studentAchievement.Name = dto.Name;
-            studentAchievement.FormDate = dto.FormDate;
+            studentAchievement.FromDate = dto.FromDate;
             studentAchievement.ToDate = dto.ToDate;
             studentAchievement.Description = dto.Description;
             studentAchievement.Status = dto.Status;

@@ -41,7 +41,8 @@
                 }
 
                 var searchDto = this.Mapper.Map<StudentAchievementSearchDto>(request.SearchParams);
-                searchDto.Column = ColumnNames.Order;
+                searchDto.Column = ColumnNames.CreatedAt;
+                searchDto.Direction = "desc";
 
                 var allItems = await this._studentAchievementService.Search(searchDto);
                 var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();

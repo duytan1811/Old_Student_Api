@@ -8,7 +8,7 @@
 
         public Guid? StudentId { get; set; }
 
-        public DateTime? FormDate { get; set; }
+        public DateTime? FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
     }
