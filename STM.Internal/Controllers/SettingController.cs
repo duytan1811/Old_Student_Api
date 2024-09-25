@@ -28,7 +28,7 @@
         }
 
         [HttpGet("keys/{key}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
         public async Task<BaseResponse<SettingResponse>> GetSetingByKey(string key)
         {
             var response = new BaseResponse<SettingResponse>();
@@ -50,7 +50,7 @@
         }
 
         [HttpGet("types/{type}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
         public async Task<BaseResponse<List<SettingResponse>>> GetSetingsByType(string type)
         {
             var response = new BaseResponse<List<SettingResponse>>();
@@ -72,7 +72,7 @@
         }
 
         [HttpPut("update")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Setting, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
         public async Task<BaseResponse<ActionStatusEnum>> Update(List<SettingSaveRequest> request)
         {
             var response = new BaseResponse<ActionStatusEnum>();

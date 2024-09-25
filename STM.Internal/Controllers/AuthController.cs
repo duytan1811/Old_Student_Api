@@ -4,7 +4,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using STM.API.Filters;
     using STM.API.Requests.Auth;
     using STM.API.Requests.Users;
     using STM.API.Responses.Auth;

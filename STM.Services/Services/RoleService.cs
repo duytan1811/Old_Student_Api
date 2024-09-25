@@ -1,7 +1,9 @@
 ﻿namespace STM.Services.Services
 {
     using System;
+    using System.Data;
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using STM.Common.Constants;
@@ -85,8 +87,33 @@
         public async Task<RoleDto?> FindById(Guid id)
         {
             var queryRole = await this._unitOfWork.GetRepositoryReadOnlyAsync<Role>().QueryAll();
+            var queryRoleClaim = await this._unitOfWork.GetRepositoryReadOnlyAsync<RoleClaim>().QueryAll();
 
             var role = queryRole.Include(x => x.UserRoles).FirstOrDefault(i => i.Id == id);
+            var roleClaims = queryRoleClaim.Where(i => i.RoleId == id).Select(x => new
+            {
+                ClaimType = x.ClaimType,
+                ClaimValue = x.ClaimValue,
+            }).ToList();
+
+            var claimTypes = roleClaims.Select(x => x.ClaimType).Distinct().ToList();
+            var menuPermissions = new List<MenuPermissionDto>();
+
+            foreach (var claimType in claimTypes)
+            {
+                var items = roleClaims.Where(x => x.ClaimType == claimType).ToList();
+                var newData = new MenuPermissionDto()
+                {
+                    ClaimType = claimType,
+                    IsView = items.Exists(x => x.ClaimValue == "1"),
+                    IsCreate = items.Exists(x => x.ClaimValue == "2"),
+                    IsEdit = items.Exists(x => x.ClaimValue == "3"),
+                    IsDelete = items.Exists(x => x.ClaimValue == "4"),
+                };
+
+                menuPermissions.Add(newData);
+            }
+
             if (role == null)
             {
                 return null;
@@ -98,6 +125,7 @@
                 Name = role.Name,
                 Status = role.Status,
                 CountUsers = role.UserRoles.Count(),
+                MenuPermissions = menuPermissions,
             };
         }
 
@@ -200,6 +228,7 @@
         public async Task<ActionStatusEnum> Create(RoleSaveDto dto)
         {
             var roleRep = this._unitOfWork.GetRepositoryAsync<Role>();
+            var roleClaimRep = this._unitOfWork.GetRepositoryAsync<RoleClaim>();
 
             var roleId = Guid.NewGuid();
             var newRole = new Role
@@ -209,7 +238,21 @@
                 Status = StatusEnum.Active,
             };
 
-            await roleRep.Add(newRole);
+            if (dto.MenuPermissions.Any())
+            {
+                var dataInsertRoleClaim = dto.MenuPermissions.Select(x => new RoleClaim
+                {
+                    Role = newRole,
+                    ClaimType = x.ClaimType,
+                    ClaimValue = x.ClaimValue,
+                }).ToList();
+
+                await roleClaimRep.Add(dataInsertRoleClaim);
+            }
+            else
+            {
+                await roleRep.Add(newRole);
+            }
 
             await this._unitOfWork.SaveChangesAsync();
 
@@ -219,16 +262,32 @@
         public async Task<ActionStatusEnum> Update(RoleSaveDto dto)
         {
             var roleRep = this._unitOfWork.GetRepositoryAsync<Role>();
+            var roleClaimRep = this._unitOfWork.GetRepositoryAsync<RoleClaim>();
 
             var role = await roleRep.Single(x => x.Id == dto.Id);
+            var roleClaims = await roleClaimRep.QueryCondition(x => x.RoleId == dto.Id);
 
             if (role == null)
             {
                 return ActionStatusEnum.NotFound;
             }
 
+            await roleClaimRep.Delete(roleClaims);
+
             role.Name = dto.Name;
             role.Status = dto.Status;
+
+            if (dto.MenuPermissions.Any())
+            {
+                var dataInsertRoleClaim = dto.MenuPermissions.Select(x => new RoleClaim
+                {
+                    RoleId = role.Id,
+                    ClaimType = x.ClaimType,
+                    ClaimValue = x.ClaimValue,
+                }).ToList();
+
+                await roleClaimRep.Add(dataInsertRoleClaim);
+            }
 
             await roleRep.Update(role);
             await this._unitOfWork.SaveChangesAsync();

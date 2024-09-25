@@ -30,7 +30,7 @@
         }
 
         [HttpPost("search")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Role, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Role, PermissionConstants.View })]
         public async Task<BaseTableResponse<RoleResponse>> Search(BaseSearchRequest<RoleSearchRequest> request)
         {
             var response = new BaseTableResponse<RoleResponse>();
@@ -64,7 +64,7 @@
         }
 
         [HttpPost("{roleId}/users")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Role, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Role, PermissionConstants.Edit })]
         public async Task<BaseTableResponse<UserResponse>> SearchUserByRoleId(string roleId, BaseSearchRequest<RoleSearchRequest> request)
         {
             var response = new BaseTableResponse<UserResponse>();
@@ -97,7 +97,7 @@
         }
 
         [HttpGet("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Role, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Role, PermissionConstants.View })]
         public async Task<BaseResponse<RoleResponse>> FindById(Guid id)
         {
             var response = new BaseResponse<RoleResponse>();
@@ -125,7 +125,7 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Role, PermissionConstants.Create })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Role, PermissionConstants.Create })]
         public async Task<BaseResponse<ActionStatusEnum>> Create(RoleSaveRequest request)
         {
             var response = new BaseResponse<ActionStatusEnum>();
@@ -142,7 +142,7 @@
                     return response;
                 }
 
-                response.Message = Messages.CreateSuccess;
+                response.Message = string.Format(Messages.CreateSuccess, MenuConstants.Role);
                 return response;
             }
             catch (Exception ex)
@@ -155,7 +155,7 @@
         }
 
         [HttpPut("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Role, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Role, PermissionConstants.Edit })]
         public async Task<BaseResponse<ActionStatusEnum>> Update(string id, RoleSaveRequest request)
         {
             var response = new BaseResponse<ActionStatusEnum>();
@@ -180,7 +180,7 @@
                     return response;
                 }
 
-                response.Message = Messages.UpdateSuccess;
+                response.Message = string.Format(Messages.UpdateSuccess, MenuConstants.Role);
                 return response;
             }
             catch (Exception ex)
@@ -193,7 +193,7 @@
         }
 
         [HttpDelete("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Role, PermissionConstants.Delete })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Role, PermissionConstants.Delete })]
         public async Task<BaseResponse<ActionStatusEnum>> Delete(Guid id)
         {
             var response = new BaseResponse<ActionStatusEnum>();
@@ -209,7 +209,7 @@
                     return response;
                 }
 
-                response.Message = Messages.DeleteSuccess;
+                response.Message = string.Format(Messages.DeleteSuccess, MenuConstants.Role);
                 return response;
             }
             catch (Exception ex)
@@ -221,7 +221,7 @@
         }
 
         [HttpPut("{roleId}/users")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Role, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Role, PermissionConstants.Edit })]
         public async Task<BaseResponse<ActionStatusEnum>> SaveUserByRole(Guid roleId, UserRoleSaveRequest request)
         {
             var response = new BaseResponse<ActionStatusEnum>();
@@ -239,7 +239,7 @@
                     return response;
                 }
 
-                response.Message = Messages.UpdateSuccess;
+                response.Message = string.Format(Messages.UpdateSuccess, MenuConstants.Role);
                 return response;
             }
             catch (Exception ex)
@@ -251,7 +251,7 @@
         }
 
         [HttpDelete("{roleId}/users")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Keys.Role, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Role, PermissionConstants.Edit })]
         public async Task<BaseResponse<ActionStatusEnum>> DeleteUserByRole(Guid roleId, UserRoleSaveRequest request)
         {
             var response = new BaseResponse<ActionStatusEnum>();
