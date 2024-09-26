@@ -14,6 +14,8 @@
 
         public int CountUsers { get; set; }
 
+        public List<RoleClaimDto>? RoleClaims { get; set; }
+
         public List<MenuPermissionDto>? MenuPermissions { get; set; }
     }
 }

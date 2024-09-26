@@ -1,7 +1,7 @@
 ﻿namespace STM.DataTranferObjects.Account
 {
     using System.Collections.Generic;
-    using STM.DataTranferObjects.Base;
+    using STM.DataTranferObjects.Roles;
 
     public class UserInfoDto
     {
@@ -17,6 +17,6 @@
 
         public string AdminText { get; set; }
 
-        public List<PermissionMenuDto> PermissionMenus { get; set; }
+        public List<MenuPermissionDto> MenuPermissions { get; set; }
     }
 }

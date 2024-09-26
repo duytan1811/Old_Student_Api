@@ -14,6 +14,7 @@
     using STM.Common.Constants;
     using STM.DataTranferObjects.Account;
     using STM.DataTranferObjects.Auth;
+    using STM.DataTranferObjects.Roles;
     using STM.DataTranferObjects.Token;
     using STM.Entities.Models;
     using STM.Repositories;
@@ -34,6 +35,9 @@
 
         public async Task<TokenDto> GenerateToken(string username)
         {
+            var queryUserRole = await this._unitOfWork.GetRepositoryReadOnlyAsync<UserRole>().QueryAll();
+            var queryRoleClaim = await this._unitOfWork.GetRepositoryReadOnlyAsync<RoleClaim>().QueryAll();
+
             var authClaims = new List<Claim>();
 
             var user = await this._userManager.FindByNameAsync(username);
@@ -51,6 +55,17 @@
             userInfo.Id = user.Id;
             userInfo.IsAdmin = user.IsAdmin;
             userInfo.Username = username;
+
+            var roleIds = queryUserRole.Where(x => x.UserId == user.Id).Select(x => x.RoleId).Distinct().ToList();
+
+            var roleClaims = queryRoleClaim.Where(x => roleIds.Contains(x.RoleId)).Select(x => new RoleClaimDto
+            {
+                ClaimValue = x.ClaimValue,
+                ClaimType = x.ClaimType,
+            }).ToList();
+
+            var menuPermissions = this.GetMenuPermissions(roleClaims);
+            userInfo.MenuPermissions = menuPermissions;
 
             authClaims.Add(new Claim(ClaimTypes.Name, JsonConvert.SerializeObject(userInfo)));
 
@@ -82,14 +97,6 @@
                 UserName = currentUser.UserName,
                 Email = currentUser.Email,
             };
-            var queryUserRole = await this._unitOfWork.GetRepositoryReadOnlyAsync<UserRole>().QueryAll();
-            var queryRole = await this._unitOfWork.GetRepositoryReadOnlyAsync<Role>().QueryAll();
-            var roleIds = queryUserRole.Where(x => x.UserId == currentUser.Id).Select(x => x.RoleId).ToList();
-            if (roleIds.Any())
-            {
-                var roleNames = queryRole.Where(x => roleIds.Contains(x.Id)).Select(x => x.Name).ToList();
-                result.RoleNames = roleNames;
-            }
 
             return result;
         }
@@ -107,6 +114,33 @@
             var roleIds = (await roleRepository.QueryCondition(i => i.UserRoles.Any(i => i.IsActive == true && i.UserId == user.Id))).Select(i => i.Id).ToList();
 
             return userInfo;
+        }
+
+        private List<MenuPermissionDto> GetMenuPermissions(List<RoleClaimDto> roleClaims)
+        {
+            var menuPermissions = new List<MenuPermissionDto>();
+
+            if (roleClaims.Count > 0)
+            {
+                var claimTypes = roleClaims.Select(x => x.ClaimType).Distinct().ToList();
+
+                foreach (var claimType in claimTypes)
+                {
+                    var items = roleClaims.Where(x => x.ClaimType == claimType).ToList();
+                    var newData = new MenuPermissionDto()
+                    {
+                        ClaimType = claimType,
+                        IsView = items.Exists(x => x.ClaimValue == "1"),
+                        IsCreate = items.Exists(x => x.ClaimValue == "2"),
+                        IsEdit = items.Exists(x => x.ClaimValue == "3"),
+                        IsDelete = items.Exists(x => x.ClaimValue == "4"),
+                    };
+
+                    menuPermissions.Add(newData);
+                }
+            }
+
+            return menuPermissions;
         }
     }
 }

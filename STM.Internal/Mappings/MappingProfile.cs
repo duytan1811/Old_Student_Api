@@ -35,7 +35,6 @@
             // Glbobal
             this.CreateMap<SelectListItemDto, SelectListItem>();
             this.CreateMap<PermissionDto, PermissionResponse>();
-            this.CreateMap<PermissionMenuDto, PermissionMenuResponse>();
             this.CreateMap<PermissionRequest, PermissionDto>();
 
             // Login

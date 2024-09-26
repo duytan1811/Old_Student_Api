@@ -1,6 +1,7 @@
 ﻿namespace STM.API.Responses.Users
 {
     using STM.API.Responses.Base;
+    using STM.DataTranferObjects.Roles;
 
     public class UserResponse : BaseItemResponse
     {
@@ -16,6 +17,6 @@
 
         public string Avatar { get; set; }
 
-        public List<PermissionMenuResponse> PermissionMenus { get; set; }
+        public List<MenuPermissionDto> MenuPermissions { get; set; }
     }
 }

@@ -48,6 +48,11 @@
                 var allItems = await this._roleService.Search(searchDto);
                 var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();
                 response.Items = this.Mapper.Map<List<RoleResponse>>(pagedItems);
+                foreach (var item in response.Items)
+                {
+                    item.MenuPermissions = this.GetMenuPermissions(item.RoleClaims);
+                }
+
                 response.Total = allItems.Count();
 
                 var startIndex = request.Start + 1;
@@ -239,7 +244,7 @@
                     return response;
                 }
 
-                response.Message = string.Format(Messages.UpdateSuccess, MenuConstants.Role);
+                response.Message = string.Format(Messages.UpdateSuccess, "thành viên cho phân quyền");
                 return response;
             }
             catch (Exception ex)
@@ -269,7 +274,7 @@
                     return response;
                 }
 
-                response.Message = Messages.DeleteSuccess;
+                response.Message = string.Format(Messages.DeleteSuccess, "thành viên khỏi phân quyền");
                 return response;
             }
             catch (Exception ex)
@@ -278,6 +283,33 @@
                 response.Message = Messages.Exception;
                 return response;
             }
+        }
+
+        private List<MenuPermissionDto> GetMenuPermissions(List<RoleClaimDto> roleClaims)
+        {
+            var menuPermissions = new List<MenuPermissionDto>();
+
+            if (roleClaims.Count > 0)
+            {
+                var claimTypes = roleClaims.Select(x => x.ClaimType).Distinct().ToList();
+
+                foreach (var claimType in claimTypes)
+                {
+                    var items = roleClaims.Where(x => x.ClaimType == claimType).ToList();
+                    var newData = new MenuPermissionDto()
+                    {
+                        ClaimType = claimType,
+                        IsView = items.Exists(x => x.ClaimValue == "1"),
+                        IsCreate = items.Exists(x => x.ClaimValue == "2"),
+                        IsEdit = items.Exists(x => x.ClaimValue == "3"),
+                        IsDelete = items.Exists(x => x.ClaimValue == "4"),
+                    };
+
+                    menuPermissions.Add(newData);
+                }
+            }
+
+            return menuPermissions;
         }
     }
 }

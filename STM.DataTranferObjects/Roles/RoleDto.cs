@@ -13,6 +13,15 @@
 
         public int CountUsers { get; set; }
 
+        public List<RoleClaimDto>? RoleClaims { get; set; }
+
         public List<MenuPermissionDto>? MenuPermissions { get; set; }
+    }
+
+    public class RoleClaimDto
+    {
+        public string ClaimType { get; set; }
+
+        public string ClaimValue { get; set; }
     }
 }

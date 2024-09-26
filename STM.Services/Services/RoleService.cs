@@ -3,7 +3,6 @@
     using System;
     using System.Data;
     using System.Linq;
-    using System.Security.Claims;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using STM.Common.Constants;
@@ -27,6 +26,7 @@
         public async Task<IQueryable<RoleDto>> Search(RoleSearchDto dto)
         {
             var queryRole = await this._unitOfWork.GetRepositoryReadOnlyAsync<Role>().QueryAll();
+            queryRole = queryRole.Include(x => x.RoleClaims);
 
             if (!string.IsNullOrEmpty(dto.Name))
             {
@@ -46,6 +46,11 @@
                     Status = role.Status,
                     Name = role.Name,
                     CountUsers = role.UserRoles.Count(i => i.IsActive == true),
+                    RoleClaims = role.RoleClaims.Select(x => new RoleClaimDto
+                    {
+                        ClaimType = x.ClaimType,
+                        ClaimValue = x.ClaimValue,
+                    }).ToList(),
                 });
 
             return dto.Column switch
@@ -90,29 +95,9 @@
             var queryRoleClaim = await this._unitOfWork.GetRepositoryReadOnlyAsync<RoleClaim>().QueryAll();
 
             var role = queryRole.Include(x => x.UserRoles).FirstOrDefault(i => i.Id == id);
-            var roleClaims = queryRoleClaim.Where(i => i.RoleId == id).Select(x => new
-            {
-                ClaimType = x.ClaimType,
-                ClaimValue = x.ClaimValue,
-            }).ToList();
+            var roleClaims = queryRoleClaim.Where(i => i.RoleId == id).ToList();
 
-            var claimTypes = roleClaims.Select(x => x.ClaimType).Distinct().ToList();
-            var menuPermissions = new List<MenuPermissionDto>();
-
-            foreach (var claimType in claimTypes)
-            {
-                var items = roleClaims.Where(x => x.ClaimType == claimType).ToList();
-                var newData = new MenuPermissionDto()
-                {
-                    ClaimType = claimType,
-                    IsView = items.Exists(x => x.ClaimValue == "1"),
-                    IsCreate = items.Exists(x => x.ClaimValue == "2"),
-                    IsEdit = items.Exists(x => x.ClaimValue == "3"),
-                    IsDelete = items.Exists(x => x.ClaimValue == "4"),
-                };
-
-                menuPermissions.Add(newData);
-            }
+            var menuPermissions = this.GetMenuPermissions(roleClaims);
 
             if (role == null)
             {
@@ -363,6 +348,33 @@
             await this._unitOfWork.SaveChangesAsync();
 
             return ActionStatusEnum.Success;
+        }
+
+        private List<MenuPermissionDto> GetMenuPermissions(List<RoleClaim> roleClaims)
+        {
+            var menuPermissions = new List<MenuPermissionDto>();
+
+            if (roleClaims.Count > 0)
+            {
+                var claimTypes = roleClaims.Select(x => x.ClaimType).Distinct().ToList();
+
+                foreach (var claimType in claimTypes)
+                {
+                    var items = roleClaims.Where(x => x.ClaimType == claimType).ToList();
+                    var newData = new MenuPermissionDto()
+                    {
+                        ClaimType = claimType,
+                        IsView = items.Exists(x => x.ClaimValue == "1"),
+                        IsCreate = items.Exists(x => x.ClaimValue == "2"),
+                        IsEdit = items.Exists(x => x.ClaimValue == "3"),
+                        IsDelete = items.Exists(x => x.ClaimValue == "4"),
+                    };
+
+                    menuPermissions.Add(newData);
+                }
+            }
+
+            return menuPermissions;
         }
     }
 }

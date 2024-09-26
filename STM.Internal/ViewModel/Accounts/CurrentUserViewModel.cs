@@ -1,7 +1,6 @@
 ﻿namespace STM.ViewModels.Accounts
 {
-    using System.Collections.Generic;
-    using STM.API.Responses.Base;
+    using STM.DataTranferObjects.Roles;
 
     public class CurrentUserViewModel
     {
@@ -19,6 +18,6 @@
 
         public string Avatar { get; set; }
 
-        public List<PermissionMenuResponse> PermissionMenus { get; set; }
+        public List<MenuPermissionDto>? MenuPermissions { get; set; }
     }
 }
