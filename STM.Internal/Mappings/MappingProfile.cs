@@ -4,18 +4,18 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using STM.API.Requests.Auth;
     using STM.API.Requests.Base;
+    using STM.API.Requests.Majors;
     using STM.API.Requests.Roles;
     using STM.API.Requests.Settings;
     using STM.API.Requests.StudentAchievements;
     using STM.API.Requests.Students;
-    using STM.API.Requests.Tables;
     using STM.API.Requests.Users;
     using STM.API.Responses.Base;
+    using STM.API.Responses.Majors;
     using STM.API.Responses.Roles;
     using STM.API.Responses.Settings;
     using STM.API.Responses.StudentAchievements;
     using STM.API.Responses.Students;
-    using STM.API.Responses.Tables;
     using STM.API.Responses.Users;
     using STM.DataTranferObjects.Auth;
     using STM.DataTranferObjects.Base;
@@ -67,7 +67,8 @@
             // Student
             this.CreateMap<StudentSaveRequestDto, StudentSaveDto>();
             this.CreateMap<StudentSearchRequestDto, StudentSearchDto>();
-            this.CreateMap<Student, StudentDto>();
+            this.CreateMap<Student, StudentDto>().ForMember(x => x.MajorName, m => m.MapFrom(s => s.MajorId.HasValue ? s.Major.Name : string.Empty))
+                .ForMember(x => x.CountArchievement, opt => opt.MapFrom(x => x.StudentAchievements.Count));
             this.CreateMap<StudentDto, StudentResponseDto>();
 
             // Student

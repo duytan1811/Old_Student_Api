@@ -29,7 +29,7 @@
         public async Task<IQueryable<UserDto>> Search(UserSearchDto dto)
         {
             var queryUser = await this._unitOfWork.GetRepositoryReadOnlyAsync<User>().QueryAll();
-            queryUser = queryUser.Include(x => x.UserRoles).Where(x => !x.IsAdmin);
+            queryUser = queryUser.Include(x => x.UserRoles).Include(x => x.Student).Where(x => !x.IsAdmin);
 
             if (!string.IsNullOrEmpty(dto.UserName))
             {
@@ -55,6 +55,7 @@
             {
                 Id = x.Id,
                 UserName = x.UserName,
+                Name = x.Student != null ? x.Student.FullName : null,
                 Email = x.Email,
                 Status = x.Status,
                 CreatedAt = x.CreatedAt,
@@ -71,7 +72,7 @@
         {
             var queryUser = await this._unitOfWork.GetRepositoryReadOnlyAsync<User>().QueryAll();
 
-            var user = queryUser.Include(x => x.UserRoles).Where(x => x.Id == id).FirstOrDefault();
+            var user = queryUser.Include(x => x.UserRoles).Include(x => x.Student).Where(x => x.Id == id).FirstOrDefault();
             if (user == null)
             {
                 return new UserDto();
@@ -81,6 +82,7 @@
             {
                 Id = user.Id,
                 UserName = user.UserName,
+                Name = user.Student != null ? user.Student.FullName : null,
                 Email = user.Email,
                 Status = user.Status,
                 UserType = user.UserType,
@@ -113,7 +115,7 @@
 
             var newStudent = new Student()
             {
-                FullName = dto.FullName,
+                FullName = dto.Name,
                 User = newUser,
             };
 
@@ -127,12 +129,14 @@
         public async Task<ActionStatusEnum> Update(UserSaveDto dto)
         {
             var user = await this._userManager.FindByIdAsync(dto.Id.ToString());
+            var studentRep = this._unitOfWork.GetRepositoryAsync<Student>();
 
             if (user == null)
             {
                 return ActionStatusEnum.NotFound;
             }
 
+            var student = await studentRep.Single(x => x.UserId == dto.Id);
             var statusExisted = await this.CheckUserExists(dto);
 
             if (statusExisted != ActionStatusEnum.Success)
@@ -143,7 +147,11 @@
             user.Email = dto.Email;
             user.UpdatedAt = DateTime.Now;
             user.UserType = dto.UserType;
+            user.Status = dto.Status;
 
+            student.FullName = dto.Name;
+
+            await studentRep.Update(student);
             var result = await this._userManager.UpdateAsync(user);
             await this._unitOfWork.SaveChangesAsync();
 

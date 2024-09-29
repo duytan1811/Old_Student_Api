@@ -30,6 +30,7 @@
             public const string User = "User";
             public const string Student = "Student";
             public const string Achievement = "Thành tích";
+            public const string News = "Tin tức";
         }
     }
 }

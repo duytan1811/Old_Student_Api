@@ -74,10 +74,9 @@
                 Id = studentAchievement.Id,
                 Name = studentAchievement.Name,
                 Status = studentAchievement.Status,
-                CreatedAt = studentAchievement.CreatedAt,
-                CreatedById = studentAchievement.CreatedById,
-                UpdatedAt = studentAchievement.UpdatedAt,
-                UpdatedById = studentAchievement.UpdatedById,
+                Description = studentAchievement.Description,
+                FromDate = studentAchievement.FromDate,
+                ToDate = studentAchievement.ToDate,
             };
         }
 
@@ -90,10 +89,20 @@
                 StudentId = dto.StudentId,
                 Name = dto.Name,
                 Description = dto.Description,
-                FromDate = dto.FromDate,
-                ToDate = dto.ToDate,
                 Status = dto.Status.HasValue ? dto.Status : StatusEnum.Active,
             };
+
+            DateTime fromDate;
+            if (!string.IsNullOrEmpty(dto.FromDateFormat) && DateTime.TryParse(dto.FromDateFormat, out fromDate))
+            {
+                newStudentAchievement.FromDate = fromDate;
+            }
+
+            DateTime toDate;
+            if (!string.IsNullOrEmpty(dto.ToDateFormat) && DateTime.TryParse(dto.ToDateFormat, out toDate))
+            {
+                newStudentAchievement.ToDate = toDate;
+            }
 
             await studentAchievementRep.Add(newStudentAchievement);
             await this._unitOfWork.SaveChangesAsync();
@@ -113,10 +122,20 @@
             }
 
             studentAchievement.Name = dto.Name;
-            studentAchievement.FromDate = dto.FromDate;
-            studentAchievement.ToDate = dto.ToDate;
             studentAchievement.Description = dto.Description;
             studentAchievement.Status = dto.Status;
+
+            DateTime fromDate;
+            if (!string.IsNullOrEmpty(dto.FromDateFormat) && DateTime.TryParse(dto.FromDateFormat, out fromDate))
+            {
+                studentAchievement.FromDate = fromDate;
+            }
+
+            DateTime toDate;
+            if (!string.IsNullOrEmpty(dto.ToDateFormat) && DateTime.TryParse(dto.ToDateFormat, out toDate))
+            {
+                studentAchievement.ToDate = toDate;
+            }
 
             await studentAchievementRep.Update(studentAchievement);
             await this._unitOfWork.SaveChangesAsync();

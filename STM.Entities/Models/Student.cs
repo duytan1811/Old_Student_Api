@@ -32,5 +32,7 @@
         public string? CurrentCompany { get; set; }
 
         public string? JobTitle { get; set; }
+
+        public virtual ICollection<StudentAchievement>? StudentAchievements { get; set; }
     }
 }

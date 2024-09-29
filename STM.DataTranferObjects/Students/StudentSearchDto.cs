@@ -13,5 +13,9 @@
         public string? Phone { get; set; }
 
         public string? FullName { get; set; }
+
+        public int? SchoolYear { get; set; }
+
+        public int? YearOfGraduation { get; set; }
     }
 }

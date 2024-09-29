@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using STM.DataAccess.Contexts;
 
@@ -11,9 +12,10 @@ using STM.DataAccess.Contexts;
 namespace STM.DataAccess.Migrations
 {
     [DbContext(typeof(STMDbContext))]
-    partial class STMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240928050805_UpdateFKStuden")]
+    partial class UpdateFKStuden
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,84 +198,84 @@ namespace STM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("bec790dd-987f-4611-b75a-03be06432974"),
+                            Id = new Guid("f6209a8a-ef7e-42b6-b543-da201337af7d"),
                             Key = "webName",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("eeb45bba-bf70-4c5d-9906-f3f79d7026c2"),
+                            Id = new Guid("a3ecb710-d26e-4b40-912f-f98e346c31bc"),
                             Key = "phone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("f535a697-78a5-4929-94d7-c0338fbd55fc"),
+                            Id = new Guid("94bdde1b-9b19-487f-a22e-b09a361447bc"),
                             Key = "email",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("aa11f037-1aa4-4db9-9a52-5af5fe7a7c4b"),
+                            Id = new Guid("69d610c3-de3f-4712-95a8-110c22c01ad1"),
                             Key = "emailSupportCustomer",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("c7e89116-a9a3-470b-9dad-801767cbc0bd"),
+                            Id = new Guid("0f7cbdb2-1f9a-4196-99ae-cbf55dfffff7"),
                             Key = "province",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("bb6f4c5b-da4d-48d4-88e4-e14b8fe82679"),
+                            Id = new Guid("a77d4919-1c44-4c9b-bf5b-7c593f74538f"),
                             Key = "district",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("07b87706-ce4b-4c05-a638-cb63e6cf39da"),
+                            Id = new Guid("1d8b2bc8-4c19-4375-b840-e84a3d56f4b8"),
                             Key = "village",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("793ff693-7bd8-4336-9279-ea9bec40252b"),
+                            Id = new Guid("99ba7f07-2ce5-4a2f-b407-96044b4ef5c2"),
                             Key = "Address",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("866861e5-71cf-48a0-bfca-c56d2303070b"),
+                            Id = new Guid("4db18901-6426-40ab-82ec-2053f7cc8d76"),
                             Key = "timeZone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("70077e24-a670-4260-9d3a-e3de86f3f1cf"),
+                            Id = new Guid("f2fe49b2-1ff9-4185-9a08-50faf2481e5f"),
                             Key = "currency",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("825a2513-ce13-40c2-a6e5-ae8dbc38a275"),
+                            Id = new Guid("6e8559f8-ded9-4c27-9b57-c1d938e97290"),
                             Key = "orderCodeStartWith",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("8e6a9507-6db4-4976-8902-66f8f0ef2bbf"),
+                            Id = new Guid("b3254c52-6528-4b12-b597-dccf2993b982"),
                             Key = "orderCodeEndWith",
                             Status = 1,
                             Type = "general"
@@ -525,7 +527,7 @@ namespace STM.DataAccess.Migrations
                             IsAdmin = true,
                             LockoutEnabled = true,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOvcIsY81T7yA2BfmG4zcceIve02ssuqG+SJrg4em1/J4WRrTrTYmbsmNSI7CBnfmg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMszbWb+Q/CldCgJpE09ef6j7XmOQ1eCVovITxjomO4S/yhs5O6p/aLhvkdehBKcGQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "ZY5BGSWBARTE74T6ZLO7WKKMMILBEB2E",
                             Status = 1,

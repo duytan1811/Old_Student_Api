@@ -2,7 +2,9 @@
 {
     public class StudentSearchRequestDto
     {
-        public string? Email { get; set; }
+        public int? SchoolYear { get; set; }
+
+        public int? YearOfGraduation { get; set; }
 
         public string? JobTitle { get; set; }
 

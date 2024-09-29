@@ -1,6 +1,7 @@
 ﻿namespace STM.Services.Services
 {
     using AutoMapper;
+    using Microsoft.EntityFrameworkCore;
     using STM.Common.Constants;
     using STM.Common.Enums;
     using STM.DataTranferObjects.Students;
@@ -36,9 +37,14 @@
                 queryStudent = queryStudent.Where(x => x.MajorId == Guid.Parse(dto.MajorId));
             }
 
-            if (!string.IsNullOrEmpty(dto.Email))
+            if (dto.SchoolYear.HasValue)
             {
-                queryStudent = queryStudent.Where(x => x.Email.ToLower() == dto.Email.ToLower());
+                queryStudent = queryStudent.Where(x => x.SchoolYear == dto.SchoolYear);
+            }
+
+            if (dto.YearOfGraduation.HasValue)
+            {
+                queryStudent = queryStudent.Where(x => x.YearOfGraduation == dto.YearOfGraduation);
             }
 
             if (!string.IsNullOrEmpty(dto.Phone))
@@ -55,6 +61,10 @@
             {
                 Id = x.Id,
                 FullName = x.FullName,
+                Phone = x.Phone,
+                MajorName = x.MajorId.HasValue ? x.Major.Name : string.Empty,
+                SchoolYear = x.SchoolYear,
+                YearOfGraduation = x.YearOfGraduation,
                 Status = x.Status,
                 CreatedAt = x.CreatedAt,
             });
@@ -69,7 +79,7 @@
         public async Task<StudentDto?> FindById(Guid id)
         {
             var queryStudent = await this._unitOfWork.GetRepositoryReadOnlyAsync<Student>().QueryAll();
-            var student = queryStudent.FirstOrDefault(i => i.Id == id);
+            var student = queryStudent.Include(x => x.Major).Include(x => x.StudentAchievements).FirstOrDefault(i => i.Id == id);
 
             if (student == null)
             {
@@ -77,6 +87,7 @@
             }
 
             var result = this._mapper.Map<StudentDto>(student);
+            result.CountArchievement = student.StudentAchievements.Count;
 
             return result;
         }
@@ -88,8 +99,22 @@
             var newStudent = new Student
             {
                 FullName = dto.FullName,
+                Phone = dto.Phone,
+                Email = dto.Email,
+                SchoolYear = dto.SchoolYear,
+                Gender = dto.Gender,
+                YearOfGraduation = dto.YearOfGraduation,
+                MajorId = dto.MajorId,
+                CurrentCompany = dto.CurrentCompany,
+                JobTitle = dto.JobTitle,
                 Status = dto.Status.HasValue ? dto.Status : StatusEnum.Active,
             };
+
+            DateTime birthday;
+            if (!string.IsNullOrEmpty(dto.BirthdayFormat) && DateTime.TryParse(dto.BirthdayFormat, out birthday))
+            {
+                newStudent.Birthday = birthday;
+            }
 
             await studentRep.Add(newStudent);
             await this._unitOfWork.SaveChangesAsync();
@@ -109,7 +134,21 @@
             }
 
             student.FullName = dto.FullName;
+            student.Phone = dto.Phone;
+            student.Email = dto.Email;
+            student.SchoolYear = dto.SchoolYear;
+            student.Gender = dto.Gender;
+            student.YearOfGraduation = dto.YearOfGraduation;
+            student.MajorId = dto.MajorId;
+            student.CurrentCompany = dto.CurrentCompany;
             student.Status = dto.Status;
+            student.JobTitle = dto.JobTitle;
+
+            DateTime birthday;
+            if (!string.IsNullOrEmpty(dto.BirthdayFormat) && DateTime.TryParse(dto.BirthdayFormat, out birthday))
+            {
+                student.Birthday = birthday;
+            }
 
             await studentRep.Update(student);
             await this._unitOfWork.SaveChangesAsync();

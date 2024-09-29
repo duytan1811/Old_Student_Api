@@ -60,5 +60,24 @@
                 return resposne;
             }
         }
+
+        [HttpGet("roles")]
+        public async Task<BaseResponse<List<SelectListItem>>> GetRoles()
+        {
+            var resposne = new BaseResponse<List<SelectListItem>>();
+
+            try
+            {
+                resposne.Data = await this._dropdownService.GetRoles();
+                return resposne;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError($"Get dropdown role error: {ex.Message}");
+                resposne.Type = GlobalConstants.Error;
+                resposne.Message = ex.Message;
+                return resposne;
+            }
+        }
     }
 }

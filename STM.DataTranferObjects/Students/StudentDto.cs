@@ -27,5 +27,9 @@
         public string? CurrentCompany { get; set; }
 
         public string? JobTitle { get; set; }
+
+        public string MajorName { get; set; }
+
+        public int CountArchievement { get; set; }
     }
 }

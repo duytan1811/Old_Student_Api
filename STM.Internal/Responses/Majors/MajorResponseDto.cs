@@ -1,4 +1,4 @@
-﻿namespace STM.API.Responses.Tables
+﻿namespace STM.API.Responses.Majors
 {
     using STM.API.Responses.Base;
 

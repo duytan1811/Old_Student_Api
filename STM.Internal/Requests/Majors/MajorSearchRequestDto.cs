@@ -1,4 +1,4 @@
-﻿namespace STM.API.Requests.Tables
+﻿namespace STM.API.Requests.Majors
 {
     using STM.Common.Enums;
 

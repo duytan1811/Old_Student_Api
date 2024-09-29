@@ -10,8 +10,8 @@
 
         public string? Description { get; set; }
 
-        public DateTime? FromDate { get; set; }
+        public string? FromDateFormat { get; set; }
 
-        public DateTime? ToDate { get; set; }
+        public string? ToDateFormat { get; set; }
     }
 }

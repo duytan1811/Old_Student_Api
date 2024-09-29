@@ -37,5 +37,16 @@
                 Text = x.Name,
             }).ToList();
         }
+
+        public async Task<List<SelectListItem>> GetRoles()
+        {
+            var query = await this._unitOfWork.GetRepositoryReadOnlyAsync<Role>().QueryAll();
+            query = query.Where(x => x.Status == StatusEnum.Active);
+            return query.Select(x => new SelectListItem
+            {
+                Value = x.Id.ToString().ToLower(),
+                Text = x.Name,
+            }).ToList();
+        }
     }
 }

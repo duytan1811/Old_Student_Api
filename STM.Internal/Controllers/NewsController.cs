@@ -4,48 +4,48 @@
     using Microsoft.AspNetCore.Mvc;
     using STM.API.Filters;
     using STM.API.Requests.Base;
-    using STM.API.Requests.Majors;
+    using STM.API.Requests.News;
     using STM.API.Responses.Base;
-    using STM.API.Responses.Majors;
+    using STM.API.Responses.News;
     using STM.Common.Constants;
-    using STM.DataTranferObjects.Majors;
+    using STM.DataTranferObjects.News;
     using STM.Services.IServices;
 
     [ApiController]
-    [Route("api/majors")]
-    public class MajorController : BaseApiController
+    [Route("api/news")]
+    public class NewsController : BaseApiController
     {
-        private readonly IMajorService _majorService;
+        private readonly INewsService _newsService;
 
-        public MajorController(
-            ILogger<MajorController> logger,
+        public NewsController(
+            ILogger<NewsController> logger,
             IMapper mapper,
             IAccountService accountService,
-            IMajorService majorService)
+            INewsService newsService)
             : base(logger, mapper, accountService)
         {
-            this._majorService = majorService;
+            this._newsService = newsService;
         }
 
         [HttpPost("search")]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
-        public async Task<BaseTableResponse<MajorResponseDto>> Search(BaseSearchRequest<MajorSearchRequestDto> request)
+        public async Task<BaseTableResponse<NewsResponseDto>> Search(BaseSearchRequest<NewsSearchRequestDto> request)
         {
-            var response = new BaseTableResponse<MajorResponseDto>();
+            var response = new BaseTableResponse<NewsResponseDto>();
 
             try
             {
                 if (request.SearchParams == null)
                 {
-                    request.SearchParams = new MajorSearchRequestDto();
+                    request.SearchParams = new NewsSearchRequestDto();
                 }
 
-                var searchDto = this.Mapper.Map<MajorSearchDto>(request.SearchParams);
+                var searchDto = this.Mapper.Map<NewsSearchDto>(request.SearchParams);
                 searchDto.Column = ColumnNames.Order;
 
-                var allItems = await this._majorService.Search(searchDto);
+                var allItems = await this._newsService.Search(searchDto);
                 var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();
-                response.Items = this.Mapper.Map<List<MajorResponseDto>>(pagedItems);
+                response.Items = this.Mapper.Map<List<NewsResponseDto>>(pagedItems);
                 response.Total = allItems.Count();
 
                 var startIndex = request.Start + 1;
@@ -63,13 +63,13 @@
 
         [HttpGet("{id}")]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
-        public async Task<BaseResponse<MajorResponseDto>> FindById(Guid id)
+        public async Task<BaseResponse<NewsResponseDto>> FindById(Guid id)
         {
-            var response = new BaseResponse<MajorResponseDto>();
+            var response = new BaseResponse<NewsResponseDto>();
 
             try
             {
-                var result = await this._majorService.FindById(id);
+                var result = await this._newsService.FindById(id);
 
                 if (result == null)
                 {
@@ -77,7 +77,7 @@
                     return response;
                 }
 
-                response.Data = this.Mapper.Map<MajorResponseDto>(result);
+                response.Data = this.Mapper.Map<NewsResponseDto>(result);
                 return response;
             }
             catch (Exception ex)
@@ -91,13 +91,13 @@
 
         [HttpPost]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Create })]
-        public async Task<BaseResponse<string>> Create(MajorSaveRequestDto request)
+        public async Task<BaseResponse<string>> Create(NewsSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
             try
             {
-                var dto = this.Mapper.Map<MajorSaveDto>(request);
-                var result = await this._majorService.Create(dto);
+                var dto = this.Mapper.Map<NewsSaveDto>(request);
+                var result = await this._newsService.Create(dto);
 
                 response.Message = result;
                 return response;
@@ -113,15 +113,15 @@
 
         [HttpPut("{id}")]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
-        public async Task<BaseResponse<string>> Update(string id, MajorSaveRequestDto request)
+        public async Task<BaseResponse<string>> Update(string id, NewsSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
 
             try
             {
                 request.Id = id;
-                var dto = this.Mapper.Map<MajorSaveDto>(request);
-                var result = await this._majorService.Update(dto);
+                var dto = this.Mapper.Map<NewsSaveDto>(request);
+                var result = await this._newsService.Update(dto);
 
                 response.Message = result;
                 return response;
@@ -143,7 +143,7 @@
 
             try
             {
-                var result = await this._majorService.Delete(id);
+                var result = await this._newsService.Delete(id);
                 response.Message = result;
                 return response;
             }

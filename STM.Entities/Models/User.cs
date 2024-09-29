@@ -21,6 +21,8 @@
 
         public DateTime UpdatedAt { get; set; }
 
+        public virtual Student? Student { get; set; }
+
         public virtual ICollection<UserClaim> UserClaims { get; set; }
 
         public virtual ICollection<UserLogin> UserLogins { get; set; }
