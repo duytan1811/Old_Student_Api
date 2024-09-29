@@ -2,6 +2,7 @@
 {
     using STM.Common.Constants;
     using STM.Common.Enums;
+    using STM.Common.Utilities;
     using STM.DataTranferObjects.News;
     using STM.Entities.Models;
     using STM.Repositories;
@@ -27,6 +28,11 @@
                 queryNews = queryNews.Where(x => x.Name.ToLower().Contains(nameSearch));
             }
 
+            if (dto.Type.HasValue)
+            {
+                queryNews = queryNews.Where(x => x.Type == dto.Type);
+            }
+
             if (dto.Status.HasValue)
             {
                 queryNews = queryNews.Where(x => x.Status == dto.Status);
@@ -36,6 +42,7 @@
             {
                 Id = x.Id,
                 Name = x.Name,
+                Type = x.Type.ToString(),
                 Status = x.Status,
                 CreatedAt = x.CreatedAt,
             });
@@ -62,10 +69,11 @@
                 Id = news.Id,
                 Name = news.Name,
                 Status = news.Status,
-                CreatedAt = news.CreatedAt,
-                CreatedById = news.CreatedById,
-                UpdatedAt = news.UpdatedAt,
-                UpdatedById = news.UpdatedById,
+                Description = news.Description,
+                Content = news.Content,
+                Type = news.Type.AsInt().ToString(),
+                StartDate = news.StartDate,
+                EndDate = news.EndDate,
             };
         }
 
@@ -76,8 +84,26 @@
             var newNews = new News
             {
                 Name = dto.Name,
+                Type = dto.Type,
+                Description = dto.Description,
+                Content = dto.Content,
                 Status = dto.Status.HasValue ? dto.Status : StatusEnum.Active,
             };
+
+            if (dto.Type == NewsTypeEnum.ReunionEvent)
+            {
+                DateTime startDate;
+                if (!string.IsNullOrEmpty(dto.StartDateFormat) && DateTime.TryParse(dto.StartDateFormat, out startDate))
+                {
+                    newNews.StartDate = startDate;
+                }
+
+                DateTime endDate;
+                if (!string.IsNullOrEmpty(dto.EndDateFormat) && DateTime.TryParse(dto.EndDateFormat, out endDate))
+                {
+                    newNews.EndDate = endDate;
+                }
+            }
 
             await newsRep.Add(newNews);
             await this._unitOfWork.SaveChangesAsync();
@@ -97,7 +123,30 @@
             }
 
             news.Name = dto.Name;
+            news.Description = dto.Description;
+            news.Content = dto.Content;
+            news.Type = dto.Type;
             news.Status = dto.Status;
+
+            if (dto.Type == NewsTypeEnum.ReunionEvent)
+            {
+                DateTime startDate;
+                if (!string.IsNullOrEmpty(dto.StartDateFormat) && DateTime.TryParse(dto.StartDateFormat, out startDate))
+                {
+                    news.StartDate = startDate;
+                }
+
+                DateTime endDate;
+                if (!string.IsNullOrEmpty(dto.EndDateFormat) && DateTime.TryParse(dto.EndDateFormat, out endDate))
+                {
+                    news.EndDate = endDate;
+                }
+            }
+            else
+            {
+                news.StartDate = null;
+                news.EndDate = null;
+            }
 
             await newsRep.Update(news);
             await this._unitOfWork.SaveChangesAsync();

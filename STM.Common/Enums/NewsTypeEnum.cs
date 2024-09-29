@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public enum NewTypeEnum
+    public enum NewsTypeEnum
     {
         [Display(Name = "Tin tức công nghệ", Order = 2)]
         TechNew = 1,

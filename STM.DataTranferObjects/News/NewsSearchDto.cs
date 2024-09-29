@@ -9,6 +9,6 @@
 
         public string? Description { get; set; }
 
-        public NewTypeEnum Type { get; set; }
+        public NewsTypeEnum? Type { get; set; }
     }
 }

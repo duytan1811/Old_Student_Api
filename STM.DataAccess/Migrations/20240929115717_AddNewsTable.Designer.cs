@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using STM.DataAccess.Contexts;
 
@@ -11,9 +12,10 @@ using STM.DataAccess.Contexts;
 namespace STM.DataAccess.Migrations
 {
     [DbContext(typeof(STMDbContext))]
-    partial class STMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240929115717_AddNewsTable")]
+    partial class AddNewsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,94 +102,6 @@ namespace STM.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Majors");
-                });
-
-            modelBuilder.Entity("STM.Entities.Models.News", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CountMember")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CreatedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("UpdatedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("News");
-                });
-
-            modelBuilder.Entity("STM.Entities.Models.NewsComment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CreatedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("NewId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("UpdatedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NewId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("NewComments");
                 });
 
             modelBuilder.Entity("STM.Entities.Models.Role", b =>
@@ -284,84 +198,84 @@ namespace STM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9453da22-ef9a-4a34-8475-81e534fcba2a"),
+                            Id = new Guid("12bfb091-c853-40f0-b424-6688f50375bd"),
                             Key = "webName",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("f24e4a95-5c30-44da-957e-e81529d87b2b"),
+                            Id = new Guid("fd90597c-1acc-4eab-9fae-ee6727fc85aa"),
                             Key = "phone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("a8a26005-4a7e-4daf-962b-36b7b9becd3c"),
+                            Id = new Guid("798542a6-dca9-45c3-b8e4-584f6c64cdf1"),
                             Key = "email",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("77649768-f20d-49e9-9d00-cb3c9ca003a2"),
+                            Id = new Guid("b81c34cf-ae18-46e9-919a-ba3c1ae4394b"),
                             Key = "emailSupportCustomer",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("8b41d162-d343-4361-8ee5-1c434ed30a5e"),
+                            Id = new Guid("fb4d9e5d-041e-48d2-8210-752e44e2374e"),
                             Key = "province",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("6f0f96b5-3fc5-48c6-b50b-91342f9e8f3a"),
+                            Id = new Guid("7e0a4739-1801-4c35-b65b-d31595f8bfb8"),
                             Key = "district",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("ff934fca-fb2e-4284-a450-d102c6b1744f"),
+                            Id = new Guid("0b6877d6-7a0c-4ab1-9e2e-eb010c3fae63"),
                             Key = "village",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("118b8168-c5e0-4d39-9057-8dd2ac6c686a"),
+                            Id = new Guid("54f8dfa4-76d3-4ff3-b314-5eda698cc756"),
                             Key = "Address",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("88f3680a-124f-4d30-874d-82f645ded346"),
+                            Id = new Guid("5b70e532-7ddf-4c32-9794-ca5c96290583"),
                             Key = "timeZone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("43c45e0d-f49d-4856-a30b-4de00b6df6e2"),
+                            Id = new Guid("9b791c09-7f75-4a14-9dbe-f059eb097c10"),
                             Key = "currency",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("e3f2541e-38cf-48d3-b3f2-fc0d68118c6c"),
+                            Id = new Guid("c398b806-b20f-48ad-9243-b189d0d3acf3"),
                             Key = "orderCodeStartWith",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("c106ee6a-6b2c-4689-9308-8b2ed771cce6"),
+                            Id = new Guid("d2dc8ad8-c5cf-490f-9a48-d48424a14cc6"),
                             Key = "orderCodeEndWith",
                             Status = 1,
                             Type = "general"
@@ -613,7 +527,7 @@ namespace STM.DataAccess.Migrations
                             IsAdmin = true,
                             LockoutEnabled = true,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEK3ge5vpr6kEjgf3u2licwlOHmA6TzpRFHSDVzzEfHEDySSlvcZ7XQuKf6CsEF97nw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEC+gpv/qdtLvSIPzKUB5plc0QUx15PSvrPt/7q4z72O/UW8S76pKgAo81+JVwG2znQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "ZY5BGSWBARTE74T6ZLO7WKKMMILBEB2E",
                             Status = 1,
@@ -709,25 +623,6 @@ namespace STM.DataAccess.Migrations
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("STM.Entities.Models.NewsComment", b =>
-                {
-                    b.HasOne("STM.Entities.Models.News", "New")
-                        .WithMany("NewComments")
-                        .HasForeignKey("NewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("STM.Entities.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("New");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("STM.Entities.Models.RoleClaim", b =>
                 {
                     b.HasOne("STM.Entities.Models.Role", "Role")
@@ -818,11 +713,6 @@ namespace STM.DataAccess.Migrations
             modelBuilder.Entity("STM.Entities.Models.Major", b =>
                 {
                     b.Navigation("Students");
-                });
-
-            modelBuilder.Entity("STM.Entities.Models.News", b =>
-                {
-                    b.Navigation("NewComments");
                 });
 
             modelBuilder.Entity("STM.Entities.Models.Role", b =>

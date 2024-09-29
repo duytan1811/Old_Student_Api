@@ -9,13 +9,13 @@
 
         public string? Description { get; set; }
 
-        public NewTypeEnum Type { get; set; }
+        public NewsTypeEnum Type { get; set; }
 
         public string? Content { get; set; }
 
-        public DateTime? StartDate { get; set; }
+        public string? StartDateFormat { get; set; }
 
-        public DateTime? EndDate { get; set; }
+        public string? EndDateFormat { get; set; }
 
         public int? CountMember { get; set; }
     }

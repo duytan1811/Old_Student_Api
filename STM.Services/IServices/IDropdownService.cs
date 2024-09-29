@@ -9,5 +9,7 @@
         Task<List<SelectListItem>> GetMajors();
 
         Task<List<SelectListItem>> GetRoles();
+
+        List<SelectListItem> GetNewTypes();
     }
 }

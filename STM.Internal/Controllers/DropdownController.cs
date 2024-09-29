@@ -79,5 +79,24 @@
                 return resposne;
             }
         }
+
+        [HttpGet("news-types")]
+        public BaseResponse<List<SelectListItem>> GetNewsTypes()
+        {
+            var resposne = new BaseResponse<List<SelectListItem>>();
+
+            try
+            {
+                resposne.Data = this._dropdownService.GetNewTypes();
+                return resposne;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError($"Get dropdown news types error: {ex.Message}");
+                resposne.Type = GlobalConstants.Error;
+                resposne.Message = ex.Message;
+                return resposne;
+            }
+        }
     }
 }

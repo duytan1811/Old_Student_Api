@@ -5,6 +5,7 @@
     using STM.API.Requests.Auth;
     using STM.API.Requests.Base;
     using STM.API.Requests.Majors;
+    using STM.API.Requests.News;
     using STM.API.Requests.Roles;
     using STM.API.Requests.Settings;
     using STM.API.Requests.StudentAchievements;
@@ -12,14 +13,18 @@
     using STM.API.Requests.Users;
     using STM.API.Responses.Base;
     using STM.API.Responses.Majors;
+    using STM.API.Responses.News;
     using STM.API.Responses.Roles;
     using STM.API.Responses.Settings;
     using STM.API.Responses.StudentAchievements;
     using STM.API.Responses.Students;
     using STM.API.Responses.Users;
+    using STM.Common.Enums;
+    using STM.Common.Utilities;
     using STM.DataTranferObjects.Auth;
     using STM.DataTranferObjects.Base;
     using STM.DataTranferObjects.Majors;
+    using STM.DataTranferObjects.News;
     using STM.DataTranferObjects.Roles;
     using STM.DataTranferObjects.Settings;
     using STM.DataTranferObjects.StudentAchievements;
@@ -71,11 +76,16 @@
                 .ForMember(x => x.CountArchievement, opt => opt.MapFrom(x => x.StudentAchievements.Count));
             this.CreateMap<StudentDto, StudentResponseDto>();
 
-            // Student
+            // Student achievement
             this.CreateMap<StudentAchievementSaveRequestDto, StudentAchievementSaveDto>();
             this.CreateMap<StudentAchievementSearchRequestDto, StudentAchievementSearchDto>();
             this.CreateMap<StudentAchievement, StudentAchievementDto>();
             this.CreateMap<StudentAchievementDto, StudentAchievementResponseDto>();
+
+            this.CreateMap<NewsSaveRequestDto, NewsSaveDto>();
+            this.CreateMap<News, NewsDto>().ForMember(x => x.Type, opt => opt.MapFrom(t => EnumHelper<NewsTypeEnum>.GetValues(t.Type)));
+            this.CreateMap<NewsSearchRequestDto, NewsSearchDto>();
+            this.CreateMap<NewsDto, NewsResponseDto>();
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Mvc.Rendering;
     using STM.Common.Enums;
+    using STM.Common.Utilities;
     using STM.Entities.Models;
     using STM.Repositories;
     using STM.Services.IServices;
@@ -47,6 +48,11 @@
                 Value = x.Id.ToString().ToLower(),
                 Text = x.Name,
             }).ToList();
+        }
+
+        public List<SelectListItem> GetNewTypes()
+        {
+            return EnumHelper<NewsTypeEnum>.ConvertToSelectList(false);
         }
     }
 }

@@ -4,10 +4,12 @@
 
     public class NewsSearchRequestDto
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public string? Description { get; set; }
 
-        public NewTypeEnum Type { get; set; }
+        public NewsTypeEnum? Type { get; set; }
+
+        public StatusEnum? Status { get; set; }
     }
 }

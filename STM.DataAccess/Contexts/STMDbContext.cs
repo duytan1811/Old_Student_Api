@@ -39,6 +39,8 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new NewConfiguration());
+            builder.ApplyConfiguration(new NewCommentConfiguration());
             builder.ApplyConfiguration(new StudentAchievementConfigurarion());
             builder.ApplyConfiguration(new ClientConfiguration());
             builder.ApplyConfiguration(new StudentConfiguration());
