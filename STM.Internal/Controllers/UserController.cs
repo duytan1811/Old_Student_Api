@@ -42,7 +42,6 @@
                 }
 
                 var searchDto = this.Mapper.Map<UserSearchDto>(request.SearchParams);
-                searchDto.Column = ColumnNames.CreatedAt;
 
                 var allItems = await this._userService.Search(searchDto);
                 var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();

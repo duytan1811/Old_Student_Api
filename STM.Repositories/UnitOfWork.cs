@@ -142,7 +142,7 @@
                     prop = item.Properties.FirstOrDefault(p => p.Metadata.Name == ColumnNames.CreatedAt);
                     if (prop != null)
                     {
-                        prop.CurrentValue = DateTime.UtcNow;
+                        prop.CurrentValue = DateTime.Now;
 
                         // CreatedBy
                         if (this.CurrentUserEntityId != null)
@@ -160,7 +160,7 @@
                 prop = item.Properties.FirstOrDefault(p => p.Metadata.Name == ColumnNames.UpdatedAt);
                 if (prop != null)
                 {
-                    prop.CurrentValue = DateTime.UtcNow;
+                    prop.CurrentValue = DateTime.Now;
 
                     // UpdatedById
                     if (this.CurrentUserEntityId != null)

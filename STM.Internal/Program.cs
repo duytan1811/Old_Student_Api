@@ -128,6 +128,7 @@ builder.Services.AddScoped<IMajorService, MajorService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IStudentAchievementService, StudentAchievementService>();
 builder.Services.AddScoped<INewsService, NewsService>();
+builder.Services.AddScoped<IFourmService, FourmService>();
 
 // Add transient services
 builder.Services.AddTransient<IActionContextAccessor, ActionContextAccessor>();

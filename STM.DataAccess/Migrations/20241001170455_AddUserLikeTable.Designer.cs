@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using STM.DataAccess.Contexts;
 
@@ -11,9 +12,10 @@ using STM.DataAccess.Contexts;
 namespace STM.DataAccess.Migrations
 {
     [DbContext(typeof(STMDbContext))]
-    partial class STMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241001170455_AddUserLikeTable")]
+    partial class AddUserLikeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,6 +112,9 @@ namespace STM.DataAccess.Migrations
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CountLike")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -274,84 +279,84 @@ namespace STM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7a07ec9e-33ff-402b-b4ab-cc3159c213c0"),
+                            Id = new Guid("6586bb15-3a46-4834-a74a-3087cb95a4b3"),
                             Key = "webName",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("c8fe1dbb-236f-433d-85a3-f7f6a5381588"),
+                            Id = new Guid("0cc90966-0a69-4c10-b9c0-e263d0ae7f53"),
                             Key = "phone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("73608215-c2be-499a-8dfe-2b199ee4a5c6"),
+                            Id = new Guid("cf5a6524-4b25-44d2-bd1f-aa707c969116"),
                             Key = "email",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("bee04c23-3411-4099-9554-6b43b0f100e1"),
+                            Id = new Guid("99eec5cd-f056-4727-84cc-d1a338b43753"),
                             Key = "emailSupportCustomer",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("71de6491-4cfe-4bf3-9a2c-a58e7b80dad8"),
+                            Id = new Guid("0b4edb6a-ad68-4777-bcab-ebb5b7be6ef3"),
                             Key = "province",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("3a7f6ede-0f76-420f-9208-55887b4ee641"),
+                            Id = new Guid("18a595c4-fc44-4460-b590-ccfb7036f640"),
                             Key = "district",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("617775c3-1c01-4cee-bc02-47c2ae070000"),
+                            Id = new Guid("35dbae08-75af-42b5-8bcc-324bcf874532"),
                             Key = "village",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("ec031553-6b9a-409d-bc6f-b2a3518e6e6d"),
+                            Id = new Guid("8af205d3-39e6-4e94-bc16-6d580c72cd6d"),
                             Key = "Address",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("99704c79-a937-4869-83c8-839f8e02292b"),
+                            Id = new Guid("ae003b14-ecfe-44c2-ac59-a87b81fd7b12"),
                             Key = "timeZone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("fbbc014b-434a-47cb-8767-317dfe28e51b"),
+                            Id = new Guid("1acb6f93-ab9b-4adf-8ba3-fbbfab16514c"),
                             Key = "currency",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("5e334b98-004e-49d0-8393-e351b9ef9510"),
+                            Id = new Guid("fa8ad071-5d4e-4468-ab70-073e08a1fb44"),
                             Key = "orderCodeStartWith",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("2d53fcde-b4d6-4eaf-9759-92c441df77c4"),
+                            Id = new Guid("ac805beb-374b-420e-b05e-3eb74fdd984f"),
                             Key = "orderCodeEndWith",
                             Status = 1,
                             Type = "general"
@@ -603,7 +608,7 @@ namespace STM.DataAccess.Migrations
                             IsAdmin = true,
                             LockoutEnabled = true,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJlkB+q6TQhgOj8YIZRBtmc9CfvgCXMoHJm/biKwTz/lZHeZeai+lzEqG+PXaAXOgQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGmZJ0x10qWJb1PPyoquyhCNuuq2SsgsXHeowokGRLX3E0h3lkjZuU+VdYIn6OVQpQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "ZY5BGSWBARTE74T6ZLO7WKKMMILBEB2E",
                             Status = 1,
@@ -665,8 +670,6 @@ namespace STM.DataAccess.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NewsId");
 
                     b.ToTable("UserLikeNews");
                 });
@@ -798,17 +801,6 @@ namespace STM.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("STM.Entities.Models.UserLikeNews", b =>
-                {
-                    b.HasOne("STM.Entities.Models.News", "News")
-                        .WithMany("UserLikeNews")
-                        .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("News");
-                });
-
             modelBuilder.Entity("STM.Entities.Models.UserLogin", b =>
                 {
                     b.HasOne("STM.Entities.Models.User", "User")
@@ -858,8 +850,6 @@ namespace STM.DataAccess.Migrations
             modelBuilder.Entity("STM.Entities.Models.News", b =>
                 {
                     b.Navigation("NewComments");
-
-                    b.Navigation("UserLikeNews");
                 });
 
             modelBuilder.Entity("STM.Entities.Models.Role", b =>

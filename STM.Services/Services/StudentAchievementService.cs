@@ -41,7 +41,7 @@
                 queryStudentAchievement = queryStudentAchievement.Where(x => x.Status == dto.Status);
             }
 
-            var query = queryStudentAchievement.OrderBy(x => x.CreatedAt).Select(x => new StudentAchievementDto
+            var query = queryStudentAchievement.Select(x => new StudentAchievementDto
             {
                 Id = x.Id,
                 Name = x.Name,

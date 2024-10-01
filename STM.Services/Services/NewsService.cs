@@ -1,5 +1,6 @@
 ﻿namespace STM.Services.Services
 {
+    using Microsoft.EntityFrameworkCore;
     using STM.Common.Constants;
     using STM.Common.Enums;
     using STM.Common.Utilities;
@@ -21,11 +22,16 @@
         public async Task<IQueryable<NewsDto>> Search(NewsSearchDto dto)
         {
             var queryNews = await this._unitOfWork.GetRepositoryReadOnlyAsync<News>().QueryAll();
-
-            if (!string.IsNullOrEmpty(dto.Name))
+            queryNews = queryNews.Include(x => x.UserLikeNews);
+            if (!string.IsNullOrEmpty(dto.Content))
             {
-                var nameSearch = dto.Name.Trim().ToLower();
-                queryNews = queryNews.Where(x => x.Name.ToLower().Contains(nameSearch));
+                var contentSearch = dto.Content.Trim().ToLower();
+                queryNews = queryNews.Where(x => x.Content.ToLower().Contains(contentSearch));
+            }
+
+            if (dto.CountLike.HasValue)
+            {
+                queryNews = queryNews.Where(x => x.UserLikeNews.Count <= dto.CountLike);
             }
 
             if (dto.Type.HasValue)
@@ -38,11 +44,12 @@
                 queryNews = queryNews.Where(x => x.Status == dto.Status);
             }
 
-            var query = queryNews.OrderBy(x => x.CreatedAt).Select(x => new NewsDto
+            var query = queryNews.Select(x => new NewsDto
             {
                 Id = x.Id,
-                Name = x.Name,
+                Content = x.Content,
                 Type = x.Type.ToString(),
+                CountLike = x.UserLikeNews.Count,
                 Status = x.Status,
                 CreatedAt = x.CreatedAt,
             });
@@ -67,9 +74,7 @@
             return new NewsDto
             {
                 Id = news.Id,
-                Name = news.Name,
                 Status = news.Status,
-                Description = news.Description,
                 Content = news.Content,
                 Type = news.Type.AsInt().ToString(),
                 StartDate = news.StartDate,
@@ -83,9 +88,7 @@
 
             var newNews = new News
             {
-                Name = dto.Name,
                 Type = dto.Type,
-                Description = dto.Description,
                 Content = dto.Content,
                 Status = dto.Status.HasValue ? dto.Status : StatusEnum.Active,
             };
@@ -122,8 +125,6 @@
                 return Messages.NotFound;
             }
 
-            news.Name = dto.Name;
-            news.Description = dto.Description;
             news.Content = dto.Content;
             news.Type = dto.Type;
             news.Status = dto.Status;
@@ -151,6 +152,36 @@
             await newsRep.Update(news);
             await this._unitOfWork.SaveChangesAsync();
 
+            return string.Format(Messages.UpdateSuccess, GlobalConstants.Menu.News);
+        }
+
+        public async Task<string> Like(Guid newsId, Guid userId)
+        {
+            var newsRep = this._unitOfWork.GetRepositoryAsync<News>();
+            var userLikeNewsRep = this._unitOfWork.GetRepositoryAsync<UserLikeNews>();
+
+            var news = await newsRep.FindById(newsId);
+
+            if (news == null)
+            {
+                return string.Format(Messages.NotFound, GlobalConstants.Menu.News);
+            }
+
+            var userLikeNews = await userLikeNewsRep.Single(x => x.NewsId == newsId && x.UserId == userId);
+            if (userLikeNews == null)
+            {
+                await userLikeNewsRep.Add(new UserLikeNews
+                {
+                    UserId = userId,
+                    NewsId = newsId,
+                });
+            }
+            else
+            {
+                await userLikeNewsRep.Delete(userLikeNews);
+            }
+
+            await this._unitOfWork.SaveChangesAsync();
             return string.Format(Messages.UpdateSuccess, GlobalConstants.Menu.News);
         }
 

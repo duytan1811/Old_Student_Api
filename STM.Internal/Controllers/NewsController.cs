@@ -41,7 +41,6 @@
                 }
 
                 var searchDto = this.Mapper.Map<NewsSearchDto>(request.SearchParams);
-                searchDto.Column = ColumnNames.Order;
 
                 var allItems = await this._newsService.Search(searchDto);
                 var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();
@@ -122,6 +121,29 @@
                 request.Id = id;
                 var dto = this.Mapper.Map<NewsSaveDto>(request);
                 var result = await this._newsService.Update(dto);
+
+                response.Message = result;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
+
+        [HttpGet("{id}/like")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        public async Task<BaseResponse<string>> Like(string id)
+        {
+            var response = new BaseResponse<string>();
+
+            try
+            {
+                var currentUserId = this.UserLogin.Id;
+                var result = await this._newsService.Like(Guid.Parse(id), currentUserId);
 
                 response.Message = result;
                 return response;

@@ -53,6 +53,7 @@
             builder.ApplyConfiguration(new UserLoginConfiguration());
             builder.ApplyConfiguration(new UserRoleConfiguration());
             builder.ApplyConfiguration(new UserTokenConfiguration());
+            builder.ApplyConfiguration(new UserLikeNewsConfiguration());
         }
     }
 }

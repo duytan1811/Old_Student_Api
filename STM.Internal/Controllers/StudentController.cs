@@ -41,7 +41,6 @@
                 }
 
                 var searchDto = this.Mapper.Map<StudentSearchDto>(request.SearchParams);
-                searchDto.Column = ColumnNames.Order;
 
                 var allItems = await this._studentService.Search(searchDto);
                 var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();

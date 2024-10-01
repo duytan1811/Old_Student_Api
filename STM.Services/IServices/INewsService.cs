@@ -12,6 +12,8 @@
 
         Task<string> Update(NewsSaveDto dto);
 
+        Task<string> Like(Guid newId, Guid userId);
+
         Task<string> Delete(Guid id);
     }
 }
