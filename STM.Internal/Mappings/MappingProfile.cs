@@ -92,6 +92,12 @@
 
             this.CreateMap<FourmSearchRequestDto, FourmSearchDto>();
             this.CreateMap<FourmDto, FourmResponseDto>();
+            this.CreateMap<NewsComment, CommentDto>()
+                .ForMember(x => x.UserAvatar, opt => opt.MapFrom(s => s.User.IsAdmin ? string.Empty : s.User.Student.Avatar));
+
+            this.CreateMap<CommentSaveRequestDto, CommentSaveDto>();
+            this.CreateMap<CommentDto, CommentResponseDto>();
+            this.CreateMap<CommentSearchRequestDto, CommentSearchDto>();
         }
     }
 }

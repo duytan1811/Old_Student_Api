@@ -68,7 +68,7 @@
 
             try
             {
-                var result = await this._newsService.FindById(id);
+                var result = await this._newsService.FindById(id, this.UserLogin.Id);
 
                 if (result == null)
                 {
@@ -96,6 +96,7 @@
             try
             {
                 var dto = this.Mapper.Map<NewsSaveDto>(request);
+                dto.CurrentUserId = this.UserLogin.Id;
                 var result = await this._newsService.Create(dto);
 
                 response.Message = result;
@@ -136,14 +137,73 @@
 
         [HttpGet("{id}/like")]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
-        public async Task<BaseResponse<string>> Like(string id)
+        public async Task<BaseResponse<string>> Like(Guid id)
         {
             var response = new BaseResponse<string>();
 
             try
             {
                 var currentUserId = this.UserLogin.Id;
-                var result = await this._newsService.Like(Guid.Parse(id), currentUserId);
+                var result = await this._newsService.Like(id, currentUserId);
+
+                response.Message = result;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
+
+        [HttpPost("{id}/comments/search")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        public async Task<BaseTableResponse<CommentResponseDto>> GetComments(BaseSearchRequest<CommentSearchRequestDto> request)
+        {
+            var response = new BaseTableResponse<CommentResponseDto>();
+
+            try
+            {
+                if (request.SearchParams == null)
+                {
+                    request.SearchParams = new CommentSearchRequestDto();
+                }
+
+                var searchDto = this.Mapper.Map<CommentSearchDto>(request.SearchParams);
+
+                var allItems = await this._newsService.GetComments(searchDto);
+                var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();
+                response.Items = this.Mapper.Map<List<CommentResponseDto>>(pagedItems);
+                response.Total = allItems.Count();
+
+                var startIndex = request.Start + 1;
+                response.Items.ForEach(i => i.Index = startIndex++);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
+
+        [HttpPost("{id}/comments")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        public async Task<BaseResponse<string>> Comment(CommentSaveRequestDto request)
+        {
+            var response = new BaseResponse<string>();
+
+            try
+            {
+                var dto = this.Mapper.Map<CommentSaveDto>(request);
+
+                var currentUserId = this.UserLogin.Id;
+                dto.UserId = currentUserId;
+                var result = await this._newsService.Comment(dto);
 
                 response.Message = result;
                 return response;

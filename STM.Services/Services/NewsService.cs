@@ -61,17 +61,19 @@
             };
         }
 
-        public async Task<NewsDto?> FindById(Guid id)
+        public async Task<NewsDto?> FindById(Guid id, Guid currenUserId)
         {
             var queryNews = await this._unitOfWork.GetRepositoryReadOnlyAsync<News>().QueryAll();
-            var news = queryNews.FirstOrDefault(i => i.Id == id);
+            var queryUser = await this._unitOfWork.GetRepositoryReadOnlyAsync<User>().QueryAll();
+            var queryLike = await this._unitOfWork.GetRepositoryReadOnlyAsync<UserLikeNews>().QueryAll();
+            var news = queryNews.Include(x => x.UserLikeNews).Include(x => x.NewComments).FirstOrDefault(i => i.Id == id);
 
             if (news == null)
             {
                 return null;
             }
 
-            return new NewsDto
+            var result = new NewsDto
             {
                 Id = news.Id,
                 Status = news.Status,
@@ -79,12 +81,45 @@
                 Type = news.Type.AsInt().ToString(),
                 StartDate = news.StartDate,
                 EndDate = news.EndDate,
+                CountLike = news.UserLikeNews.Count,
+                CountComment = news.NewComments.Count,
+                IsLiked = queryLike.Where(x => x.UserId == currenUserId && x.NewsId == news.Id).Count() > 0,
             };
+
+            if (news.CreatedById.HasValue)
+            {
+                var user = queryUser.Include(x => x.Student).FirstOrDefault(x => x.Id == news.CreatedById);
+                result.CreatedByName = user.IsAdmin ? "Admin" : user.Student.FullName;
+                result.CreatedByAvatar = user?.Student?.Avatar;
+            }
+
+            return result;
+        }
+
+        public async Task<IQueryable<CommentDto>?> GetComments(CommentSearchDto dto)
+        {
+            var queryComments = await this._unitOfWork.GetRepositoryReadOnlyAsync<NewsComment>().QueryAll();
+
+            queryComments = queryComments.Include(x => x.User).Where(i => i.NewId == dto.NewsId);
+
+            var query = queryComments.Select(x => new CommentDto
+            {
+                Id = x.Id,
+                UserId = x.UserId,
+                Status = x.Status,
+                Content = x.Content,
+                CreatedAt = x.CreatedAt,
+                UserAvatar = x.User.IsAdmin ? string.Empty : x.User.Student.Avatar,
+                CreatedByName = x.User.IsAdmin ? "Admin" : x.User.Student.FullName,
+            }).OrderByDescending(x => x.CreatedAt);
+
+            return query;
         }
 
         public async Task<string> Create(NewsSaveDto dto)
         {
             var newsRep = this._unitOfWork.GetRepositoryAsync<News>();
+            var queryUser = await this._unitOfWork.GetRepositoryReadOnlyAsync<User>().QueryAll();
 
             var newNews = new News
             {
@@ -92,6 +127,12 @@
                 Content = dto.Content,
                 Status = dto.Status.HasValue ? dto.Status : StatusEnum.Active,
             };
+            var user = queryUser.FirstOrDefault(x => x.Id == dto.CurrentUserId);
+
+            if (!user.IsAdmin && !user.IsTeacher)
+            {
+                newNews.Status = StatusEnum.WaitingApproval;
+            }
 
             if (dto.Type == NewsTypeEnum.ReunionEvent)
             {
@@ -182,6 +223,31 @@
             }
 
             await this._unitOfWork.SaveChangesAsync();
+            return string.Format(Messages.UpdateSuccess, GlobalConstants.Menu.News);
+        }
+
+        public async Task<string> Comment(CommentSaveDto dto)
+        {
+            var newsRep = this._unitOfWork.GetRepositoryAsync<News>();
+            var newCommentRep = this._unitOfWork.GetRepositoryAsync<NewsComment>();
+
+            var news = await newsRep.FindById(dto.NewsId);
+
+            if (news == null)
+            {
+                return string.Format(Messages.NotFound, GlobalConstants.Menu.News);
+            }
+
+            var newComment = new NewsComment
+            {
+                UserId = dto.UserId,
+                NewId = dto.NewsId,
+                Content = dto.Content,
+            };
+
+            await newCommentRep.Add(newComment);
+            await this._unitOfWork.SaveChangesAsync();
+
             return string.Format(Messages.UpdateSuccess, GlobalConstants.Menu.News);
         }
 

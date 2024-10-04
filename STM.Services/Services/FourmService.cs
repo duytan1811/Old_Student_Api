@@ -2,6 +2,7 @@
 {
     using Microsoft.EntityFrameworkCore;
     using STM.Common.Constants;
+    using STM.Common.Enums;
     using STM.DataTranferObjects.Fourms;
     using STM.Entities.Models;
     using STM.Repositories;
@@ -39,18 +40,22 @@
                          join u in queryUser on n.CreatedById equals u.Id
                          join s in queryStudent on u.Id equals s.UserId into us
                          from res in us.DefaultIfEmpty()
+                         where n.Status == StatusEnum.Active
                          select new FourmDto
                          {
                              Id = n.Id,
                              Content = n.Content,
                              Type = n.Type,
                              Status = n.Status,
+                             StartDate = n.StartDate,
+                             EndDate = n.EndDate,
                              CreatedAt = n.CreatedAt,
                              CountLike = n.UserLikeNews.Count,
                              CountComment = n.NewComments.Count,
                              IsLiked = n.UserLikeNews.Where(x => x.UserId == userId).Count() > 0,
                              CreatedByName = u.IsAdmin ? "Admin" : res.FullName,
                              CreatedByAvatar = res.Avatar,
+                             CreatedById = n.CreatedById,
                          }).OrderByDescending(x => x.CreatedAt);
 
             return dto.Column switch

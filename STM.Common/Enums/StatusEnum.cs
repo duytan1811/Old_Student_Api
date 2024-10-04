@@ -7,7 +7,7 @@
         /// <summary>
         /// Inactive.
         /// </summary>
-        [Display(Name = "Không hoạt động", Order = 2)]
+        [Display(Name = "Không hoạt động", Order = 1)]
         Inactive = 0,
 
         /// <summary>
@@ -19,13 +19,19 @@
         /// <summary>
         /// In progress.
         /// </summary>
-        [Display(Name = "Đang xử lý", Order = 2)]
+        [Display(Name = "Đang xử lý", Order = 3)]
         InProgress = 2,
 
         /// <summary>
         /// Cancel.
         /// </summary>
-        [Display(Name = "Hủy bỏ", Order = 2)]
+        [Display(Name = "Hủy bỏ", Order = 4)]
         Cancel = 3,
+
+        /// <summary>
+        /// Cancel.
+        /// </summary>
+        [Display(Name = "Chờ xác nhận", Order = 5)]
+        WaitingApproval = 4,
     }
 }

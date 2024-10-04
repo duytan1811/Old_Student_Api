@@ -21,5 +21,13 @@
         public int? CountLike { get; set; }
 
         public int CountComment { get; set; }
+
+        public DateTime? StartDate { get; set; }
+
+        public string? StartDateFormat => this.StartDate?.ToString("yyyy-MM-dd");
+
+        public DateTime? EndDate { get; set; }
+
+        public string? EndDateFormat => this.EndDate?.ToString("yyyy-MM-dd");
     }
 }

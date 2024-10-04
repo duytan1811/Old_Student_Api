@@ -15,6 +15,8 @@
 
         public bool IsAdmin { get; set; }
 
+        public bool IsTeacher { get; set; }
+
         public UserTypeEnum? UserType { get; set; }
 
         public DateTime CreatedAt { get; set; }

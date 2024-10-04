@@ -25,5 +25,15 @@
         public string? EndDateFormat => this.EndDate?.ToString("yyyy-MM-dd");
 
         public int? CountMember { get; set; }
+
+        public int? CountComment { get; set; }
+
+        public int? CountLike { get; set; }
+
+        public bool IsLiked { get; set; }
+
+        public string? CreatedByAvatar { get; set; }
+
+        public string? CreatedByName { get; set; }
     }
 }
