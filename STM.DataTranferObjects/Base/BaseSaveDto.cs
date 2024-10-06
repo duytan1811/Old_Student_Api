@@ -11,7 +11,5 @@
         public bool IsActive { get; set; } = true;
 
         public string? CreateOrUpdateById { get; set; }
-
-        public Guid? CurrentUserId { get; set; }
     }
 }

@@ -54,6 +54,8 @@
             builder.ApplyConfiguration(new UserRoleConfiguration());
             builder.ApplyConfiguration(new UserTokenConfiguration());
             builder.ApplyConfiguration(new UserLikeNewsConfiguration());
+            builder.ApplyConfiguration(new JobConfiguration());
+            builder.ApplyConfiguration(new JobUserRegisterConfiguration());
         }
     }
 }

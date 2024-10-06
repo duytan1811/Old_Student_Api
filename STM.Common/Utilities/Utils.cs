@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Security.AccessControl;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
@@ -158,6 +159,15 @@
             }
         }
 
+        public static void ConvertBase64ToFile(string base64String, string outputFilePath)
+        {
+            var base64Data = base64String.Contains(",") ? base64String.Split(',')[1] : base64String;
+
+            byte[] fileBytes = Convert.FromBase64String(base64Data);
+
+            File.WriteAllBytes(outputFilePath, fileBytes);
+        }
+
         public static string ConvertToBase64(this Stream stream)
         {
             byte[] bytes;
@@ -168,6 +178,24 @@
             }
 
             return Convert.ToBase64String(bytes);
+        }
+
+        public static void CreateFolder(string folderPath)
+        {
+            if (!Directory.Exists(folderPath))
+            {
+                DirectoryInfo dir = Directory.CreateDirectory(folderPath);
+
+                // Set full access permissions for "Everyone"
+                DirectorySecurity security = dir.GetAccessControl();
+                security.AddAccessRule(new FileSystemAccessRule("Everyone",
+                    FileSystemRights.FullControl,
+                    InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
+                    PropagationFlags.None,
+                    AccessControlType.Allow));
+
+                dir.SetAccessControl(security);
+            }
         }
 
         public static string ConvertServerFileNameToFileName(string svFilename)

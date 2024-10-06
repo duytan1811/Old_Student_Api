@@ -9,6 +9,7 @@
 
         public const string ResourceFolder = "Resources";
         public const string TemplateFolder = "Templates";
+        public const string UploadJobJD = "Upload/Jobs";
         public const string ReportFolder = "Reports";
 
         public const string FontFolder = "Fonts";
@@ -31,6 +32,7 @@
             public const string Student = "Student";
             public const string Achievement = "Thành tích";
             public const string News = "Tin tức";
+            public const string Job = "Việc làm";
         }
     }
 }

@@ -5,6 +5,7 @@
     using STM.API.Requests.Auth;
     using STM.API.Requests.Base;
     using STM.API.Requests.Fourms;
+    using STM.API.Requests.Jobs;
     using STM.API.Requests.Majors;
     using STM.API.Requests.News;
     using STM.API.Requests.Roles;
@@ -14,6 +15,7 @@
     using STM.API.Requests.Users;
     using STM.API.Responses.Base;
     using STM.API.Responses.Fourms;
+    using STM.API.Responses.Jobs;
     using STM.API.Responses.Majors;
     using STM.API.Responses.News;
     using STM.API.Responses.Roles;
@@ -26,6 +28,7 @@
     using STM.DataTranferObjects.Auth;
     using STM.DataTranferObjects.Base;
     using STM.DataTranferObjects.Fourms;
+    using STM.DataTranferObjects.Jobs;
     using STM.DataTranferObjects.Majors;
     using STM.DataTranferObjects.News;
     using STM.DataTranferObjects.Roles;
@@ -98,6 +101,12 @@
             this.CreateMap<CommentSaveRequestDto, CommentSaveDto>();
             this.CreateMap<CommentDto, CommentResponseDto>();
             this.CreateMap<CommentSearchRequestDto, CommentSearchDto>();
+
+            this.CreateMap<JobSaveRequestDto, JobSaveDto>();
+            this.CreateMap<JobSearchRequestDto, JobSearchDto>();
+            this.CreateMap<Job, JobDto>()
+                .ForMember(x => x.MajorName, opt => opt.MapFrom(t => t.Major.Name));
+            this.CreateMap<JobDto, JobResponseDto>();
         }
     }
 }

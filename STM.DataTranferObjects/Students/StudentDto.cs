@@ -30,6 +30,6 @@
 
         public string MajorName { get; set; }
 
-        public int CountArchievement { get; set; }
+        public int? CountArchievement { get; set; }
     }
 }
