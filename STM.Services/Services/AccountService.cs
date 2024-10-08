@@ -35,6 +35,7 @@
 
         public async Task<TokenDto> GenerateToken(string username)
         {
+            var queryStudent = await this._unitOfWork.GetRepositoryReadOnlyAsync<Student>().QueryAll();
             var queryUserRole = await this._unitOfWork.GetRepositoryReadOnlyAsync<UserRole>().QueryAll();
             var queryRoleClaim = await this._unitOfWork.GetRepositoryReadOnlyAsync<RoleClaim>().QueryAll();
 
@@ -54,7 +55,21 @@
             var userInfo = await this.GetUserInfo(user);
             userInfo.Id = user.Id;
             userInfo.IsAdmin = user.IsAdmin;
+            userInfo.IsTeacher = user.IsTeacher;
             userInfo.Username = username;
+
+            if (userInfo.IsAdmin)
+            {
+                userInfo.FullName = "Admin";
+            }
+            else if (!userInfo.IsAdmin && !user.IsTeacher)
+            {
+                var student = queryStudent.FirstOrDefault(x => x.UserId == user.Id);
+                if (student != null)
+                {
+                    userInfo.FullName = student.FullName;
+                }
+            }
 
             var roleIds = queryUserRole.Where(x => x.UserId == user.Id).Select(x => x.RoleId).Distinct().ToList();
 

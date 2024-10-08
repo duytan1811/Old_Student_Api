@@ -188,7 +188,8 @@
 
                 // Set full access permissions for "Everyone"
                 DirectorySecurity security = dir.GetAccessControl();
-                security.AddAccessRule(new FileSystemAccessRule("Everyone",
+                security.AddAccessRule(new FileSystemAccessRule(
+                    "Everyone",
                     FileSystemRights.FullControl,
                     InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
                     PropagationFlags.None,

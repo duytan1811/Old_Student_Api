@@ -251,6 +251,25 @@
             return string.Format(Messages.UpdateSuccess, GlobalConstants.Menu.News);
         }
 
+        public async Task<string> Confirm(Guid newId)
+        {
+            var newsRep = this._unitOfWork.GetRepositoryAsync<News>();
+
+            var news = await newsRep.FindById(newId);
+
+            if (news == null)
+            {
+                return string.Format(Messages.NotFound, GlobalConstants.Menu.News);
+            }
+
+            news.Status = StatusEnum.Active;
+
+            await newsRep.Update(news);
+            await this._unitOfWork.SaveChangesAsync();
+
+            return string.Format(Messages.UpdateSuccess, GlobalConstants.Menu.News);
+        }
+
         public async Task<string> Delete(Guid id)
         {
             var newsRep = this._unitOfWork.GetRepositoryAsync<News>();

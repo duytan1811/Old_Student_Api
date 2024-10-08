@@ -13,5 +13,7 @@
         Task<string> Update(JobSaveDto dto);
 
         Task<string> Delete(Guid id);
+
+        Task<string> ApplyJob(Guid id, ApplyJobSaveDto dto);
     }
 }

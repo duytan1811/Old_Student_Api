@@ -4,6 +4,11 @@
 
     public class JobSaveDto : BaseSaveDto
     {
+        public JobSaveDto()
+        {
+            this.Skills = new List<string>();
+        }
+
         public string Title { get; set; }
 
         public string? Content { get; set; }
@@ -22,7 +27,7 @@
 
         public string CompanyName { get; set; }
 
-        public string? Skills { get; set; }
+        public List<string>? Skills { get; set; }
 
         public string? Address { get; set; }
 

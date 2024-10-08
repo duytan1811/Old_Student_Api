@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using STM.DataAccess.Contexts;
 
@@ -11,9 +12,10 @@ using STM.DataAccess.Contexts;
 namespace STM.DataAccess.Migrations
 {
     [DbContext(typeof(STMDbContext))]
-    partial class STMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241008151745_AddApplyJobTable")]
+    partial class AddApplyJobTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -379,84 +381,84 @@ namespace STM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2620f253-36b6-4a7a-a965-4a8160409526"),
+                            Id = new Guid("c8f14bdd-1a80-4a4c-b20e-729aa2108721"),
                             Key = "webName",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("89edd189-84fd-4e63-9613-11f684f03c18"),
+                            Id = new Guid("3d1517e8-acc8-4789-af5b-5a6a7b036295"),
                             Key = "phone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("56ff3bb3-f47e-4f69-9b48-2e6d643afc4c"),
+                            Id = new Guid("9045fc19-e85d-47b0-85f6-b8c35c33fa91"),
                             Key = "email",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("d8053750-db24-4edc-835c-fff1e696354f"),
+                            Id = new Guid("28822e6b-14fd-48e8-8ed2-89eb1f482d2a"),
                             Key = "emailSupportCustomer",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("cec2c352-55e1-4464-a906-c5b688d4b05b"),
+                            Id = new Guid("4e31687c-64d6-407a-b8ef-14325acd2a8e"),
                             Key = "province",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("5b942598-b3c2-4526-9e0a-7ce151cd2570"),
+                            Id = new Guid("2b91462c-232a-434e-8cc9-c171a084d840"),
                             Key = "district",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("a62f92bb-4151-4893-b878-456d62b27ec4"),
+                            Id = new Guid("162021ff-7fc8-4314-8d7f-e931beb506b1"),
                             Key = "village",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("73146138-6446-4c15-86cd-615b0623f4e2"),
+                            Id = new Guid("081b1742-65ff-44db-9915-bde4967a95af"),
                             Key = "Address",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("f6466957-90c6-4e2f-8c7c-19c3a6809195"),
+                            Id = new Guid("7c3ef994-e911-44da-a6d3-3a1325176ca7"),
                             Key = "timeZone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("bc647ee0-1d45-467a-8c3a-da8cf8ac87c6"),
+                            Id = new Guid("eab877b7-c428-4822-825d-9bfc5416577e"),
                             Key = "currency",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("433a72d5-9792-4b5e-82e5-f10b9cf90952"),
+                            Id = new Guid("680b42b1-e2a3-405c-a01f-52e6249b1049"),
                             Key = "orderCodeStartWith",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("8bb6ac8d-c809-4277-93db-8b74be6adfc0"),
+                            Id = new Guid("af2c4d2c-72de-4cea-9c04-1992023051ea"),
                             Key = "orderCodeEndWith",
                             Status = 1,
                             Type = "general"
@@ -712,7 +714,7 @@ namespace STM.DataAccess.Migrations
                             IsTeacher = false,
                             LockoutEnabled = true,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAED/MbR+xS0b/OKJyZNGXopqRW3RP4lQZdDLXVkHkG/4f8rK6kCwaOYuwwQ6DKEdNhA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFoSyilmSGllG3eDPY6wMt5sJQFebbwmptb4UdsSd3aC6Bsr0yn6/ksH7SMUzPOSig==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "ZY5BGSWBARTE74T6ZLO7WKKMMILBEB2E",
                             Status = 1,
@@ -854,7 +856,7 @@ namespace STM.DataAccess.Migrations
             modelBuilder.Entity("STM.Entities.Models.JobUserRegister", b =>
                 {
                     b.HasOne("STM.Entities.Models.Job", "Job")
-                        .WithMany("JobUserRegisters")
+                        .WithMany()
                         .HasForeignKey("JobId");
 
                     b.HasOne("STM.Entities.Models.User", "User")
@@ -981,11 +983,6 @@ namespace STM.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("STM.Entities.Models.Job", b =>
-                {
-                    b.Navigation("JobUserRegisters");
                 });
 
             modelBuilder.Entity("STM.Entities.Models.Major", b =>

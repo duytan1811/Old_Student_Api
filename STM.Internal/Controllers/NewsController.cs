@@ -217,6 +217,28 @@
             }
         }
 
+        [HttpGet("{id}/confirm")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        public async Task<BaseResponse<string>> Confirm(Guid id)
+        {
+            var response = new BaseResponse<string>();
+
+            try
+            {
+                var result = await this._newsService.Confirm(id);
+
+                response.Message = result;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
+
         [HttpDelete("{id}")]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
         public async Task<BaseResponse<string>> Delete(Guid id)

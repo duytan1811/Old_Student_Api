@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using STM.DataAccess.Contexts;
 
@@ -11,9 +12,10 @@ using STM.DataAccess.Contexts;
 namespace STM.DataAccess.Migrations
 {
     [DbContext(typeof(STMDbContext))]
-    partial class STMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241008155617_UpdateRelationshipJobUserRegister")]
+    partial class UpdateRelationshipJobUserRegister
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

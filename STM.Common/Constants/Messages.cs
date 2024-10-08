@@ -17,6 +17,7 @@
         public const string DeleteFail = "Thêm {0} thất bại";
         public const string UpdateDisplaySuccess = "UpdateDisplaySuccess";
         public const string ImportSuccess = "Import {0} thành công";
+        public const string ApplyJob = "Ứng tuyển thành công";
 
         // System
         public const string Exception = "Đã xảy ra lỗi hệ thống";

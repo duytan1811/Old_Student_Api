@@ -18,6 +18,8 @@
 
         Task<string> Comment(CommentSaveDto dto);
 
+        Task<string> Confirm(Guid newId);
+
         Task<string> Delete(Guid id);
     }
 }

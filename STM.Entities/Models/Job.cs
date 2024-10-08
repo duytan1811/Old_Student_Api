@@ -26,5 +26,7 @@
         public int WorkType { get; set; }
 
         public string? FilePath { get; set; }
+
+        public virtual ICollection<JobUserRegister> JobUserRegisters { get; set; }
     }
 }

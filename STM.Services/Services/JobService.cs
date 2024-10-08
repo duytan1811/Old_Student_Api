@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
+    using Newtonsoft.Json;
     using STM.Common.Constants;
     using STM.Common.Enums;
     using STM.Common.Utilities;
@@ -38,19 +39,23 @@
                 queryJob = queryJob.Where(x => x.Status == dto.Status);
             }
 
-            var query = queryJob.Include(x => x.Major).OrderBy(x => x.CreatedAt).Select(x => new JobDto
+            var query = queryJob.Include(x => x.JobUserRegisters).Include(x => x.Major).OrderBy(x => x.CreatedAt).Select(x => new JobDto
             {
                 Id = x.Id,
                 Title = x.Title,
                 Content = x.Content,
                 StartDate = x.StartDate,
+                CompanyName = x.CompanyName,
+                Address = x.Address,
+                WorkType = x.WorkType,
                 EndDate = x.EndDate,
                 MajorName = x.Major.Name,
                 MajorId = x.MajorId,
                 FilePath = x.FilePath,
-
+                Skills = !string.IsNullOrEmpty(x.Skills) ? JsonConvert.DeserializeObject<List<string>>(x.Skills) : null,
                 Status = x.Status,
                 CreatedAt = x.CreatedAt,
+                IsApplyed = x.JobUserRegisters.Count() > 0,
             });
 
             return dto.Column switch
@@ -84,7 +89,7 @@
                 MajorId = dto.MajorId,
                 CompanyName = dto.CompanyName,
                 WorkType = dto.WorkType,
-                Skills = dto.Skills,
+                Skills = JsonConvert.SerializeObject(dto.Skills),
                 Address = dto.Address,
                 Status = dto.Status.HasValue ? dto.Status : StatusEnum.Active,
             };
@@ -137,7 +142,7 @@
             job.Content = dto.Content;
             job.CompanyName = dto.CompanyName;
             job.WorkType = dto.WorkType;
-            job.Skills = dto.Skills;
+            job.Skills = JsonConvert.SerializeObject(dto.Skills);
             job.Address = dto.Address;
             job.Status = dto.Status;
 
@@ -187,6 +192,34 @@
             await this._unitOfWork.SaveChangesAsync();
 
             return string.Format(Messages.DeleteSuccess, GlobalConstants.Menu.Job);
+        }
+
+        public async Task<string> ApplyJob(Guid id, ApplyJobSaveDto dto)
+        {
+            var jobUserRegisterRep = this._unitOfWork.GetRepositoryAsync<JobUserRegister>();
+
+            var newJobUserRegister = new JobUserRegister()
+            {
+                UserId = dto.UserId,
+                JobId = dto.JobId,
+                FullName = dto.FullName,
+                Content = dto.Content,
+            };
+
+            if (!string.IsNullOrEmpty(dto.FileBase64))
+            {
+                var folderPath = $"{GlobalConstants.ResourceFolder}/{GlobalConstants.UploadCV}";
+                Utils.CreateFolder(folderPath);
+                var filePath = $"{folderPath}/{dto.FileName}";
+                newJobUserRegister.FilePath = filePath;
+
+                Utils.ConvertBase64ToFile(dto.FileBase64, filePath);
+            }
+
+            await jobUserRegisterRep.Add(newJobUserRegister);
+            await this._unitOfWork.SaveChangesAsync();
+
+            return Messages.ApplyJob;
         }
     }
 }

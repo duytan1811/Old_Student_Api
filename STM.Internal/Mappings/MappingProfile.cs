@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using Newtonsoft.Json;
     using STM.API.Requests.Auth;
     using STM.API.Requests.Base;
     using STM.API.Requests.Fourms;
@@ -105,8 +106,10 @@
             this.CreateMap<JobSaveRequestDto, JobSaveDto>();
             this.CreateMap<JobSearchRequestDto, JobSearchDto>();
             this.CreateMap<Job, JobDto>()
+               .ForMember(x => x.Skills, opt => opt.MapFrom(t => JsonConvert.DeserializeObject<List<string>>(t.Skills)))
                 .ForMember(x => x.MajorName, opt => opt.MapFrom(t => t.Major.Name));
             this.CreateMap<JobDto, JobResponseDto>();
+            this.CreateMap<ApplyJobSaveRequestDto, ApplyJobSaveDto>();
         }
     }
 }

@@ -154,5 +154,29 @@
                 return response;
             }
         }
+
+        [HttpPost("{id}/apply-job")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
+        public async Task<BaseResponse<string>> ApplyJob(Guid id, ApplyJobSaveRequestDto request)
+        {
+            var response = new BaseResponse<string>();
+
+            try
+            {
+                var data = this.Mapper.Map<ApplyJobSaveDto>(request);
+                data.UserId = this.UserLogin.Id;
+
+                var result = await this._jobService.ApplyJob(id, data);
+                response.Message = result;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
     }
 }

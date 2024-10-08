@@ -10,6 +10,7 @@
         public const string ResourceFolder = "Resources";
         public const string TemplateFolder = "Templates";
         public const string UploadJobJD = "Upload/Jobs";
+        public const string UploadCV = "Upload/Jobs/CV";
         public const string ReportFolder = "Reports";
 
         public const string FontFolder = "Fonts";

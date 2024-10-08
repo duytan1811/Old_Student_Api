@@ -13,7 +13,9 @@
 
         public virtual User? User { get; set; }
 
-        public string? Descriotion { get; set; }
+        public string? FullName { get; set; }
+
+        public string? Content { get; set; }
 
         public string? FilePath { get; set; }
     }
