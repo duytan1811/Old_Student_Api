@@ -32,5 +32,7 @@
         public int WorkType { get; set; }
 
         public bool IsApplyed { get; set; }
+
+        public int CountApplyed { get; set; }
     }
 }

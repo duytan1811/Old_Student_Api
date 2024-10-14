@@ -17,7 +17,9 @@
 
         public bool IsTeacher { get; set; }
 
-        public string AdminText { get; set; }
+        public string? Phone { get; set; }
+
+        public string? Email { get; set; }
 
         public List<MenuPermissionDto> MenuPermissions { get; set; }
     }

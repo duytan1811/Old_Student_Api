@@ -1,6 +1,8 @@
 ﻿namespace STM.Services.Services
 {
+    using System.Linq;
     using AutoMapper;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Newtonsoft.Json;
     using STM.Common.Constants;
@@ -15,13 +17,16 @@
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public JobService(
             IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor)
         {
             this._unitOfWork = unitOfWork;
             this._mapper = mapper;
+            this._httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IQueryable<JobDto>> Search(JobSearchDto dto)
@@ -39,24 +44,28 @@
                 queryJob = queryJob.Where(x => x.Status == dto.Status);
             }
 
-            var query = queryJob.Include(x => x.JobUserRegisters).Include(x => x.Major).OrderBy(x => x.CreatedAt).Select(x => new JobDto
-            {
-                Id = x.Id,
-                Title = x.Title,
-                Content = x.Content,
-                StartDate = x.StartDate,
-                CompanyName = x.CompanyName,
-                Address = x.Address,
-                WorkType = x.WorkType,
-                EndDate = x.EndDate,
-                MajorName = x.Major.Name,
-                MajorId = x.MajorId,
-                FilePath = x.FilePath,
-                Skills = !string.IsNullOrEmpty(x.Skills) ? JsonConvert.DeserializeObject<List<string>>(x.Skills) : null,
-                Status = x.Status,
-                CreatedAt = x.CreatedAt,
-                IsApplyed = x.JobUserRegisters.Count() > 0,
-            });
+            var hostName = this.GetHostName();
+            var query = queryJob.Include(x => x.JobUserRegisters).Include(x => x.Major)
+                .OrderBy(x => x.CreatedAt)
+                .Select(x => new JobDto
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Content = x.Content,
+                    StartDate = x.StartDate,
+                    CompanyName = x.CompanyName,
+                    Address = x.Address,
+                    WorkType = x.WorkType,
+                    EndDate = x.EndDate,
+                    MajorName = x.Major.Name,
+                    MajorId = x.MajorId,
+                    FilePath = !string.IsNullOrEmpty(x.FilePath) ? $"{hostName}/{x.FilePath}" : string.Empty,
+                    Skills = !string.IsNullOrEmpty(x.Skills) ? JsonConvert.DeserializeObject<List<string>>(x.Skills) : null,
+                    Status = x.Status,
+                    CreatedAt = x.CreatedAt,
+                    IsApplyed = x.JobUserRegisters.Count(j => j.UserId == dto.CurrentUserId) > 0,
+                    CountApplyed = x.JobUserRegisters.Count(),
+                });
 
             return dto.Column switch
             {
@@ -65,17 +74,59 @@
             };
         }
 
-        public async Task<JobDto?> FindById(Guid id)
+        public async Task<IQueryable<UserApplyDto>> GetUserApplies(Guid jobId, UserApplySearchDto dto)
+        {
+            var queryJobUR = await this._unitOfWork.GetRepositoryReadOnlyAsync<JobUserRegister>().QueryAll();
+
+            queryJobUR = queryJobUR.Where(x => x.JobId == jobId);
+
+            if (!string.IsNullOrEmpty(dto.FullName))
+            {
+                var nameSearch = dto.FullName.Trim().ToLower();
+                queryJobUR = queryJobUR.Where(x => x.FullName.ToLower().Contains(nameSearch));
+            }
+
+            if (dto.Status.HasValue)
+            {
+                queryJobUR = queryJobUR.Where(x => x.Status == dto.Status);
+            }
+
+            var hostName = this.GetHostName();
+            var query = queryJobUR
+                .OrderBy(x => x.CreatedAt)
+                .Select(x => new UserApplyDto
+                {
+                    Id = x.Id,
+                    FullName = x.FullName,
+                    Content = x.Content,
+                    FilePath = !string.IsNullOrEmpty(x.FilePath) ? $"{hostName}/{x.FilePath}" : string.Empty,
+                    Status = x.Status,
+                    CreatedAt = x.CreatedAt,
+                });
+
+            return dto.Column switch
+            {
+                ColumnNames.CreatedAt => dto.Ascending ? query.OrderBy(x => x.CreatedAt) : query.OrderByDescending(x => x.CreatedAt),
+                _ => query,
+            };
+        }
+
+        public async Task<JobDto?> FindById(Guid id, Guid currentUserId)
         {
             var queryJob = await this._unitOfWork.GetRepositoryReadOnlyAsync<Job>().QueryAll();
-            var job = queryJob.FirstOrDefault(i => i.Id == id);
+            var job = queryJob.Include(x => x.JobUserRegisters).Include(x => x.Major).FirstOrDefault(i => i.Id == id);
 
             if (job == null)
             {
                 return null;
             }
 
-            return this._mapper.Map<JobDto>(job);
+            var result = this._mapper.Map<JobDto>(job);
+            var hostName = this.GetHostName();
+            result.FilePath = !string.IsNullOrEmpty(result.FilePath) ? $"{hostName}/{result.FilePath}" : string.Empty;
+            result.IsApplyed = job.JobUserRegisters.Count(x => x.UserId == currentUserId) > 0;
+
+            return result;
         }
 
         public async Task<string> Create(JobSaveDto dto)
@@ -220,6 +271,13 @@
             await this._unitOfWork.SaveChangesAsync();
 
             return Messages.ApplyJob;
+        }
+
+        private string? GetHostName()
+        {
+            var context = this._httpContextAccessor.HttpContext;
+            var hostName = context?.Request.Host.Value;
+            return hostName ?? null;
         }
     }
 }

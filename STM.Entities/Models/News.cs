@@ -14,6 +14,10 @@
 
         public DateTime? EndDate { get; set; }
 
+        public Guid? EventId { get; set; }
+
+        public virtual Event Event { get; set; }
+
         public virtual ICollection<NewsComment> NewComments { get; set; }
 
         public virtual ICollection<UserLikeNews> UserLikeNews { get; set; }

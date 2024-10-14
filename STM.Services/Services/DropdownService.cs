@@ -54,5 +54,10 @@
         {
             return EnumHelper<NewsTypeEnum>.ConvertToSelectList(false);
         }
+
+        public List<SelectListItem> GetEventTypes()
+        {
+            return EnumHelper<EventTypeEnum>.ConvertToSelectList(false);
+        }
     }
 }

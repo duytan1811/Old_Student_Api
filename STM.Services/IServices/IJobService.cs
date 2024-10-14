@@ -6,7 +6,9 @@
     {
         Task<IQueryable<JobDto>> Search(JobSearchDto dto);
 
-        Task<JobDto?> FindById(Guid id);
+        Task<IQueryable<UserApplyDto>> GetUserApplies(Guid jobId, UserApplySearchDto dto);
+
+        Task<JobDto?> FindById(Guid id, Guid currentId);
 
         Task<string> Create(JobSaveDto dto);
 

@@ -56,6 +56,8 @@
             builder.ApplyConfiguration(new UserLikeNewsConfiguration());
             builder.ApplyConfiguration(new JobConfiguration());
             builder.ApplyConfiguration(new JobUserRegisterConfiguration());
+            builder.ApplyConfiguration(new EventRegisterConfiguration());
+            builder.ApplyConfiguration(new EventConfiguration());
         }
     }
 }

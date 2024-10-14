@@ -98,5 +98,24 @@
                 return resposne;
             }
         }
+
+        [HttpGet("events")]
+        public BaseResponse<List<SelectListItem>> GetEventTypes()
+        {
+            var resposne = new BaseResponse<List<SelectListItem>>();
+
+            try
+            {
+                resposne.Data = this._dropdownService.GetEventTypes();
+                return resposne;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError($"Get dropdown event types error: {ex.Message}");
+                resposne.Type = GlobalConstants.Error;
+                resposne.Message = ex.Message;
+                return resposne;
+            }
+        }
     }
 }

@@ -5,5 +5,7 @@
         public string? Title { get; set; }
 
         public int? Status { get; set; }
+
+        public Guid? CurentUserId { get; set; }
     }
 }

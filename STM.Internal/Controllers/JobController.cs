@@ -41,10 +41,44 @@
                 }
 
                 var searchDto = this.Mapper.Map<JobSearchDto>(request.SearchParams);
+                searchDto.CurrentUserId = this.UserLogin.Id;
 
                 var allItems = await this._jobService.Search(searchDto);
                 var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();
                 response.Items = this.Mapper.Map<List<JobResponseDto>>(pagedItems);
+                response.Total = allItems.Count();
+
+                var startIndex = request.Start + 1;
+                response.Items.ForEach(i => i.Index = startIndex++);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
+
+        [HttpPost("{id}/user-applies")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        public async Task<BaseTableResponse<UserApplyResponseDto>> GetUserApplies(Guid id, BaseSearchRequest<UserApplySearchRequestDto> request)
+        {
+            var response = new BaseTableResponse<UserApplyResponseDto>();
+
+            try
+            {
+                if (request.SearchParams == null)
+                {
+                    request.SearchParams = new UserApplySearchRequestDto();
+                }
+
+                var searchDto = this.Mapper.Map<UserApplySearchDto>(request.SearchParams);
+
+                var allItems = await this._jobService.GetUserApplies(id, searchDto);
+                var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();
+                response.Items = this.Mapper.Map<List<UserApplyResponseDto>>(pagedItems);
                 response.Total = allItems.Count();
 
                 var startIndex = request.Start + 1;
@@ -68,7 +102,7 @@
 
             try
             {
-                var result = await this._jobService.FindById(id);
+                var result = await this._jobService.FindById(id, this.UserLogin.Id);
 
                 if (result == null)
                 {

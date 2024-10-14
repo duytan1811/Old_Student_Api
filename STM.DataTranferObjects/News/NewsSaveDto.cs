@@ -13,10 +13,6 @@
 
         public string? Content { get; set; }
 
-        public string? StartDateFormat { get; set; }
-
-        public string? EndDateFormat { get; set; }
-
         public int? CountMember { get; set; }
 
         public Guid? CurrentUserId { get; set; }

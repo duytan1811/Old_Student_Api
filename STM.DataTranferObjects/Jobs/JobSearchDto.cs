@@ -5,5 +5,7 @@
     public class JobSearchDto : BaseSearchDto
     {
         public string? Title { get; set; }
+
+        public Guid? CurrentUserId { get; set; }
     }
 }

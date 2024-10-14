@@ -11,5 +11,7 @@
         Task<List<SelectListItem>> GetRoles();
 
         List<SelectListItem> GetNewTypes();
+
+        List<SelectListItem> GetEventTypes();
     }
 }

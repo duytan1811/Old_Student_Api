@@ -26,14 +26,15 @@
         {
             public const string Auth = "Auth";
             public const string Major = "Nghề nghiệp";
-            public const string Role = "Role";
+            public const string Role = "Phân quyền";
             public const string UserRole = "UserRole";
             public const string Product = "Product";
-            public const string User = "User";
-            public const string Student = "Student";
+            public const string User = "Thành viên";
+            public const string Student = "Cựu sinh viên";
             public const string Achievement = "Thành tích";
             public const string News = "Tin tức";
             public const string Job = "Việc làm";
+            public const string Event = "Sự kiện";
         }
     }
 }

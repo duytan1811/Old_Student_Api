@@ -68,6 +68,8 @@
                 if (student != null)
                 {
                     userInfo.FullName = student.FullName;
+                    userInfo.Phone = student.Phone;
+                    userInfo.Email = student.Email;
                 }
             }
 

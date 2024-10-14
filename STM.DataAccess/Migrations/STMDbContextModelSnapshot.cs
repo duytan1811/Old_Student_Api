@@ -69,6 +69,95 @@ namespace STM.DataAccess.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("STM.Entities.Models.Event", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("STM.Entities.Models.EventRegister", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EventRegisters");
+                });
+
             modelBuilder.Entity("STM.Entities.Models.Job", b =>
                 {
                     b.Property<Guid>("Id")
@@ -225,6 +314,9 @@ namespace STM.DataAccess.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -241,6 +333,8 @@ namespace STM.DataAccess.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EventId");
 
                     b.ToTable("News");
                 });
@@ -379,84 +473,84 @@ namespace STM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2620f253-36b6-4a7a-a965-4a8160409526"),
+                            Id = new Guid("6ce352c2-3f32-4b82-b9b1-c5bfb2d48798"),
                             Key = "webName",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("89edd189-84fd-4e63-9613-11f684f03c18"),
+                            Id = new Guid("1937e5a6-c897-4fba-b44f-eb9535a47960"),
                             Key = "phone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("56ff3bb3-f47e-4f69-9b48-2e6d643afc4c"),
+                            Id = new Guid("c631dc9c-49ec-430b-b8dd-86c58a23d2c1"),
                             Key = "email",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("d8053750-db24-4edc-835c-fff1e696354f"),
+                            Id = new Guid("3c019392-4dea-44b3-9bf1-59d531062cee"),
                             Key = "emailSupportCustomer",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("cec2c352-55e1-4464-a906-c5b688d4b05b"),
+                            Id = new Guid("5dc8dd7a-0209-4598-a923-2d7ced55a2dc"),
                             Key = "province",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("5b942598-b3c2-4526-9e0a-7ce151cd2570"),
+                            Id = new Guid("a2655be4-b9c3-4499-86e8-758df4357f28"),
                             Key = "district",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("a62f92bb-4151-4893-b878-456d62b27ec4"),
+                            Id = new Guid("9451d49c-d042-4855-99ba-a96dea32047c"),
                             Key = "village",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("73146138-6446-4c15-86cd-615b0623f4e2"),
+                            Id = new Guid("e6850b0a-4446-48c3-8744-4340442c3e10"),
                             Key = "Address",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("f6466957-90c6-4e2f-8c7c-19c3a6809195"),
+                            Id = new Guid("05a2e051-259a-428e-ab37-f5ee6a047a35"),
                             Key = "timeZone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("bc647ee0-1d45-467a-8c3a-da8cf8ac87c6"),
+                            Id = new Guid("8391d667-51a9-4df6-b52f-444f6dc56035"),
                             Key = "currency",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("433a72d5-9792-4b5e-82e5-f10b9cf90952"),
+                            Id = new Guid("17fa4a6b-c801-4eae-b4c9-1f8ca3d536f3"),
                             Key = "orderCodeStartWith",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("8bb6ac8d-c809-4277-93db-8b74be6adfc0"),
+                            Id = new Guid("bd6480ce-01f7-4dc2-b844-8945cb6884c9"),
                             Key = "orderCodeEndWith",
                             Status = 1,
                             Type = "general"
@@ -712,7 +806,7 @@ namespace STM.DataAccess.Migrations
                             IsTeacher = false,
                             LockoutEnabled = true,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAED/MbR+xS0b/OKJyZNGXopqRW3RP4lQZdDLXVkHkG/4f8rK6kCwaOYuwwQ6DKEdNhA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPWQC0TBTmSFN/sUWX+j6o7slf7xVwEAmjE/uZgjzK0wPu1twVMkEWxZpuCPB43Omg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "ZY5BGSWBARTE74T6ZLO7WKKMMILBEB2E",
                             Status = 1,
@@ -842,6 +936,21 @@ namespace STM.DataAccess.Migrations
                     b.ToTable("UserTokens");
                 });
 
+            modelBuilder.Entity("STM.Entities.Models.EventRegister", b =>
+                {
+                    b.HasOne("STM.Entities.Models.Event", "Event")
+                        .WithMany("EventRegisters")
+                        .HasForeignKey("EventId");
+
+                    b.HasOne("STM.Entities.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("STM.Entities.Models.Job", b =>
                 {
                     b.HasOne("STM.Entities.Models.Major", "Major")
@@ -864,6 +973,15 @@ namespace STM.DataAccess.Migrations
                     b.Navigation("Job");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("STM.Entities.Models.News", b =>
+                {
+                    b.HasOne("STM.Entities.Models.Event", "Event")
+                        .WithMany("News")
+                        .HasForeignKey("EventId");
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("STM.Entities.Models.NewsComment", b =>
@@ -981,6 +1099,13 @@ namespace STM.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("STM.Entities.Models.Event", b =>
+                {
+                    b.Navigation("EventRegisters");
+
+                    b.Navigation("News");
                 });
 
             modelBuilder.Entity("STM.Entities.Models.Job", b =>

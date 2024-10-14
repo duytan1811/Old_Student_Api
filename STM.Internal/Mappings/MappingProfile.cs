@@ -5,6 +5,7 @@
     using Newtonsoft.Json;
     using STM.API.Requests.Auth;
     using STM.API.Requests.Base;
+    using STM.API.Requests.Events;
     using STM.API.Requests.Fourms;
     using STM.API.Requests.Jobs;
     using STM.API.Requests.Majors;
@@ -15,6 +16,7 @@
     using STM.API.Requests.Students;
     using STM.API.Requests.Users;
     using STM.API.Responses.Base;
+    using STM.API.Responses.Events;
     using STM.API.Responses.Fourms;
     using STM.API.Responses.Jobs;
     using STM.API.Responses.Majors;
@@ -28,6 +30,7 @@
     using STM.Common.Utilities;
     using STM.DataTranferObjects.Auth;
     using STM.DataTranferObjects.Base;
+    using STM.DataTranferObjects.Events;
     using STM.DataTranferObjects.Fourms;
     using STM.DataTranferObjects.Jobs;
     using STM.DataTranferObjects.Majors;
@@ -110,6 +113,19 @@
                 .ForMember(x => x.MajorName, opt => opt.MapFrom(t => t.Major.Name));
             this.CreateMap<JobDto, JobResponseDto>();
             this.CreateMap<ApplyJobSaveRequestDto, ApplyJobSaveDto>();
+            this.CreateMap<UserApplySearchRequestDto, UserApplySearchDto>();
+            this.CreateMap<UserApplyDto, UserApplyResponseDto>();
+
+            this.CreateMap<EventSaveRequestDto, EventSaveDto>();
+            this.CreateMap<EventSearchRequestDto, EventSearchDto>();
+            this.CreateMap<Event, EventDto>();
+            this.CreateMap<EventDto, EventResponseDto>();
+
+            this.CreateMap<EventRegister, EventRegisterDto>()
+                .ForMember(x => x.FullName, opt => opt.MapFrom(i => i.User.Student.FullName));
+            this.CreateMap<EventRegisterDto, EventRegisterResponseDto>();
+            this.CreateMap<EventRegisterSearchRequestDto, EventRegisterSearchDto>();
+            this.CreateMap<EventRegisterSaveRequestDto, EventRegisterSaveDto>();
         }
     }
 }

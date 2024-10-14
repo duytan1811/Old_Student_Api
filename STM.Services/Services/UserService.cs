@@ -55,8 +55,9 @@
             {
                 Id = x.Id,
                 UserName = x.UserName,
-                Name = x.Student != null ? x.Student.FullName : null,
+                FullName = x.Student != null ? x.Student.FullName : null,
                 Email = x.Email,
+                IsTeacher = x.IsTeacher,
                 Status = x.Status,
                 CreatedAt = x.CreatedAt,
             });
@@ -82,8 +83,9 @@
             {
                 Id = user.Id,
                 UserName = user.UserName,
-                Name = user.Student != null ? user.Student.FullName : null,
+                FullName = user.Student != null ? user.Student.FullName : null,
                 Email = user.Email,
+                IsTeacher = user.IsTeacher,
                 Status = user.Status,
                 UserType = user.UserType,
             };
@@ -110,12 +112,13 @@
                 Email = dto.Email,
                 Status = StatusEnum.Active,
                 CreatedAt = DateTime.Now,
+                IsTeacher = dto.IsTeacher,
                 UserType = dto.UserType.HasValue ? dto.UserType : UserTypeEnum.Student,
             };
 
             var newStudent = new Student()
             {
-                FullName = dto.Name,
+                FullName = dto.FullName,
                 User = newUser,
             };
 
@@ -148,8 +151,9 @@
             user.UpdatedAt = DateTime.Now;
             user.UserType = dto.UserType;
             user.Status = dto.Status;
+            user.IsTeacher = dto.IsTeacher;
 
-            student.FullName = dto.Name;
+            student.FullName = dto.FullName;
 
             await studentRep.Update(student);
             var result = await this._userManager.UpdateAsync(user);

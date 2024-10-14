@@ -134,21 +134,6 @@
                 newNews.Status = StatusEnum.WaitingApproval;
             }
 
-            if (dto.Type == NewsTypeEnum.ReunionEvent)
-            {
-                DateTime startDate;
-                if (!string.IsNullOrEmpty(dto.StartDateFormat) && DateTime.TryParse(dto.StartDateFormat, out startDate))
-                {
-                    newNews.StartDate = startDate;
-                }
-
-                DateTime endDate;
-                if (!string.IsNullOrEmpty(dto.EndDateFormat) && DateTime.TryParse(dto.EndDateFormat, out endDate))
-                {
-                    newNews.EndDate = endDate;
-                }
-            }
-
             await newsRep.Add(newNews);
             await this._unitOfWork.SaveChangesAsync();
 
@@ -169,26 +154,6 @@
             news.Content = dto.Content;
             news.Type = dto.Type;
             news.Status = dto.Status;
-
-            if (dto.Type == NewsTypeEnum.ReunionEvent)
-            {
-                DateTime startDate;
-                if (!string.IsNullOrEmpty(dto.StartDateFormat) && DateTime.TryParse(dto.StartDateFormat, out startDate))
-                {
-                    news.StartDate = startDate;
-                }
-
-                DateTime endDate;
-                if (!string.IsNullOrEmpty(dto.EndDateFormat) && DateTime.TryParse(dto.EndDateFormat, out endDate))
-                {
-                    news.EndDate = endDate;
-                }
-            }
-            else
-            {
-                news.StartDate = null;
-                news.EndDate = null;
-            }
 
             await newsRep.Update(news);
             await this._unitOfWork.SaveChangesAsync();
