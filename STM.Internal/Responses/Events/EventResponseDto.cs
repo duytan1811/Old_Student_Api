@@ -8,11 +8,11 @@
     {
         public DateTime? StartDate { get; set; }
 
-        public string? StartDateFormat => this.StartDate?.ToString("yyyy-MM-dd");
+        public DateTime? StartDateFormat => this.StartDate;
 
         public DateTime? EndDate { get; set; }
 
-        public string? EndDateFormat => this.EndDate?.ToString("yyyy-MM-dd");
+        public DateTime? EndDateFormat => this.EndDate;
 
         public EventTypeEnum Type { get; set; }
 
