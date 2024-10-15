@@ -2,8 +2,11 @@
 {
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
+    using OfficeOpenXml;
+    using OfficeOpenXml.Style;
     using STM.Common.Constants;
     using STM.Common.Enums;
+    using STM.Common.Utilities;
     using STM.DataTranferObjects.Events;
     using STM.Entities.Models;
     using STM.Repositories;
@@ -68,6 +71,7 @@
             return dto.Column switch
             {
                 ColumnNames.CreatedAt => dto.Ascending ? query.OrderBy(x => x.CreatedAt) : query.OrderByDescending(x => x.CreatedAt),
+                ColumnNames.CountEventRegister => dto.Ascending ? query.OrderBy(x => x.CountEventRegister) : query.OrderByDescending(x => x.CountEventRegister),
                 _ => query,
             };
         }
@@ -233,6 +237,42 @@
             await this._unitOfWork.SaveChangesAsync();
 
             return Messages.EventRegister;
+        }
+
+        public async Task<MemoryStream> ExportExcel(EventSearchDto dto)
+        {
+            string templatePath = Path.Combine(Environment.CurrentDirectory, GlobalConstants.ResourceFolder, GlobalConstants.TemplateFolder);
+            string reportPath = Path.Combine(Environment.CurrentDirectory, GlobalConstants.ResourceFolder, GlobalConstants.ReportFolder);
+            if (!Directory.Exists(reportPath))
+            {
+                Directory.CreateDirectory(reportPath);
+            }
+
+            string fileName = string.Format(FileNameConstants.StatisticsEvent, DateTime.Now.ToString("yyyyMMddhhmmsss"));
+            FileInfo newFile = new FileInfo(Path.Combine(reportPath, fileName));
+            FileInfo templateFile = new FileInfo(Path.Combine(templatePath, FileNameConstants.StatisticsEventTemplate));
+
+            var data = (await this.Search(dto)).ToList();
+
+            using (ExcelPackage pck = new ExcelPackage(newFile, templateFile))
+            {
+                var row = 1;
+                ExcelWorksheet sheet = pck.Workbook.Worksheets[0];
+
+                foreach (var item in data)
+                {
+                    sheet.Cells[$"A{row}"].Value = item.Title;
+                    row++;
+                }
+
+                ExcelHelper.RenderBorderAll(sheet, 3, 2, 50, 4, ExcelBorderStyle.Thin);
+
+                sheet.Name = "BC";
+                var stream = new MemoryStream();
+                pck.ToStream(newFile);
+                pck.SaveAs(stream);
+                return stream;
+            }
         }
     }
 }

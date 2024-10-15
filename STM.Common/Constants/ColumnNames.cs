@@ -10,7 +10,7 @@
         public const string CreatedById = "CreatedById";
         public const string Status = "Status";
         public const string IsActive = "IsActive";
-        public const string SubmitDate = "SubmitDate";
+        public const string CountEventRegister = "CountEventRegister";
         public const string Order = "Order";
     }
 }

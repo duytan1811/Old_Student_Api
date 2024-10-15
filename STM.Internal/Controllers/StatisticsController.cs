@@ -5,7 +5,6 @@
     using STM.API.Filters;
     using STM.API.Responses.Base;
     using STM.API.Responses.Statistics;
-    using STM.API.Responses.Students;
     using STM.Common.Constants;
     using STM.Services.IServices;
 
