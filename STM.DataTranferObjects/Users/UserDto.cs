@@ -13,6 +13,18 @@
 
         public bool IsTeacher { get; set; }
 
+        public int? SchoolYear { get; set; }
+
+        public string? Phone { get; set; }
+
+        public int? YearOfGraduation { get; set; }
+
+        public string? CurrentCompany { get; set; }
+
+        public string? JobTitle { get; set; }
+
+        public string? MajorName { get; set; }
+
         public UserTypeEnum? UserType { get; set; }
     }
 }

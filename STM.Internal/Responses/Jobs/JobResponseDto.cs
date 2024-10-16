@@ -34,6 +34,8 @@
 
         public string? FilePath { get; set; }
 
+        public string? FilePathOriginal { get; set; }
+
         public string? FileName => !string.IsNullOrEmpty(this.FilePath) ? this.FilePath.Split("/")[4] : null;
 
         public bool IsApplyed { get; set; }
@@ -41,5 +43,21 @@
         public int CountApplyed { get; set; }
 
         public bool IsExpired => this.EndDate < DateTime.Now;
+
+        public string? FileBase64
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(this.FilePathOriginal))
+                {
+                    byte[] bytes = File.ReadAllBytes(this.FilePathOriginal);
+                    string file = Convert.ToBase64String(bytes);
+
+                    return file;
+                }
+
+                return null;
+            }
+        }
     }
 }

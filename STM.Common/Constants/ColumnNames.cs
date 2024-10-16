@@ -12,5 +12,6 @@
         public const string IsActive = "IsActive";
         public const string CountEventRegister = "CountEventRegister";
         public const string Order = "Order";
+        public const string CountComment = "CountComment";
     }
 }

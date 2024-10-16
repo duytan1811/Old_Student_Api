@@ -256,16 +256,33 @@
 
             using (ExcelPackage pck = new ExcelPackage(newFile, templateFile))
             {
-                var row = 1;
+                var row = 4;
                 ExcelWorksheet sheet = pck.Workbook.Worksheets[0];
-
                 foreach (var item in data)
                 {
-                    sheet.Cells[$"A{row}"].Value = item.Title;
+                    if (item.EndDate < DateTime.Now)
+                    {
+                        item.Status = StatusEnum.ExpiredDate;
+                    }
+                    else if (item.StartDate > DateTime.Now)
+                    {
+                        item.Status = StatusEnum.InComming;
+                    }
+                    else if (item.StartDate < DateTime.Now && DateTime.Now < item.EndDate)
+                    {
+                        item.Status = StatusEnum.InProgress;
+                    }
+
+                    sheet.Cells[$"B{row}"].Value = row - 3;
+                    sheet.Cells[$"C{row}"].Value = EnumHelper<EventTypeEnum>.GetDisplayValue(item.Type);
+                    sheet.Cells[$"D{row}"].Value = item.StartDate;
+                    sheet.Cells[$"E{row}"].Value = item.EndDate;
+                    sheet.Cells[$"F{row}"].Value = item.Status.HasValue ? EnumHelper<StatusEnum>.GetDisplayValue(item.Status.Value) : string.Empty;
+                    sheet.Cells[$"G{row}"].Value = item.CountEventRegister;
                     row++;
                 }
 
-                ExcelHelper.RenderBorderAll(sheet, 3, 2, 50, 4, ExcelBorderStyle.Thin);
+                ExcelHelper.RenderBorderAll(sheet, 4, 2, row - 1, 7, ExcelBorderStyle.Thin);
 
                 sheet.Name = "BC";
                 var stream = new MemoryStream();

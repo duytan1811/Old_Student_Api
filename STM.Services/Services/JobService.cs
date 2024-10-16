@@ -32,11 +32,27 @@
         public async Task<IQueryable<JobDto>> Search(JobSearchDto dto)
         {
             var queryJob = await this._unitOfWork.GetRepositoryReadOnlyAsync<Job>().QueryAll();
+            queryJob = queryJob.Include(x => x.JobUserRegisters);
 
             if (!string.IsNullOrEmpty(dto.Title))
             {
                 var nameSearch = dto.Title.Trim().ToLower();
                 queryJob = queryJob.Where(x => x.Title.ToLower().Contains(nameSearch));
+            }
+
+            if (!string.IsNullOrEmpty(dto.FileName))
+            {
+                queryJob = queryJob.Where(x => x.FilePath.ToLower().Contains(dto.FileName.ToLower().Trim()));
+            }
+
+            if (dto.MajorId.HasValue)
+            {
+                queryJob = queryJob.Where(x => x.MajorId == dto.MajorId);
+            }
+
+            if (dto.CountApply.HasValue)
+            {
+                queryJob = queryJob.Where(x => x.JobUserRegisters.Count <= dto.CountApply);
             }
 
             if (dto.Status.HasValue)
@@ -59,6 +75,7 @@
                     EndDate = x.EndDate,
                     MajorName = x.Major.Name,
                     MajorId = x.MajorId,
+                    FilePathOriginal = x.FilePath,
                     FilePath = !string.IsNullOrEmpty(x.FilePath) ? $"{hostName}/{x.FilePath}" : string.Empty,
                     Skills = !string.IsNullOrEmpty(x.Skills) ? JsonConvert.DeserializeObject<List<string>>(x.Skills) : null,
                     Status = x.Status,
@@ -100,6 +117,7 @@
                     FullName = x.FullName,
                     Content = x.Content,
                     FilePath = !string.IsNullOrEmpty(x.FilePath) ? $"{hostName}/{x.FilePath}" : string.Empty,
+                    FilePathOriginal = x.FilePath,
                     Status = x.Status,
                     CreatedAt = x.CreatedAt,
                 });
@@ -123,6 +141,7 @@
 
             var result = this._mapper.Map<JobDto>(job);
             var hostName = this.GetHostName();
+            result.FilePathOriginal = job.FilePath;
             result.FilePath = !string.IsNullOrEmpty(result.FilePath) ? $"{hostName}/{result.FilePath}" : string.Empty;
             result.IsApplyed = job.JobUserRegisters.Count(x => x.UserId == currentUserId) > 0;
 

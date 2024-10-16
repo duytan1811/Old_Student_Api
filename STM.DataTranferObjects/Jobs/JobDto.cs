@@ -34,5 +34,7 @@
         public bool IsApplyed { get; set; }
 
         public int CountApplyed { get; set; }
+
+        public string? FilePathOriginal { get; set; }
     }
 }

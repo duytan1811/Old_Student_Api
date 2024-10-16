@@ -130,6 +130,8 @@
             this.CreateMap<EventRegisterSaveRequestDto, EventRegisterSaveDto>();
 
             this.CreateMap<EventByMonthDto, EventByMonthResponseDto>();
+            this.CreateMap<MemberByMonthDto, MemberByMonthResponseDto>();
+            this.CreateMap<NewsByMonthDto, NewsByMonthResponseDto>();
         }
     }
 }

@@ -45,5 +45,49 @@
                 return response;
             }
         }
+
+        [HttpGet("member-by-month")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        public async Task<BaseResponse<List<MemberByMonthResponseDto>>> GetMemberByMonth()
+        {
+            var response = new BaseResponse<List<MemberByMonthResponseDto>>();
+
+            try
+            {
+                var result = await this._statisticsService.GetMemberByMonths();
+
+                response.Data = this.Mapper.Map<List<MemberByMonthResponseDto>>(result);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
+
+        [HttpGet("news-by-month")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        public async Task<BaseResponse<List<NewsByMonthResponseDto>>> GetNewsByMonth()
+        {
+            var response = new BaseResponse<List<NewsByMonthResponseDto>>();
+
+            try
+            {
+                var result = await this._statisticsService.GetNewsByMonths();
+
+                response.Data = this.Mapper.Map<List<NewsByMonthResponseDto>>(result);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
     }
 }

@@ -9,6 +9,8 @@
 
         public int? CountLike { get; set; }
 
+        public int? CountComment { get; set; }
+
         public NewsTypeEnum? Type { get; set; }
     }
 }

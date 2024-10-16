@@ -216,7 +216,7 @@
 
         [HttpGet("export-excel")]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
-        public async Task<BaseResponse<string>> ExportTemplate([FromForm] BaseSearchRequest<EventSearchRequestDto> request)
+        public async Task<BaseResponse<string>> ExportExcel([FromForm] BaseSearchRequest<EventSearchRequestDto> request)
         {
             var response = new BaseResponse<string>();
 
@@ -229,7 +229,7 @@
 
                 var searchDto = this.Mapper.Map<EventSearchDto>(request.SearchParams);
                 searchDto.UserId = this.UserLogin.Id;
-                searchDto.Column = request.Sorting.Column;
+                searchDto.Column = ColumnNames.CountEventRegister;
                 searchDto.Direction = request.Sorting.Direction;
 
                 var result = await this._eventService.ExportExcel(searchDto);

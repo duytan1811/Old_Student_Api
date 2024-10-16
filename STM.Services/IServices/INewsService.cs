@@ -21,5 +21,7 @@
         Task<string> Confirm(Guid newId);
 
         Task<string> Delete(Guid id);
+
+        Task<MemoryStream> ExportExcel(NewsSearchDto dto);
     }
 }
