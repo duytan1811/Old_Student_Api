@@ -184,5 +184,36 @@
                 return response;
             }
         }
+
+        [HttpGet("export-excel")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
+        public async Task<BaseResponse<string>> ExportExcel([FromForm] BaseSearchRequest<UserSearchRequest> request)
+        {
+            var response = new BaseResponse<string>();
+
+            try
+            {
+                if (request.SearchParams == null)
+                {
+                    request.SearchParams = new UserSearchRequest();
+                }
+
+                var searchDto = this.Mapper.Map<UserSearchDto>(request.SearchParams);
+                searchDto.Direction = request.Sorting.Direction;
+
+                var result = await this._userService.ExportExcel(searchDto);
+
+                byte[] b = result.ToArray();
+                response.Data = Convert.ToBase64String(b);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
     }
 }

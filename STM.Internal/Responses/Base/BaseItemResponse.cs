@@ -9,9 +9,9 @@
 
         public Guid Id { get; set; }
 
-        public int? Status { get; set; }
+        public StatusEnum? Status { get; set; }
 
-        public string? StatusName => this.Status.HasValue ? EnumHelper<StatusEnum>.GetDisplayValue(this.Status) : null;
+        public string? StatusName => this.Status.HasValue ? EnumHelper<StatusEnum>.GetDisplayValue((int)this.Status) : null;
 
         public DateTime? CreatedAt { get; set; }
 

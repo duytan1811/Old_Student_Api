@@ -131,6 +131,7 @@ builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IFourmService, FourmService>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
 // Add transient services
 builder.Services.AddTransient<IActionContextAccessor, ActionContextAccessor>();

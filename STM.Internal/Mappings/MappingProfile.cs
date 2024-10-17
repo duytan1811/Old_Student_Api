@@ -23,6 +23,7 @@
     using STM.API.Responses.News;
     using STM.API.Responses.Roles;
     using STM.API.Responses.Settings;
+    using STM.API.Responses.Statistics;
     using STM.API.Responses.StudentAchievements;
     using STM.API.Responses.Students;
     using STM.API.Responses.Users;
@@ -37,6 +38,7 @@
     using STM.DataTranferObjects.News;
     using STM.DataTranferObjects.Roles;
     using STM.DataTranferObjects.Settings;
+    using STM.DataTranferObjects.Statistics;
     using STM.DataTranferObjects.StudentAchievements;
     using STM.DataTranferObjects.Students;
     using STM.DataTranferObjects.Users;
@@ -126,6 +128,10 @@
             this.CreateMap<EventRegisterDto, EventRegisterResponseDto>();
             this.CreateMap<EventRegisterSearchRequestDto, EventRegisterSearchDto>();
             this.CreateMap<EventRegisterSaveRequestDto, EventRegisterSaveDto>();
+
+            this.CreateMap<EventByMonthDto, EventByMonthResponseDto>();
+            this.CreateMap<MemberByMonthDto, MemberByMonthResponseDto>();
+            this.CreateMap<NewsByMonthDto, NewsByMonthResponseDto>();
         }
     }
 }

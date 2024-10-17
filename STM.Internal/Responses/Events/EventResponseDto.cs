@@ -8,11 +8,11 @@
     {
         public DateTime? StartDate { get; set; }
 
-        public string? StartDateFormat => this.StartDate?.ToString("yyyy-MM-dd");
+        public DateTime? StartDateFormat => this.StartDate;
 
         public DateTime? EndDate { get; set; }
 
-        public string? EndDateFormat => this.EndDate?.ToString("yyyy-MM-dd");
+        public DateTime? EndDateFormat => this.EndDate;
 
         public EventTypeEnum Type { get; set; }
 
@@ -33,5 +33,47 @@
         public bool IsComming => this.StartDate > DateTime.Now;
 
         public bool IsProgress => this.StartDate < DateTime.Now && DateTime.Now < this.EndDate;
+
+        public StatusEnum? Status
+        {
+            get
+            {
+                if (this.IsExpired)
+                {
+                    return StatusEnum.ExpiredDate;
+                }
+                else if (this.IsComming)
+                {
+                    return StatusEnum.InComming;
+                }
+                else if (this.IsProgress)
+                {
+                    return StatusEnum.InProgress;
+                }
+
+                return this.Status;
+            }
+        }
+
+        public string? StatusName
+        {
+            get
+            {
+                if (this.IsExpired)
+                {
+                    return this.Status.HasValue ? EnumHelper<StatusEnum>.GetDisplayValue(StatusEnum.ExpiredDate) : null;
+                }
+                else if (this.IsComming)
+                {
+                    return this.Status.HasValue ? EnumHelper<StatusEnum>.GetDisplayValue(StatusEnum.InComming) : null;
+                }
+                else if (this.IsProgress)
+                {
+                    return this.Status.HasValue ? EnumHelper<StatusEnum>.GetDisplayValue(StatusEnum.InProgress) : null;
+                }
+
+                return this.StatusName;
+            }
+        }
     }
 }

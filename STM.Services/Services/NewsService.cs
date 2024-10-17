@@ -1,6 +1,8 @@
 ﻿namespace STM.Services.Services
 {
     using Microsoft.EntityFrameworkCore;
+    using OfficeOpenXml;
+    using OfficeOpenXml.Style;
     using STM.Common.Constants;
     using STM.Common.Enums;
     using STM.Common.Utilities;
@@ -34,6 +36,11 @@
                 queryNews = queryNews.Where(x => x.UserLikeNews.Count <= dto.CountLike);
             }
 
+            if (dto.CountComment.HasValue)
+            {
+                queryNews = queryNews.Where(x => x.NewComments.Count <= dto.CountComment);
+            }
+
             if (dto.Type.HasValue)
             {
                 queryNews = queryNews.Where(x => x.Type == dto.Type);
@@ -50,13 +57,16 @@
                 Content = x.Content,
                 Type = x.Type.ToString(),
                 CountLike = x.UserLikeNews.Count,
+                CountComment = x.NewComments.Count,
                 Status = x.Status,
                 CreatedAt = x.CreatedAt,
+                CreatedById = x.CreatedById,
             });
 
             return dto.Column switch
             {
                 ColumnNames.CreatedAt => dto.Ascending ? query.OrderBy(x => x.CreatedAt) : query.OrderByDescending(x => x.CreatedAt),
+                ColumnNames.CountComment => dto.Ascending ? query.OrderBy(x => x.CreatedAt) : query.OrderByDescending(x => x.CountComment).ThenByDescending(x => x.CountLike),
                 _ => query,
             };
         }
@@ -249,6 +259,52 @@
             await this._unitOfWork.SaveChangesAsync();
 
             return string.Format(Messages.DeleteSuccess, GlobalConstants.Menu.News);
+        }
+
+        public async Task<MemoryStream> ExportExcel(NewsSearchDto dto)
+        {
+            string templatePath = Path.Combine(Environment.CurrentDirectory, GlobalConstants.ResourceFolder, GlobalConstants.TemplateFolder);
+            string reportPath = Path.Combine(Environment.CurrentDirectory, GlobalConstants.ResourceFolder, GlobalConstants.ReportFolder);
+            if (!Directory.Exists(reportPath))
+            {
+                Directory.CreateDirectory(reportPath);
+            }
+
+            string fileName = string.Format(FileNameConstants.StatisticsNews, DateTime.Now.ToString("yyyyMMddhhmmsss"));
+            FileInfo newFile = new FileInfo(Path.Combine(reportPath, fileName));
+            FileInfo templateFile = new FileInfo(Path.Combine(templatePath, FileNameConstants.StatisticsNewsTemplate));
+
+            var queryUser = await this._unitOfWork.GetRepositoryReadOnlyAsync<User>().QueryAll();
+            queryUser = queryUser.Include(x => x.Student);
+            var data = (await this.Search(dto)).ToList().OrderByDescending(x => x.CountComment).ThenByDescending(x => x.CountLike);
+
+            var createdByIdsList = data.Select(x => x.CreatedById).ToList();
+            var createdByList = queryUser.Where(x => createdByIdsList.Contains(x.Id)).ToList();
+
+            using (ExcelPackage pck = new ExcelPackage(newFile, templateFile))
+            {
+                var row = 4;
+                ExcelWorksheet sheet = pck.Workbook.Worksheets[0];
+                foreach (var item in data)
+                {
+                    var createdyBy = createdByList.Find(x => x.Id == item.CreatedById);
+                    sheet.Cells[$"B{row}"].Value = row - 3;
+                    sheet.Cells[$"C{row}"].Value = EnumHelper<NewsTypeEnum>.GetDisplayValue(item.Type);
+                    sheet.Cells[$"D{row}"].Value = item.CountLike ?? 0;
+                    sheet.Cells[$"E{row}"].Value = item.CountComment ?? 0;
+                    sheet.Cells[$"F{row}"].Value = item.Status.HasValue ? EnumHelper<StatusEnum>.GetDisplayValue(item.Status.Value) : string.Empty;
+                    sheet.Cells[$"G{row}"].Value = createdyBy.IsAdmin ? "Admin" : createdyBy.Student.FullName;
+                    row++;
+                }
+
+                ExcelHelper.RenderBorderAll(sheet, 4, 2, row - 1, 7, ExcelBorderStyle.Thin);
+
+                sheet.Name = "BC";
+                var stream = new MemoryStream();
+                pck.ToStream(newFile);
+                pck.SaveAs(stream);
+                return stream;
+            }
         }
     }
 }

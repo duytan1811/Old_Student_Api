@@ -14,5 +14,7 @@
         Task<ActionStatusEnum> Update(UserSaveDto dto);
 
         Task<ActionStatusEnum> Delete(Guid id);
+
+        Task<MemoryStream> ExportExcel(UserSearchDto dto);
     }
 }

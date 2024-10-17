@@ -17,5 +17,7 @@
         Task<string> Delete(Guid id);
 
         Task<string> Register(Guid id, EventRegisterSaveDto dto);
+
+        Task<MemoryStream> ExportExcel(EventSearchDto request);
     }
 }
