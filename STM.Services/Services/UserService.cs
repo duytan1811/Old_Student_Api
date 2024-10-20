@@ -150,6 +150,7 @@
             {
                 FullName = dto.FullName,
                 User = newUser,
+                Email = dto.Email,
             };
 
             await this._userManager.CreateAsync(newUser, dto.Password);
@@ -227,6 +228,7 @@
             user.IsTeacher = dto.IsTeacher;
 
             student.FullName = dto.FullName;
+            student.Email = dto.Email;
 
             await studentRep.Update(student);
             var result = await this._userManager.UpdateAsync(user);
@@ -239,6 +241,8 @@
         {
             var userRep = this._unitOfWork.GetRepositoryAsync<User>();
             var studentRep = this._unitOfWork.GetRepositoryAsync<Student>();
+            var jobURRep = this._unitOfWork.GetRepositoryAsync<JobUserRegister>();
+            var eventRRep = this._unitOfWork.GetRepositoryAsync<EventRegister>();
 
             var user = await userRep.Single(x => x.Id == id);
             if (user == null)
@@ -250,6 +254,18 @@
             if (student != null)
             {
                 await studentRep.Delete(student);
+            }
+
+            var jobURs = (await jobURRep.QueryCondition(x => x.UserId == user.Id)).ToList();
+            if (jobURs.Any())
+            {
+                await jobURRep.Delete(jobURs);
+            }
+
+            var eventRs = (await eventRRep.QueryCondition(x => x.UserId == user.Id)).ToList();
+            if (eventRs.Any())
+            {
+                await eventRRep.Delete(eventRs);
             }
 
             await userRep.Delete(user);
