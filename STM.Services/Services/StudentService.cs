@@ -159,6 +159,7 @@
         public async Task<string> Delete(Guid id)
         {
             var studentRep = this._unitOfWork.GetRepositoryAsync<Student>();
+            var studentACRep = this._unitOfWork.GetRepositoryAsync<StudentAchievement>();
             var student = await studentRep.Single(i => i.Id == id);
 
             if (student == null)
@@ -166,6 +167,9 @@
                 return Messages.NotFound;
             }
 
+            var studentACs = await studentACRep.QueryCondition(x => x.StudentId == student.Id);
+
+            await studentACRep.Delete(studentACs.ToList());
             await studentRep.Delete(student);
             await this._unitOfWork.SaveChangesAsync();
 

@@ -2,27 +2,37 @@
 {
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
+    using Newtonsoft.Json;
     using OfficeOpenXml;
     using OfficeOpenXml.Style;
     using STM.Common.Constants;
     using STM.Common.Enums;
     using STM.Common.Utilities;
+    using STM.DataTranferObjects.Email;
     using STM.DataTranferObjects.Events;
     using STM.Entities.Models;
     using STM.Repositories;
     using STM.Services.IServices;
+    using STM.Services.ScheduleJob;
 
     public class EventService : IEventService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly ISchedulingService _schedulingService;
 
         public EventService(
             IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMapper mapper,
+            IServiceScopeFactory scopeFactory,
+            ISchedulingService schedulingService)
         {
             this._unitOfWork = unitOfWork;
             this._mapper = mapper;
+            this._scopeFactory = scopeFactory;
+            this._schedulingService = schedulingService;
         }
 
         public async Task<IQueryable<EventDto>> Search(EventSearchDto dto)
@@ -142,6 +152,7 @@
         public async Task<string> Create(EventSaveDto dto)
         {
             var eventRep = this._unitOfWork.GetRepositoryAsync<Event>();
+            var queryStudent = await this._unitOfWork.GetRepositoryReadOnlyAsync<Student>().QueryAll();
 
             var newEvent = new Event
             {
@@ -167,6 +178,23 @@
             await eventRep.Add(newEvent);
             await this._unitOfWork.SaveChangesAsync();
 
+            EventNotificationJob.SetScopeFactory(this._scopeFactory);
+
+            var emailAddress = queryStudent.Where(x => !string.IsNullOrEmpty(x.Email)).Select(x => x.Email).Distinct().ToList();
+            var emailInfo = new EmailInfoDto
+            {
+                Title = "[STM] Sự kiện mới",
+                EmailAddress = emailAddress,
+            };
+            this._schedulingService.ScheduleJob<EventNotificationJob>(Guid.NewGuid().ToString(), DateTime.Now, new Dictionary<string, string>
+                            {
+                                { "EmailInfoAsJson", JsonConvert.SerializeObject(emailInfo) },
+                                { "StartDate", newEvent.StartDate?.ToString("HH:mm dd/MM/yyyy") },
+                                { "EndDate", newEvent.EndDate?.ToString("HH:mm dd/MM/yyyy") },
+                                { "EventAddress", newEvent.Address },
+                                { "EventContent", newEvent.Content },
+                            });
+
             return string.Format(Messages.CreateSuccess, GlobalConstants.Menu.Event);
         }
 
@@ -184,7 +212,6 @@
             objEvent.Title = dto.Title;
             objEvent.Content = dto.Content;
             objEvent.Address = dto.Address;
-            objEvent.Status = dto.Status;
             objEvent.Type = dto.Type;
 
             DateTime startDate;
@@ -208,6 +235,8 @@
         public async Task<string> Delete(Guid id)
         {
             var eventRep = this._unitOfWork.GetRepositoryAsync<Event>();
+            var eventRegisRep = this._unitOfWork.GetRepositoryAsync<EventRegister>();
+
             var objEvent = await eventRep.Single(i => i.Id == id);
 
             if (objEvent == null)
@@ -215,6 +244,9 @@
                 return Messages.NotFound;
             }
 
+            var evetRigs = await eventRegisRep.QueryCondition(x => x.EventId == objEvent.Id);
+
+            await eventRegisRep.Delete(evetRigs.ToList());
             await eventRep.Delete(objEvent);
             await this._unitOfWork.SaveChangesAsync();
 
@@ -224,6 +256,9 @@
         public async Task<string> Register(Guid id, EventRegisterSaveDto dto)
         {
             var eventUserRegisterRep = this._unitOfWork.GetRepositoryAsync<EventRegister>();
+            var queryEvent = await this._unitOfWork.GetRepositoryReadOnlyAsync<Event>().QueryAll();
+
+            var objEvent = queryEvent.FirstOrDefault(x => x.Id == id);
 
             var newEventUserRegister = new EventRegister()
             {
@@ -235,6 +270,19 @@
 
             await eventUserRegisterRep.Add(newEventUserRegister);
             await this._unitOfWork.SaveChangesAsync();
+
+            EventRegisterNotificationJob.SetScopeFactory(this._scopeFactory);
+            var emailInfo = new EmailInfoDto
+            {
+                Title = "[STM] Đăng ký tham gia sự kiện",
+                EmailAddress = new List<string>() { newEventUserRegister.Email },
+            };
+
+            this._schedulingService.ScheduleJob<EventRegisterNotificationJob>(Guid.NewGuid().ToString(), DateTime.Now, new Dictionary<string, string>
+                            {
+                                { "EmailInfoAsJson", JsonConvert.SerializeObject(emailInfo) },
+                                { "EventName", objEvent.Title },
+                            });
 
             return Messages.EventRegister;
         }

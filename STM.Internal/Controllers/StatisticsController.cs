@@ -89,5 +89,49 @@
                 return response;
             }
         }
+
+        [HttpGet("student-by-major")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        public async Task<BaseResponse<List<StudentByMajorResponseDto>>> GetStudentByMajor()
+        {
+            var response = new BaseResponse<List<StudentByMajorResponseDto>>();
+
+            try
+            {
+                var result = await this._statisticsService.GetStudentByMajor();
+
+                response.Data = this.Mapper.Map<List<StudentByMajorResponseDto>>(result);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
+
+        [HttpGet("student-by-year")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        public async Task<BaseResponse<List<StudentByYearResponseDto>>> GetStudentByYear()
+        {
+            var response = new BaseResponse<List<StudentByYearResponseDto>>();
+
+            try
+            {
+                var result = await this._statisticsService.GetStudentByYear();
+
+                response.Data = this.Mapper.Map<List<StudentByYearResponseDto>>(result);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
     }
 }

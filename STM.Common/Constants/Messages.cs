@@ -3,10 +3,9 @@
     public static class Messages
     {
         // Login
-        public const string LoginIncorrect = "Login.Incorrect";
-        public const string LoginUserNotFound = "Login.UserNotFound";
-        public const string LoginUserLocked = "Login.UserLocked";
-        public const string LoginException = "Login.Exception";
+        public const string LoginIncorrect = "Tài khoản hoặc mật khẩu không chính xác";
+        public const string LoginUserNotFound = "Không tìm thấy thông tin tài khoản";
+        public const string LoginUserLocked = "Tài khoản đã bị khóa";
 
         // CRUD
         public const string CreateSuccess = "Thêm {0} thành công";
@@ -17,6 +16,7 @@
         public const string DeleteFail = "Thêm {0} thất bại";
         public const string UpdateDisplaySuccess = "UpdateDisplaySuccess";
         public const string ImportSuccess = "Import {0} thành công";
+        public const string ChangePassword = "Thay đổi mật khẩu thành công";
         public const string ApplyJob = "Ứng tuyển thành công";
         public const string EventRegister = "Đăng ký tham gia sự kiện thành công";
 

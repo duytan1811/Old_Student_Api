@@ -7,7 +7,7 @@
     using STM.Repositories;
     using STM.Services.IServices;
 
-    public class JobNotificationJob : IJob
+    public class EventNotificationJob : IJob
     {
         private static IServiceScopeFactory _scopeFactory;
 
@@ -25,11 +25,17 @@
             var jobData = context.JobDetail.JobDataMap;
 
             var emailInfoAsJson = jobData.GetString("EmailInfoAsJson");
+            var startDate = jobData.GetString("StartDate");
+            var endDate = jobData.GetString("EndDate");
+            var address = jobData.GetString("EventAddress");
+            var eventContent = jobData.GetString("EventContent");
 
             var emailInfo = JsonConvert.DeserializeObject<EmailInfoDto>(emailInfoAsJson);
 
-            emailInfo.Content = "<p>Đã thêm mới một việc làm</p>" +
-                "Hãy đăng nhập hệ thống để xem chi tiết";
+            emailInfo.Content = "<p>HOT!HOT!HOT! Sự kiện mới</p>" +
+                $"Thời gian bắt đầu: <strong>{startDate}</strong> - Kết thúc: <strong>{endDate}</strong><br>" +
+                $"Địa chỉ:{address}<br>" +
+                $"Nội dung:<br>{eventContent}";
 
             emailService.SendMail(emailInfo);
         }

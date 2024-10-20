@@ -76,7 +76,7 @@
             {
                 this.Logger.LogError(ex, ex.Message);
                 response.Type = GlobalConstants.Error;
-                response.Message = Messages.LoginException;
+                response.Message = Messages.Exception;
             }
 
             return response;
@@ -107,6 +107,34 @@
                 }
 
                 response.Message = string.Format(Messages.CreateSuccess, "Tài khoản");
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
+
+        [HttpGet("reset-password/{email}")]
+        public async Task<BaseResponse<ActionStatusEnum>> ResetPassword(string email)
+        {
+            var response = new BaseResponse<ActionStatusEnum>();
+
+            try
+            {
+                var result = await this._userService.ResetPassword(email);
+
+                if (result == ActionStatusEnum.NotFound)
+                {
+                    response.Type = GlobalConstants.Error;
+                    response.Message = "Không xác định được tài khoản";
+                    return response;
+                }
+
+                response.Message = "Đặt lại mật khẩu thành công. Vui lòng kiểm tra email";
                 return response;
             }
             catch (Exception ex)

@@ -7,7 +7,7 @@
     using STM.Repositories;
     using STM.Services.IServices;
 
-    public class JobNotificationJob : IJob
+    public class ResetPasswordJob : IJob
     {
         private static IServiceScopeFactory _scopeFactory;
 
@@ -25,11 +25,13 @@
             var jobData = context.JobDetail.JobDataMap;
 
             var emailInfoAsJson = jobData.GetString("EmailInfoAsJson");
+            var newPassword = jobData.GetString("NewPassword");
 
             var emailInfo = JsonConvert.DeserializeObject<EmailInfoDto>(emailInfoAsJson);
 
-            emailInfo.Content = "<p>Đã thêm mới một việc làm</p>" +
-                "Hãy đăng nhập hệ thống để xem chi tiết";
+            emailInfo.Content = "<p>Khôi phục mật khẩu thành công</p>" +
+                $"Mật khẩu của bạn: {newPassword}<br>" +
+                "Hãy đăng nhập để thay đổi mật khẩu!";
 
             emailService.SendMail(emailInfo);
         }

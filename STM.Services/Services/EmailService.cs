@@ -3,10 +3,10 @@
     using MailKit.Net.Smtp;
     using Microsoft.Extensions.Configuration;
     using MimeKit;
-    using MimeKit.Utils;
     using STM.DataTranferObjects.Email;
+    using STM.Services.IServices;
 
-    internal class EmailService
+    public class EmailService : IEmailService
     {
         private readonly IConfiguration _configuration;
 
@@ -28,7 +28,7 @@
                 var password = this._configuration["Email:Password"];
                 var displayName = this._configuration["Email:DisplayName"];
 
-                if (string.IsNullOrEmpty(emailInfo.EmailAddress))
+                if (!emailInfo.EmailAddress.Any())
                 {
                     return false;
                 }
@@ -45,12 +45,6 @@
                     HtmlBody = emailInfo.Content,
                 };
 
-                if (emailInfo.HasAttachment)
-                {
-                    var image = builder.Attachments.Add(emailInfo.FileName, emailInfo.File);
-                    image.ContentId = MimeUtils.GenerateMessageId();
-                }
-
                 var message = new MimeMessage
                 {
                     Subject = emailInfo.Title,
@@ -58,7 +52,10 @@
                     Sender = new MailboxAddress(displayName, username),
                 };
 
-                message.To.Add(MailboxAddress.Parse(emailInfo.EmailAddress));
+                foreach (var item in emailInfo.EmailAddress)
+                {
+                    message.To.Add(MailboxAddress.Parse(item));
+                }
 
                 using var smtpClient = new SmtpClient
                 {

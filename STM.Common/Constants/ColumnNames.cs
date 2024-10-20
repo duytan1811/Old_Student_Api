@@ -13,5 +13,7 @@
         public const string CountEventRegister = "CountEventRegister";
         public const string Order = "Order";
         public const string CountComment = "CountComment";
+        public const string EndDate = "EndDate";
+        public const string StartDate = "StartDate";
     }
 }

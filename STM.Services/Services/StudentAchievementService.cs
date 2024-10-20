@@ -55,6 +55,7 @@
             return dto.Column switch
             {
                 ColumnNames.CreatedAt => dto.Ascending ? query.OrderBy(x => x.CreatedAt) : query.OrderByDescending(x => x.CreatedAt),
+                ColumnNames.EndDate => dto.Ascending ? query.OrderBy(x => x.ToDate) : query.OrderByDescending(x => x.ToDate),
                 _ => query,
             };
         }

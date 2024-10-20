@@ -46,5 +46,9 @@
         /// Mã đã tồn tại.
         /// </summary>
         CodeExists = 8,
+
+        PasswordIncorrect = 9,
+
+        PasswordLess = 10,
     }
 }

@@ -13,7 +13,11 @@
 
         Task<ActionStatusEnum> Update(UserSaveDto dto);
 
+        Task<ActionStatusEnum> ResetPassword(string email);
+
         Task<ActionStatusEnum> Delete(Guid id);
+
+        Task<ActionStatusEnum> ChangePassword(Guid id, ChangePasswordDto dto);
 
         Task<MemoryStream> ExportExcel(UserSearchDto dto);
     }

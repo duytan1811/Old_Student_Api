@@ -1,13 +1,12 @@
 #pragma warning disable SA1200 // Using directives should be placed correctly
+#pragma warning disable SA1210 // Using directives should be ordered alphabetically by namespace
 using System.Text;
 using STM.Common.Constants;
 using STM.DataAccess.Contexts;
 using STM.Entities.Models;
 using STM.Repositories;
-#pragma warning disable SA1210 // Using directives should be ordered alphabetically by namespace
 using STM.Services.IServices;
 using STM.Services.Services;
-#pragma warning restore SA1210 // Using directives should be ordered alphabetically by namespace
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -15,6 +14,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using STM.API;
+using Quartz.Impl;
+using Quartz;
+using Infomed.CSSD.Services.Services;
+using Microsoft.AspNetCore.Identity;
+#pragma warning restore SA1210 // Using directives should be ordered alphabetically by namespace
 #pragma warning restore SA1200 // Using directives should be placed correctly
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,7 +35,8 @@ builder.Services.AddDbContext<STMDbContext>(options =>
 
 // For Identity
 builder.Services.AddIdentity<User, Role>()
-    .AddEntityFrameworkStores<STMDbContext>();
+    .AddEntityFrameworkStores<STMDbContext>()
+    .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
 // Adding Authentication
 builder.Services.AddAuthentication(options =>
@@ -132,12 +137,15 @@ builder.Services.AddScoped<IFourmService, FourmService>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<ISchedulingService, SchedulingService>();
 
 // Add transient services
 builder.Services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
 
 // Add singleton services
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
 builder.Services.AddCors();
 

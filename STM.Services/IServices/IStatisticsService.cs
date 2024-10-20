@@ -9,5 +9,9 @@
         Task<List<MemberByMonthDto>> GetMemberByMonths();
 
         Task<List<NewsByMonthDto>> GetNewsByMonths();
+
+        Task<List<StudentByMajorDto>> GetStudentByMajor();
+
+        Task<List<StudentByYearDto>> GetStudentByYear();
     }
 }

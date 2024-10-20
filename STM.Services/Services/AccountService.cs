@@ -62,7 +62,7 @@
             {
                 userInfo.FullName = "Admin";
             }
-            else if (!userInfo.IsAdmin && !user.IsTeacher)
+            else if (!userInfo.IsAdmin)
             {
                 var student = queryStudent.FirstOrDefault(x => x.UserId == user.Id);
                 if (student != null)
@@ -70,6 +70,7 @@
                     userInfo.FullName = student.FullName;
                     userInfo.Phone = student.Phone;
                     userInfo.Email = student.Email;
+                    userInfo.StudentId = student.Id;
                 }
             }
 

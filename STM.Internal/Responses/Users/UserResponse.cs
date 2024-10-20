@@ -15,6 +15,8 @@
 
         public string FullName { get; set; }
 
+        public Guid? StudentId { get; set; }
+
         public string Avatar { get; set; }
 
         public bool IsTeacher { get; set; }

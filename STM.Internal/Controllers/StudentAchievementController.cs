@@ -41,7 +41,7 @@
                 }
 
                 var searchDto = this.Mapper.Map<StudentAchievementSearchDto>(request.SearchParams);
-
+                searchDto.Column = ColumnNames.EndDate;
                 var allItems = await this._studentAchievementService.Search(searchDto);
                 var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();
                 response.Items = this.Mapper.Map<List<StudentAchievementResponseDto>>(pagedItems);

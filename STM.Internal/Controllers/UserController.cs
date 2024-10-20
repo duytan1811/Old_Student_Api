@@ -185,6 +185,50 @@
             }
         }
 
+        [HttpPost("{id}/change-password")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.User, PermissionConstants.Delete })]
+        public async Task<BaseResponse<ActionStatusEnum>> ChangePassword(Guid id, ChangePasswordRequestDto request)
+        {
+            var response = new BaseResponse<ActionStatusEnum>();
+
+            try
+            {
+                var dto = this.Mapper.Map<ChangePasswordDto>(request);
+                var result = await this._userService.ChangePassword(id, dto);
+
+                if (result == ActionStatusEnum.NotFound)
+                {
+                    response.Type = GlobalConstants.Error;
+                    response.Message = Messages.NotFound;
+                    return response;
+                }
+
+                if (result == ActionStatusEnum.PasswordIncorrect)
+                {
+                    response.Type = GlobalConstants.Error;
+                    response.Message = "Mật khẩu cũ không chính xác";
+                    return response;
+                }
+
+                if (result == ActionStatusEnum.PasswordLess)
+                {
+                    response.Type = GlobalConstants.Error;
+                    response.Message = "Mật khẩu phải bao gồm các ký tự thường, in hoa, số và ký tự đặc biệt";
+                    return response;
+                }
+
+                response.Message = Messages.ChangePassword;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
+
         [HttpGet("export-excel")]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
         public async Task<BaseResponse<string>> ExportExcel([FromForm] BaseSearchRequest<UserSearchRequest> request)

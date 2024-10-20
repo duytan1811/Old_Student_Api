@@ -1,32 +1,43 @@
 ﻿namespace STM.Services.Services
 {
+    using System.Text;
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
+    using Newtonsoft.Json;
     using OfficeOpenXml;
     using OfficeOpenXml.Style;
     using STM.Common.Constants;
     using STM.Common.Enums;
     using STM.Common.Utilities;
+    using STM.DataTranferObjects.Email;
     using STM.DataTranferObjects.Users;
     using STM.Entities.Models;
     using STM.Repositories;
     using STM.Services.IServices;
+    using STM.Services.ScheduleJob;
 
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly ISchedulingService _schedulingService;
 
         public UserService(
             IUnitOfWork unitOfWork,
             UserManager<User> userManager,
+            IServiceScopeFactory scopeFactory,
+            ISchedulingService schedulingService,
             IMapper mapper)
         {
             this._unitOfWork = unitOfWork;
             this._mapper = mapper;
             this._userManager = userManager;
+            this._scopeFactory = scopeFactory;
+            this._schedulingService = schedulingService;
         }
 
         public async Task<IQueryable<UserDto>> Search(UserSearchDto dto)
@@ -148,6 +159,49 @@
             return ActionStatusEnum.Success;
         }
 
+        public async Task<ActionStatusEnum> ResetPassword(string email)
+        {
+            var studentRep = this._unitOfWork.GetRepositoryAsync<Student>();
+            var userRep = this._unitOfWork.GetRepositoryAsync<User>();
+
+            var student = (await studentRep.QueryCondition(x => x.Email.ToLower() == email.Trim().ToLower())).FirstOrDefault();
+
+            if (student == null)
+            {
+                return ActionStatusEnum.NotFound;
+            }
+
+            var user = await userRep.FindById(student.UserId.Value);
+
+            var passwordReset = this.GeneratePassword(8);
+            if (user != null)
+            {
+                var token = await this._userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await this._userManager.ResetPasswordAsync(user, token, passwordReset);
+                if (!result.Succeeded)
+                {
+                    return ActionStatusEnum.PasswordLess;
+                }
+            }
+
+            await this._unitOfWork.SaveChangesAsync();
+
+            ResetPasswordJob.SetScopeFactory(this._scopeFactory);
+            var emailInfo = new EmailInfoDto
+            {
+                Title = "[STM] Khôi phục mật khẩu",
+                EmailAddress = new List<string>() { email },
+            };
+
+            this._schedulingService.ScheduleJob<ResetPasswordJob>(Guid.NewGuid().ToString(), DateTime.Now, new Dictionary<string, string>
+                            {
+                                { "EmailInfoAsJson", JsonConvert.SerializeObject(emailInfo) },
+                                { "NewPassword", passwordReset },
+                            });
+
+            return ActionStatusEnum.Success;
+        }
+
         public async Task<ActionStatusEnum> Update(UserSaveDto dto)
         {
             var user = await this._userManager.FindByIdAsync(dto.Id.ToString());
@@ -199,6 +253,35 @@
             }
 
             await userRep.Delete(user);
+            await this._unitOfWork.SaveChangesAsync();
+
+            return ActionStatusEnum.Success;
+        }
+
+        public async Task<ActionStatusEnum> ChangePassword(Guid id, ChangePasswordDto dto)
+        {
+            var userRep = this._unitOfWork.GetRepositoryAsync<User>();
+            var studentRep = this._unitOfWork.GetRepositoryAsync<Student>();
+
+            var user = await userRep.FindById(id);
+            if (user == null)
+            {
+                return ActionStatusEnum.NotFound;
+            }
+
+            var isPasswordCorrect = await this._userManager.CheckPasswordAsync(user, dto.OldPassword);
+
+            if (!isPasswordCorrect)
+            {
+                return ActionStatusEnum.PasswordIncorrect;
+            }
+
+            var result = await this._userManager.ChangePasswordAsync(user, dto.OldPassword, dto.NewPassword);
+            if (!result.Succeeded)
+            {
+                return ActionStatusEnum.PasswordLess;
+            }
+
             await this._unitOfWork.SaveChangesAsync();
 
             return ActionStatusEnum.Success;
@@ -267,6 +350,47 @@
             }
 
             return ActionStatusEnum.Success;
+        }
+
+        private string GeneratePassword(int length)
+        {
+            const string lowerCase = "abcdefghijklmnopqrstuvwxyz";
+            const string upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string numbers = "0123456789";
+            const string specialChars = "!@#$%^&*()_+-=[]{}|;:'\",.<>?/";
+
+            string allChars = lowerCase + upperCase + numbers + specialChars;
+            StringBuilder password = new StringBuilder();
+            Random random = new Random();
+
+            // Ensure password contains at least one character from each category
+            password.Append(lowerCase[random.Next(lowerCase.Length)]);
+            password.Append(upperCase[random.Next(upperCase.Length)]);
+            password.Append(numbers[random.Next(numbers.Length)]);
+            password.Append(specialChars[random.Next(specialChars.Length)]);
+
+            // Fill the rest of the password with random characters
+            for (int i = 4; i < length; i++)
+            {
+                password.Append(allChars[random.Next(allChars.Length)]);
+            }
+
+            return this.ShuffleString(password.ToString());
+        }
+
+        private string ShuffleString(string str)
+        {
+            char[] array = str.ToCharArray();
+            Random random = new Random();
+            for (int i = array.Length - 1; i > 0; i--)
+            {
+                int j = random.Next(i + 1);
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+
+            return new string(array);
         }
     }
 }

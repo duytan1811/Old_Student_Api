@@ -4,29 +4,38 @@
     using AutoMapper;
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using STM.Common.Constants;
     using STM.Common.Enums;
     using STM.Common.Utilities;
+    using STM.DataTranferObjects.Email;
     using STM.DataTranferObjects.Jobs;
     using STM.Entities.Models;
     using STM.Repositories;
     using STM.Services.IServices;
+    using STM.Services.ScheduleJob;
 
     public class JobService : IJobService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISchedulingService _schedulingService;
+        private readonly IServiceScopeFactory _scopeFactory;
 
         public JobService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            ISchedulingService schedulingService,
+            IServiceScopeFactory scopeFactory)
         {
             this._unitOfWork = unitOfWork;
             this._mapper = mapper;
             this._httpContextAccessor = httpContextAccessor;
+            this._schedulingService = schedulingService;
+            this._scopeFactory = scopeFactory;
         }
 
         public async Task<IQueryable<JobDto>> Search(JobSearchDto dto)
@@ -151,6 +160,7 @@
         public async Task<string> Create(JobSaveDto dto)
         {
             var jobRep = this._unitOfWork.GetRepositoryAsync<Job>();
+            var queryStudent = await this._unitOfWork.GetRepositoryReadOnlyAsync<Student>().QueryAll();
 
             var newJob = new Job
             {
@@ -192,6 +202,19 @@
 
             await jobRep.Add(newJob);
             await this._unitOfWork.SaveChangesAsync();
+
+            JobNotificationJob.SetScopeFactory(this._scopeFactory);
+
+            var emailAddress = queryStudent.Where(x => !string.IsNullOrEmpty(x.Email)).Select(x => x.Email).Distinct().ToList();
+            var emailInfo = new EmailInfoDto
+            {
+                Title = "[STM] Việc làm hôm nay",
+                EmailAddress = emailAddress,
+            };
+            this._schedulingService.ScheduleJob<JobNotificationJob>(Guid.NewGuid().ToString(), DateTime.Now, new Dictionary<string, string>
+                            {
+                                { "EmailInfoAsJson", JsonConvert.SerializeObject(emailInfo) },
+                            });
 
             return string.Format(Messages.CreateSuccess, GlobalConstants.Menu.Job);
         }
@@ -251,6 +274,7 @@
         public async Task<string> Delete(Guid id)
         {
             var jobRep = this._unitOfWork.GetRepositoryAsync<Job>();
+            var jobURRep = this._unitOfWork.GetRepositoryAsync<JobUserRegister>();
             var job = await jobRep.Single(i => i.Id == id);
 
             if (job == null)
@@ -258,6 +282,9 @@
                 return Messages.NotFound;
             }
 
+            var jobUR = await jobURRep.QueryCondition(x => x.JobId == job.Id);
+
+            await jobURRep.Delete(jobUR.ToList());
             await jobRep.Delete(job);
             await this._unitOfWork.SaveChangesAsync();
 

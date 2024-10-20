@@ -132,6 +132,9 @@
             this.CreateMap<EventByMonthDto, EventByMonthResponseDto>();
             this.CreateMap<MemberByMonthDto, MemberByMonthResponseDto>();
             this.CreateMap<NewsByMonthDto, NewsByMonthResponseDto>();
+            this.CreateMap<StudentByYearDto, StudentByYearResponseDto>();
+            this.CreateMap<StudentByMajorDto, StudentByMajorResponseDto>();
+            this.CreateMap<ChangePasswordRequestDto, ChangePasswordDto>();
         }
     }
 }
