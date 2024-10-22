@@ -5,14 +5,14 @@
     [Table("Surveys")]
     public class Survey : BaseModel
     {
-        public Guid SurveyTemplateId { get; set; }
+        public string Name { get; set; }
 
-        public virtual SurveyTemplate SurveyTemplate { get; set; }
+        public string? QuestionIds { get; set; }
 
         public DateTime? StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
 
-        public int MyProperty { get; set; }
+        public virtual ICollection<SurveyResult> SurveyResults { get; set; }
     }
 }

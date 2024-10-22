@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using STM.DataAccess.Contexts;
 
@@ -11,9 +12,10 @@ using STM.DataAccess.Contexts;
 namespace STM.DataAccess.Migrations
 {
     [DbContext(typeof(STMDbContext))]
-    partial class STMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241022142714_RenameQuestionTable")]
+    partial class RenameQuestionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -506,84 +508,84 @@ namespace STM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ae0577eb-f896-4b6d-af82-bf4ee4dcd045"),
+                            Id = new Guid("92de5a53-28fc-45e8-9f28-ef503a486c5e"),
                             Key = "webName",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("6d397fd9-a1ef-4a3b-a85e-6104e23b277b"),
+                            Id = new Guid("069a0c85-c867-4c45-9537-bd23f4d4db04"),
                             Key = "phone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("ec3051e9-9374-487c-84c2-d46279deab79"),
+                            Id = new Guid("0abd6cf3-feb3-4a0a-9f70-725f34a9eb6e"),
                             Key = "email",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("9ef0e341-0b60-4f96-834a-f651d4440220"),
+                            Id = new Guid("0310db65-f61f-46b5-8bcf-19678a6f71c0"),
                             Key = "emailSupportCustomer",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("a245d721-fb1b-43e3-a8c2-cdd308354ec7"),
+                            Id = new Guid("1489e3c4-942d-4d3a-bb1e-d39d6cff4fbf"),
                             Key = "province",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("d77b6247-f3e3-4826-a1f3-24848d4b740b"),
+                            Id = new Guid("39de26b2-2efb-4e25-8b00-691368507d8f"),
                             Key = "district",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("7c841188-49b7-4368-bdc6-3355ae146914"),
+                            Id = new Guid("a6eb717a-2a65-4897-bd56-952a7bd1fcdb"),
                             Key = "village",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("bb169229-f509-417a-a3e2-8e76e345018c"),
+                            Id = new Guid("a893f9c2-7beb-4ed7-9a42-3a8ba64ebabd"),
                             Key = "Address",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("a0067f74-65bb-410e-af2e-3287c62260ca"),
+                            Id = new Guid("b25a6cd2-7143-4e87-b4e3-234529f02a97"),
                             Key = "timeZone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("4812ed21-c138-4364-801a-bfd305c72595"),
+                            Id = new Guid("eaf3726c-c8f6-4728-a371-ebcae2b89cec"),
                             Key = "currency",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("b9ad0008-1278-4bba-bb72-eff5e3fc54d8"),
+                            Id = new Guid("03e28188-053c-4c17-885f-898794057052"),
                             Key = "orderCodeStartWith",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("2eb44447-ddbe-4329-80ae-a80d10053f9d"),
+                            Id = new Guid("46b70662-cebe-4043-8eff-8b9d8c7d8fbb"),
                             Key = "orderCodeEndWith",
                             Status = 1,
                             Type = "general"
@@ -718,18 +720,17 @@ namespace STM.DataAccess.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QuestionIds")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("MyProperty")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("SurveyTemplateId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -738,6 +739,8 @@ namespace STM.DataAccess.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SurveyTemplateId");
 
                     b.ToTable("Surveys");
                 });
@@ -782,6 +785,42 @@ namespace STM.DataAccess.Migrations
                     b.HasIndex("SurveyId");
 
                     b.ToTable("SurveyResults");
+                });
+
+            modelBuilder.Entity("STM.Entities.Models.SurveyTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QuestionIds")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SurveyTemplate");
                 });
 
             modelBuilder.Entity("STM.Entities.Models.SystemLog", b =>
@@ -920,7 +959,7 @@ namespace STM.DataAccess.Migrations
                             IsTeacher = false,
                             LockoutEnabled = true,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGQ6J+HbJ13GzmxYN4PmFm0DuTKga6AXmmRea0+B65dl5GvPZVs4rIUPYxpPKhaOJg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOEnrpgsLPxzkbSufPfDVVN0AjcQjYOIG8UEZ8oiqBhIFy3GT2rsF2O7/1uObpCfPQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "ZY5BGSWBARTE74T6ZLO7WKKMMILBEB2E",
                             Status = 1,
@@ -1152,6 +1191,17 @@ namespace STM.DataAccess.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("STM.Entities.Models.Survey", b =>
+                {
+                    b.HasOne("STM.Entities.Models.SurveyTemplate", "SurveyTemplate")
+                        .WithMany()
+                        .HasForeignKey("SurveyTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SurveyTemplate");
+                });
+
             modelBuilder.Entity("STM.Entities.Models.SurveyResult", b =>
                 {
                     b.HasOne("STM.Entities.Models.Question", "Question")
@@ -1161,7 +1211,7 @@ namespace STM.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("STM.Entities.Models.Survey", "Survey")
-                        .WithMany("SurveyResults")
+                        .WithMany()
                         .HasForeignKey("SurveyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1268,11 +1318,6 @@ namespace STM.DataAccess.Migrations
             modelBuilder.Entity("STM.Entities.Models.Student", b =>
                 {
                     b.Navigation("StudentAchievements");
-                });
-
-            modelBuilder.Entity("STM.Entities.Models.Survey", b =>
-                {
-                    b.Navigation("SurveyResults");
                 });
 
             modelBuilder.Entity("STM.Entities.Models.User", b =>

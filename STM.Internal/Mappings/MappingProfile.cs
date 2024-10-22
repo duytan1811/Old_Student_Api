@@ -15,7 +15,7 @@
     using STM.API.Requests.Settings;
     using STM.API.Requests.StudentAchievements;
     using STM.API.Requests.Students;
-    using STM.API.Requests.SurveyTemplates;
+    using STM.API.Requests.Surveys;
     using STM.API.Requests.Users;
     using STM.API.Responses.Base;
     using STM.API.Responses.Events;
@@ -29,7 +29,7 @@
     using STM.API.Responses.Statistics;
     using STM.API.Responses.StudentAchievements;
     using STM.API.Responses.Students;
-    using STM.API.Responses.SurveyTemplates;
+    using STM.API.Responses.Surveys;
     using STM.API.Responses.Users;
     using STM.Common.Enums;
     using STM.Common.Utilities;
@@ -46,7 +46,7 @@
     using STM.DataTranferObjects.Statistics;
     using STM.DataTranferObjects.StudentAchievements;
     using STM.DataTranferObjects.Students;
-    using STM.DataTranferObjects.SurveyTemplates;
+    using STM.DataTranferObjects.Surveys;
     using STM.DataTranferObjects.Users;
     using STM.Entities.Models;
     using STM.ViewModels.Accounts;
@@ -142,16 +142,19 @@
             this.CreateMap<StudentByMajorDto, StudentByMajorResponseDto>();
             this.CreateMap<ChangePasswordRequestDto, ChangePasswordDto>();
 
-            this.CreateMap<SurveyTemplate, SurveyTemplateDto>()
+            this.CreateMap<Survey, SurveyDto>()
                 .ForMember(x => x.QuestionIds, opt => opt.MapFrom(x => x.QuestionIds.Length > 0 ? JsonConvert.DeserializeObject<List<Guid?>>(x.QuestionIds) : null));
-            this.CreateMap<SurveyTemplateSearchRequestDto, SurveyTemplateSearchDto>();
-            this.CreateMap<SurveyTemplateSaveRequestDto, SurveyTemplateSaveDto>();
-            this.CreateMap<SurveyTemplateDto, SurveyTemplateResponseDto>();
+            this.CreateMap<SurveySearchRequestDto, SurveySearchDto>();
+            this.CreateMap<SurveySaveRequestDto, SurveySaveDto>();
+            this.CreateMap<SurveyDto, SurveyResponseDto>();
 
             this.CreateMap<Question, QuestionDto>();
             this.CreateMap<QuestionSaveRequestDto, QuestionSaveDto>();
             this.CreateMap<QuestionSearchRequestDto, QuestionSearchDto>();
             this.CreateMap<QuestionDto, QuestionResponseDto>();
+
+            this.CreateMap<SurveyResultSaveRequestItemDto, SurveyResultSaveItemDto>();
+            this.CreateMap<SurveyResultSaveRequestDto, SurveyResultSaveDto>();
         }
     }
 }

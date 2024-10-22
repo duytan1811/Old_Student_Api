@@ -36,6 +36,7 @@
             {
                 Id = x.Id,
                 Name = x.Name,
+                IsComment = x.IsComment,
                 Status = x.Status,
                 CreatedAt = x.CreatedAt,
             });
@@ -61,6 +62,7 @@
             {
                 Id = question.Id,
                 Name = question.Name,
+                IsComment = question.IsComment,
                 Status = question.Status,
                 CreatedAt = question.CreatedAt,
                 CreatedById = question.CreatedById,
@@ -110,7 +112,7 @@
         public async Task<string> Delete(Guid id)
         {
             var questionRep = this._unitOfWork.GetRepositoryAsync<Question>();
-            var querySurvey = await this._unitOfWork.GetRepositoryReadOnlyAsync<SurveyTemplate>().QueryAll();
+            var querySurvey = await this._unitOfWork.GetRepositoryReadOnlyAsync<Survey>().QueryAll();
 
             var question = await questionRep.Single(i => i.Id == id);
 

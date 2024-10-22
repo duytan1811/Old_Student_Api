@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using STM.DataAccess.Contexts;
 
@@ -11,9 +12,10 @@ using STM.DataAccess.Contexts;
 namespace STM.DataAccess.Migrations
 {
     [DbContext(typeof(STMDbContext))]
-    partial class STMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241022152443_RemoveSurveyTable")]
+    partial class RemoveSurveyTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -506,84 +508,84 @@ namespace STM.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ae0577eb-f896-4b6d-af82-bf4ee4dcd045"),
+                            Id = new Guid("d6fdb850-eb7d-4008-be68-e2f7190f1364"),
                             Key = "webName",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("6d397fd9-a1ef-4a3b-a85e-6104e23b277b"),
+                            Id = new Guid("384cc30a-4aa8-4e24-842d-1450535ab0de"),
                             Key = "phone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("ec3051e9-9374-487c-84c2-d46279deab79"),
+                            Id = new Guid("fa5d8c59-4412-4a45-b0de-aa5abe6bf5d0"),
                             Key = "email",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("9ef0e341-0b60-4f96-834a-f651d4440220"),
+                            Id = new Guid("2470e833-06e2-41f3-ae66-2304ff6ea320"),
                             Key = "emailSupportCustomer",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("a245d721-fb1b-43e3-a8c2-cdd308354ec7"),
+                            Id = new Guid("c1272ae8-5c2d-4eaf-b721-d87baafbc615"),
                             Key = "province",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("d77b6247-f3e3-4826-a1f3-24848d4b740b"),
+                            Id = new Guid("bb43643d-926d-4b4a-9bcd-701622e2ac74"),
                             Key = "district",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("7c841188-49b7-4368-bdc6-3355ae146914"),
+                            Id = new Guid("e44665a5-2530-4476-86ff-5277063c19ed"),
                             Key = "village",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("bb169229-f509-417a-a3e2-8e76e345018c"),
+                            Id = new Guid("afb3da2b-60f7-4c97-9770-5d8216350fc0"),
                             Key = "Address",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("a0067f74-65bb-410e-af2e-3287c62260ca"),
+                            Id = new Guid("84971619-c6c6-4ebe-b1b3-c375bcdedaca"),
                             Key = "timeZone",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("4812ed21-c138-4364-801a-bfd305c72595"),
+                            Id = new Guid("3665a38e-b7a4-4753-ad7a-29436698c4ff"),
                             Key = "currency",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("b9ad0008-1278-4bba-bb72-eff5e3fc54d8"),
+                            Id = new Guid("2ab09528-5c7b-46cc-9c6d-deae30d6d94d"),
                             Key = "orderCodeStartWith",
                             Status = 1,
                             Type = "general"
                         },
                         new
                         {
-                            Id = new Guid("2eb44447-ddbe-4329-80ae-a80d10053f9d"),
+                            Id = new Guid("e9caacb5-f2ce-4b86-bd2f-5b833ee4218e"),
                             Key = "orderCodeEndWith",
                             Status = 1,
                             Type = "general"
@@ -920,7 +922,7 @@ namespace STM.DataAccess.Migrations
                             IsTeacher = false,
                             LockoutEnabled = true,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGQ6J+HbJ13GzmxYN4PmFm0DuTKga6AXmmRea0+B65dl5GvPZVs4rIUPYxpPKhaOJg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJB8A2ZGb5FJHgdKwUV/b9CAiEpp0e3HwK7rQTVDKay6fQhUepTC/ckDRC1kULlTMA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "ZY5BGSWBARTE74T6ZLO7WKKMMILBEB2E",
                             Status = 1,
@@ -1161,7 +1163,7 @@ namespace STM.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("STM.Entities.Models.Survey", "Survey")
-                        .WithMany("SurveyResults")
+                        .WithMany()
                         .HasForeignKey("SurveyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1268,11 +1270,6 @@ namespace STM.DataAccess.Migrations
             modelBuilder.Entity("STM.Entities.Models.Student", b =>
                 {
                     b.Navigation("StudentAchievements");
-                });
-
-            modelBuilder.Entity("STM.Entities.Models.Survey", b =>
-                {
-                    b.Navigation("SurveyResults");
                 });
 
             modelBuilder.Entity("STM.Entities.Models.User", b =>

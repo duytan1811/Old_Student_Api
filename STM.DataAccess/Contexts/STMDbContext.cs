@@ -60,7 +60,6 @@
             builder.ApplyConfiguration(new EventConfiguration());
             builder.ApplyConfiguration(new QuestionConfiguration());
             builder.ApplyConfiguration(new SurveyConfiguration());
-            builder.ApplyConfiguration(new SurveyTemplateConfiguration());
             builder.ApplyConfiguration(new SurveyResultConfiguration());
         }
     }
