@@ -14,6 +14,7 @@
         public const string UpdateFail = "Thêm {0} thất bại";
         public const string DeleteSuccess = "Xóa {0} thành công";
         public const string DeleteFail = "Thêm {0} thất bại";
+        public const string CannotDelete = "Không thể xóa {0}. Thông tin được liên kết với chức năng khác";
         public const string UpdateDisplaySuccess = "UpdateDisplaySuccess";
         public const string ImportSuccess = "Import {0} thành công";
         public const string ChangePassword = "Thay đổi mật khẩu thành công";

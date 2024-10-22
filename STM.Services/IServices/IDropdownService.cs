@@ -13,5 +13,9 @@
         List<SelectListItem> GetNewTypes();
 
         List<SelectListItem> GetEventTypes();
+
+        Task<List<SelectListItem>> GetQuestions();
+
+        List<SelectListItem> GetSurveyTypes();
     }
 }

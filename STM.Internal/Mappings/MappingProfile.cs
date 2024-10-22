@@ -10,10 +10,12 @@
     using STM.API.Requests.Jobs;
     using STM.API.Requests.Majors;
     using STM.API.Requests.News;
+    using STM.API.Requests.Questions;
     using STM.API.Requests.Roles;
     using STM.API.Requests.Settings;
     using STM.API.Requests.StudentAchievements;
     using STM.API.Requests.Students;
+    using STM.API.Requests.SurveyTemplates;
     using STM.API.Requests.Users;
     using STM.API.Responses.Base;
     using STM.API.Responses.Events;
@@ -21,11 +23,13 @@
     using STM.API.Responses.Jobs;
     using STM.API.Responses.Majors;
     using STM.API.Responses.News;
+    using STM.API.Responses.Questions;
     using STM.API.Responses.Roles;
     using STM.API.Responses.Settings;
     using STM.API.Responses.Statistics;
     using STM.API.Responses.StudentAchievements;
     using STM.API.Responses.Students;
+    using STM.API.Responses.SurveyTemplates;
     using STM.API.Responses.Users;
     using STM.Common.Enums;
     using STM.Common.Utilities;
@@ -36,11 +40,13 @@
     using STM.DataTranferObjects.Jobs;
     using STM.DataTranferObjects.Majors;
     using STM.DataTranferObjects.News;
+    using STM.DataTranferObjects.Questions;
     using STM.DataTranferObjects.Roles;
     using STM.DataTranferObjects.Settings;
     using STM.DataTranferObjects.Statistics;
     using STM.DataTranferObjects.StudentAchievements;
     using STM.DataTranferObjects.Students;
+    using STM.DataTranferObjects.SurveyTemplates;
     using STM.DataTranferObjects.Users;
     using STM.Entities.Models;
     using STM.ViewModels.Accounts;
@@ -135,6 +141,17 @@
             this.CreateMap<StudentByYearDto, StudentByYearResponseDto>();
             this.CreateMap<StudentByMajorDto, StudentByMajorResponseDto>();
             this.CreateMap<ChangePasswordRequestDto, ChangePasswordDto>();
+
+            this.CreateMap<SurveyTemplate, SurveyTemplateDto>()
+                .ForMember(x => x.QuestionIds, opt => opt.MapFrom(x => x.QuestionIds.Length > 0 ? JsonConvert.DeserializeObject<List<Guid?>>(x.QuestionIds) : null));
+            this.CreateMap<SurveyTemplateSearchRequestDto, SurveyTemplateSearchDto>();
+            this.CreateMap<SurveyTemplateSaveRequestDto, SurveyTemplateSaveDto>();
+            this.CreateMap<SurveyTemplateDto, SurveyTemplateResponseDto>();
+
+            this.CreateMap<Question, QuestionDto>();
+            this.CreateMap<QuestionSaveRequestDto, QuestionSaveDto>();
+            this.CreateMap<QuestionSearchRequestDto, QuestionSearchDto>();
+            this.CreateMap<QuestionDto, QuestionResponseDto>();
         }
     }
 }

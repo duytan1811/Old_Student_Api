@@ -139,6 +139,8 @@ builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ISchedulingService, SchedulingService>();
+builder.Services.AddScoped<ISurveyTemplateService, SurveyTemplateService>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
 
 // Add transient services
 builder.Services.AddTransient<IActionContextAccessor, ActionContextAccessor>();

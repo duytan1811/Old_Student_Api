@@ -35,6 +35,9 @@
             public const string News = "Tin tức";
             public const string Job = "Việc làm";
             public const string Event = "Sự kiện";
+            public const string SurveyTemplate = "Mẫu khảo sát";
+            public const string Survey = "Khảo sát";
+            public const string Question = "Câu hỏi";
         }
     }
 }

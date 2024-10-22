@@ -117,5 +117,43 @@
                 return resposne;
             }
         }
+
+        [HttpGet("questions")]
+        public async Task<BaseResponse<List<SelectListItem>>> GetQuestions()
+        {
+            var resposne = new BaseResponse<List<SelectListItem>>();
+
+            try
+            {
+                resposne.Data = await this._dropdownService.GetQuestions();
+                return resposne;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError($"Get dropdown questions error: {ex.Message}");
+                resposne.Type = GlobalConstants.Error;
+                resposne.Message = ex.Message;
+                return resposne;
+            }
+        }
+
+        [HttpGet("survey-types")]
+        public BaseResponse<List<SelectListItem>> GetSurveyTypes()
+        {
+            var resposne = new BaseResponse<List<SelectListItem>>();
+
+            try
+            {
+                resposne.Data = this._dropdownService.GetSurveyTypes();
+                return resposne;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError($"Get dropdown survey types error: {ex.Message}");
+                resposne.Type = GlobalConstants.Error;
+                resposne.Message = ex.Message;
+                return resposne;
+            }
+        }
     }
 }
