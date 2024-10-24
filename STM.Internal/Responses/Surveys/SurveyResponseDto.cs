@@ -26,7 +26,7 @@
 
         public List<QuestionResponseDto>? Questions { get; set; }
 
-        public bool IsExpried => this.EndDate < DateTime.Now;
+        public bool IsExpried => this.EndDate < DateTime.Now.Date;
 
         public bool IsSurveyed { get; set; }
 

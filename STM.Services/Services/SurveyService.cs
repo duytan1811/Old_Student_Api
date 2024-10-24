@@ -1,5 +1,6 @@
 ﻿namespace STM.Services.Services
 {
+    using System.Linq;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
     using Newtonsoft.Json;
@@ -65,6 +66,60 @@
             return dto.Column switch
             {
                 ColumnNames.CreatedAt => dto.Ascending ? query.OrderBy(x => x.CreatedAt) : query.OrderByDescending(x => x.CreatedAt),
+                ColumnNames.IsSurveyed => dto.Ascending ? query.OrderBy(x => x.IsSurveyed).ThenBy(x => x.EndDate)
+                : query.OrderByDescending(x => x.IsSurveyed).ThenByDescending(x => x.EndDate),
+                _ => query,
+            };
+        }
+
+        public async Task<IQueryable<SurveyResultDto>> SearchServeyResult(SurveyResultSearchDto dto)
+        {
+            var querySurveyRS = await this._unitOfWork.GetRepositoryReadOnlyAsync<SurveyResult>().QueryAll();
+            var queryStudent = await this._unitOfWork.GetRepositoryReadOnlyAsync<Student>().QueryAll();
+            var queryUser = await this._unitOfWork.GetRepositoryReadOnlyAsync<User>().QueryAll();
+
+            queryStudent = queryStudent.Include(x => x.User);
+
+            if (dto.SurveyId.HasValue)
+            {
+                querySurveyRS = querySurveyRS.Where(x => x.SurveyId == dto.SurveyId);
+            }
+
+            if (dto.Date.HasValue)
+            {
+                querySurveyRS = querySurveyRS.Where(x => x.CreatedAt.HasValue && x.CreatedAt.Value.Date == dto.Date.Value.Date);
+            }
+
+            if (!string.IsNullOrEmpty(dto.FullName))
+            {
+                var nameSearch = dto.FullName.Trim().ToLower();
+                queryStudent = queryStudent.Where(x => x.FullName.ToLower().Contains(nameSearch));
+            }
+
+            var userIds = queryStudent.GroupBy(x => x.UserId).Select(x => x.Key).ToList();
+
+            var query = (from ss in querySurveyRS
+                         join u in queryUser on ss.CreatedById equals u.Id
+                         join s in queryStudent on u.Id equals s.UserId into us
+                         from res in us.DefaultIfEmpty()
+                         where ss.CreatedById.HasValue && userIds.Contains(ss.CreatedById)
+                         select new
+                         {
+                             CreatedById = ss.CreatedById.Value,
+                             SurveyId = ss.SurveyId,
+                             FullName = u.IsAdmin ? "Admin" : res.FullName,
+                             CreatedAt = ss.CreatedAt,
+                         }).GroupBy(x => new { x.CreatedById, x.SurveyId, x.FullName, x.CreatedAt.Value.Date })
+                         .Select(x => new SurveyResultDto
+                         {
+                             CreatedById = x.Key.CreatedById,
+                             SurveyId = x.Key.SurveyId,
+                             FullName = x.Key.FullName,
+                             CreatedAt = x.Key.Date,
+                         });
+
+            return dto.Column switch
+            {
                 _ => query,
             };
         }
@@ -92,6 +147,31 @@
                 }).ToList();
 
             result.Questions = questions;
+
+            return result;
+        }
+
+        public async Task<SurveyResultDetailDto?> GetSurveyDetail(Guid surveyId, Guid userId)
+        {
+            var querySurvey = await this._unitOfWork.GetRepositoryReadOnlyAsync<Survey>().QueryAll();
+            var querySurveyRS = await this._unitOfWork.GetRepositoryReadOnlyAsync<SurveyResult>().QueryAll();
+            var queryUser = await this._unitOfWork.GetRepositoryReadOnlyAsync<User>().QueryAll();
+
+            var survey = querySurvey.FirstOrDefault(i => i.Id == surveyId);
+
+            if (survey == null)
+            {
+                return null;
+            }
+
+            var user = queryUser.Include(x => x.Student).FirstOrDefault(i => i.Id == userId);
+
+            var surveyRS = querySurveyRS.Include(x => x.Question)
+                .Where(x => x.SurveyId == survey.Id && x.CreatedById == user.Id).ToList();
+            var result = new SurveyResultDetailDto();
+            result.CreatedByName = user.IsAdmin ? "Admin" : user.Student.FullName;
+
+            result.Items = this._mapper.Map<List<SurveyResultDetailItemDto>>(surveyRS);
 
             return result;
         }

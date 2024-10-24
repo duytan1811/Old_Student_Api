@@ -11,7 +11,7 @@
         public const string Status = "Status";
         public const string IsActive = "IsActive";
         public const string CountEventRegister = "CountEventRegister";
-        public const string Order = "Order";
+        public const string IsSurveyed = "IsSurveyed";
         public const string CountComment = "CountComment";
         public const string EndDate = "EndDate";
         public const string StartDate = "StartDate";

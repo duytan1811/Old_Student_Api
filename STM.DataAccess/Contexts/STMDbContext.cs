@@ -61,6 +61,7 @@
             builder.ApplyConfiguration(new QuestionConfiguration());
             builder.ApplyConfiguration(new SurveyConfiguration());
             builder.ApplyConfiguration(new SurveyResultConfiguration());
+            builder.ApplyConfiguration(new ContributeConfiguration());
         }
     }
 }

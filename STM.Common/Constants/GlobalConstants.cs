@@ -37,6 +37,8 @@
             public const string Event = "Sự kiện";
             public const string Survey = "Khảo sát";
             public const string Question = "Câu hỏi";
+            public const string Contribute = "Đóng góp";
+            public const string Reward = "Khen thưởng";
         }
     }
 }

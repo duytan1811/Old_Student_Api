@@ -155,5 +155,43 @@
                 return resposne;
             }
         }
+
+        [HttpGet("students")]
+        public async Task<BaseResponse<List<SelectListItem>>> GetStudents()
+        {
+            var resposne = new BaseResponse<List<SelectListItem>>();
+
+            try
+            {
+                resposne.Data = await this._dropdownService.GetStudents();
+                return resposne;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError($"Get dropdown students error: {ex.Message}");
+                resposne.Type = GlobalConstants.Error;
+                resposne.Message = ex.Message;
+                return resposne;
+            }
+        }
+
+        [HttpGet("contribute-types")]
+        public BaseResponse<List<SelectListItem>> GetContributesTypes()
+        {
+            var resposne = new BaseResponse<List<SelectListItem>>();
+
+            try
+            {
+                resposne.Data = this._dropdownService.GetContributeTypes();
+                return resposne;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError($"Get dropdown contributes types error: {ex.Message}");
+                resposne.Type = GlobalConstants.Error;
+                resposne.Message = ex.Message;
+                return resposne;
+            }
+        }
     }
 }

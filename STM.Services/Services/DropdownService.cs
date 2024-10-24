@@ -75,5 +75,22 @@
         {
             return EnumHelper<SurveyTypeEnum>.ConvertToSelectList(false);
         }
+
+        public async Task<List<SelectListItem>> GetStudents()
+        {
+            var query = await this._unitOfWork.GetRepositoryReadOnlyAsync<Student>().QueryAll();
+            query = query.Where(x => x.Status == StatusEnum.Active);
+
+            return query.Select(x => new SelectListItem
+            {
+                Value = x.Id.ToString().ToLower(),
+                Text = x.FullName,
+            }).ToList();
+        }
+
+        public List<SelectListItem> GetContributeTypes()
+        {
+            return EnumHelper<ContributeTypeEnum>.ConvertToSelectList(false);
+        }
     }
 }

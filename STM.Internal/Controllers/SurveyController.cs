@@ -41,12 +41,46 @@
                 }
 
                 var searchDto = this.Mapper.Map<SurveySearchDto>(request.SearchParams);
-                searchDto.Column = ColumnNames.CreatedAt;
                 searchDto.CurrentUserId = this.UserLogin.Id;
 
                 var allItems = await this._surveyService.Search(searchDto);
                 var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();
                 response.Items = this.Mapper.Map<List<SurveyResponseDto>>(pagedItems);
+                response.Total = allItems.Count();
+
+                var startIndex = request.Start + 1;
+                response.Items.ForEach(i => i.Index = startIndex++);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
+
+        [HttpPost("{surveyId}/survey-results")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        public async Task<BaseTableResponse<SurveyResultResponseDto>> SearchSurveyResults(Guid surveyId, BaseSearchRequest<SurveyResultSearchRequestDto> request)
+        {
+            var response = new BaseTableResponse<SurveyResultResponseDto>();
+
+            try
+            {
+                if (request.SearchParams == null)
+                {
+                    request.SearchParams = new SurveyResultSearchRequestDto();
+                }
+
+                var searchDto = this.Mapper.Map<SurveyResultSearchDto>(request.SearchParams);
+                searchDto.SurveyId = surveyId;
+                searchDto.Column = ColumnNames.CreatedAt;
+
+                var allItems = await this._surveyService.SearchServeyResult(searchDto);
+                var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();
+                response.Items = this.Mapper.Map<List<SurveyResultResponseDto>>(pagedItems);
                 response.Total = allItems.Count();
 
                 var startIndex = request.Start + 1;
@@ -79,6 +113,34 @@
                 }
 
                 response.Data = this.Mapper.Map<SurveyResponseDto>(result);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
+
+        [HttpGet("{surveyId}/survey-results/{userId}")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        public async Task<BaseResponse<SurveyResultDetailResponseDto>> GetSurveyDetail(Guid surveyId, Guid userId)
+        {
+            var response = new BaseResponse<SurveyResultDetailResponseDto>();
+
+            try
+            {
+                var result = await this._surveyService.GetSurveyDetail(surveyId, userId);
+
+                if (result == null)
+                {
+                    response.Message = Messages.NotFound;
+                    return response;
+                }
+
+                response.Data = this.Mapper.Map<SurveyResultDetailResponseDto>(result);
                 return response;
             }
             catch (Exception ex)

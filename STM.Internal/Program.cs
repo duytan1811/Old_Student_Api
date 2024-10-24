@@ -141,6 +141,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ISchedulingService, SchedulingService>();
 builder.Services.AddScoped<ISurveyService, SurveyService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IContributeService, ContributeService>();
 
 // Add transient services
 builder.Services.AddTransient<IActionContextAccessor, ActionContextAccessor>();

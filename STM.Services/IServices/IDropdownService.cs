@@ -17,5 +17,9 @@
         Task<List<SelectListItem>> GetQuestions();
 
         List<SelectListItem> GetSurveyTypes();
+
+        Task<List<SelectListItem>> GetStudents();
+
+        List<SelectListItem> GetContributeTypes();
     }
 }

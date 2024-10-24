@@ -5,6 +5,7 @@
     using Newtonsoft.Json;
     using STM.API.Requests.Auth;
     using STM.API.Requests.Base;
+    using STM.API.Requests.Contributes;
     using STM.API.Requests.Events;
     using STM.API.Requests.Fourms;
     using STM.API.Requests.Jobs;
@@ -18,6 +19,7 @@
     using STM.API.Requests.Surveys;
     using STM.API.Requests.Users;
     using STM.API.Responses.Base;
+    using STM.API.Responses.Contributes;
     using STM.API.Responses.Events;
     using STM.API.Responses.Fourms;
     using STM.API.Responses.Jobs;
@@ -35,6 +37,7 @@
     using STM.Common.Utilities;
     using STM.DataTranferObjects.Auth;
     using STM.DataTranferObjects.Base;
+    using STM.DataTranferObjects.Contributes;
     using STM.DataTranferObjects.Events;
     using STM.DataTranferObjects.Fourms;
     using STM.DataTranferObjects.Jobs;
@@ -155,6 +158,21 @@
 
             this.CreateMap<SurveyResultSaveRequestItemDto, SurveyResultSaveItemDto>();
             this.CreateMap<SurveyResultSaveRequestDto, SurveyResultSaveDto>();
+
+            this.CreateMap<SurveyResultSearchRequestDto, SurveyResultSearchDto>();
+            this.CreateMap<SurveyResultDto, SurveyResultResponseDto>();
+
+            this.CreateMap<SurveyResult, SurveyResultDetailItemDto>()
+                .ForMember(x => x.IsQuestionComment, opt => opt.MapFrom(m => m.Question.IsComment))
+                .ForMember(x => x.QuestionName, opt => opt.MapFrom(m => m.Question.Name));
+            this.CreateMap<SurveyResultDetailItemDto, SurveyResultDetailResponseItemDto>();
+            this.CreateMap<SurveyResultDetailDto, SurveyResultDetailResponseDto>();
+
+            this.CreateMap<ContributeSearchRequestDto, ContributeSearchDto>();
+            this.CreateMap<ContributeSaveRequestDto, ContributeSaveDto>();
+            this.CreateMap<ContributeSaveDto, Contribute>();
+            this.CreateMap<Contribute, ContributeDto>();
+            this.CreateMap<ContributeDto, ContributeResponseDto>();
         }
     }
 }
