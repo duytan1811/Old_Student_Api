@@ -1,9 +1,16 @@
 ﻿namespace STM.API.Responses.Students
 {
     using STM.API.Responses.Base;
+    using STM.Common.Enums;
+    using STM.Common.Utilities;
 
     public class StudentResponseDto : BaseItemResponse
     {
+        public StudentResponseDto()
+        {
+            this.Contributes = new List<StudentContributeResponseDto>();
+        }
+
         public Guid? UserId { get; set; }
 
         public Guid? MajorId { get; set; }
@@ -28,8 +35,23 @@
 
         public string? JobTitle { get; set; }
 
-        public string MajorName { get; set; }
+        public string? MajorName { get; set; }
 
-        public int CountArchievement { get; set; }
+        public int? CountArchievement { get; set; }
+
+        public int? CountContribute { get; set; }
+
+        public List<StudentContributeResponseDto>? Contributes { get; set; }
+    }
+
+    public class StudentContributeResponseDto
+    {
+        public ContributeTypeEnum Type { get; set; }
+
+        public string TypeName => EnumHelper<ContributeTypeEnum>.GetDisplayValue(this.Type);
+
+        public decimal? Amount { get; set; }
+
+        public string? Detail { get; set; }
     }
 }

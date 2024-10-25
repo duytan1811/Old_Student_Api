@@ -13,5 +13,7 @@
         Task<string> Update(StudentSaveDto dto);
 
         Task<string> Delete(Guid id);
+
+        Task<List<StudentContributeDto>> GetContributes(Guid id);
     }
 }

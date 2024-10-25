@@ -1,9 +1,11 @@
 ﻿namespace STM.DataTranferObjects.Students
 {
+    using STM.Common.Enums;
     using STM.DataTranferObjects.Base;
 
     public class StudentDto : BaseDto
     {
+
         public Guid? UserId { get; set; }
 
         public Guid? MajorId { get; set; }
@@ -31,5 +33,16 @@
         public string MajorName { get; set; }
 
         public int? CountArchievement { get; set; }
+
+        public int? CountContribute { get; set; }
+    }
+
+    public class StudentContributeDto
+    {
+        public ContributeTypeEnum Type { get; set; }
+
+        public decimal? Amount { get; set; }
+
+        public string? Detail { get; set; }
     }
 }

@@ -250,7 +250,7 @@
                 return Messages.NotFound;
             }
 
-            var isExistsSurveyRS = querySurvey.Any();
+            var isExistsSurveyRS = querySurvey.Any(x => x.SurveyId == survey.Id);
             if (isExistsSurveyRS)
             {
                 return string.Format(Messages.CannotDelete, GlobalConstants.Menu.Survey);
@@ -285,7 +285,7 @@
             await surveyRsRep.Add(newSurveyRs);
             await this._unitOfWork.SaveChangesAsync();
 
-            return string.Format(Messages.DeleteSuccess, GlobalConstants.Menu.Survey);
+            return Messages.SurveySuccess;
         }
     }
 }

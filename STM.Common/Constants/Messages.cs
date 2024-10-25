@@ -20,6 +20,7 @@
         public const string ChangePassword = "Thay đổi mật khẩu thành công";
         public const string ApplyJob = "Ứng tuyển thành công";
         public const string EventRegister = "Đăng ký tham gia sự kiện thành công";
+        public const string SurveySuccess = "Thực hiện khảo sát thành công";
 
         // System
         public const string Exception = "Đã xảy ra lỗi hệ thống";

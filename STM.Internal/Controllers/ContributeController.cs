@@ -41,6 +41,7 @@
                 }
 
                 var searchDto = this.Mapper.Map<ContributeSearchDto>(request.SearchParams);
+                searchDto.Column = ColumnNames.CreatedAt;
 
                 var allItems = await this._contributeService.Search(searchDto);
                 var pagedItems = allItems.Skip(request.Start).Take(request.Length).ToList();

@@ -207,6 +207,11 @@
             try
             {
                 var result = await this._surveyService.Delete(id);
+                if (result.StartsWith("Không thể"))
+                {
+                    response.Type = GlobalConstants.Error;
+                }
+
                 response.Message = result;
                 return response;
             }

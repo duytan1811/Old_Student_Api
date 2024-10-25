@@ -26,6 +26,7 @@
         {
             var queryStudent = await this._unitOfWork.GetRepositoryReadOnlyAsync<Student>().QueryAll();
 
+            queryStudent = queryStudent.Include(x => x.StudentAchievements).Include(x => x.Contributes);
             if (!string.IsNullOrEmpty(dto.FullName))
             {
                 var nameSearch = dto.FullName.Trim().ToLower();
@@ -67,6 +68,8 @@
                 YearOfGraduation = x.YearOfGraduation,
                 Status = x.Status,
                 CreatedAt = x.CreatedAt,
+                CountArchievement = x.StudentAchievements.Count(),
+                CountContribute = x.Contributes.Count(),
             });
 
             return dto.Column switch
@@ -79,7 +82,7 @@
         public async Task<StudentDto?> FindById(Guid id)
         {
             var queryStudent = await this._unitOfWork.GetRepositoryReadOnlyAsync<Student>().QueryAll();
-            var student = queryStudent.Include(x => x.Major).Include(x => x.StudentAchievements).FirstOrDefault(i => i.Id == id);
+            var student = queryStudent.Include(x => x.Major).Include(x => x.StudentAchievements).Include(x => x.Contributes).FirstOrDefault(i => i.Id == id);
 
             if (student == null)
             {
@@ -88,6 +91,30 @@
 
             var result = this._mapper.Map<StudentDto>(student);
             result.CountArchievement = student.StudentAchievements.Count;
+
+            return result;
+        }
+
+        public async Task<List<StudentContributeDto>> GetContributes(Guid id)
+        {
+            var queryStudent = await this._unitOfWork.GetRepositoryReadOnlyAsync<Student>().QueryAll();
+            var student = queryStudent.Include(x => x.Major).Include(x => x.StudentAchievements).Include(x => x.Contributes).FirstOrDefault(i => i.Id == id);
+            var result = new List<StudentContributeDto>();
+
+            if (student == null)
+            {
+                return result;
+            }
+
+            if (student.Contributes.Count > 0)
+            {
+                result = student.Contributes.Select(x => new StudentContributeDto
+                {
+                    Type = x.Type,
+                    Amount = x.Amount,
+                    Detail = x.Detail,
+                }).ToList();
+            }
 
             return result;
         }
@@ -158,6 +185,7 @@
 
         public async Task<string> Delete(Guid id)
         {
+            var userRep = this._unitOfWork.GetRepositoryAsync<User>();
             var studentRep = this._unitOfWork.GetRepositoryAsync<Student>();
             var studentACRep = this._unitOfWork.GetRepositoryAsync<StudentAchievement>();
             var student = await studentRep.Single(i => i.Id == id);
@@ -168,9 +196,11 @@
             }
 
             var studentACs = await studentACRep.QueryCondition(x => x.StudentId == student.Id);
+            var user = await userRep.Single(x => x.Id == student.UserId);
 
             await studentACRep.Delete(studentACs.ToList());
             await studentRep.Delete(student);
+            await userRep.Delete(user);
             await this._unitOfWork.SaveChangesAsync();
 
             return string.Format(Messages.DeleteSuccess, GlobalConstants.Menu.Student);

@@ -143,6 +143,11 @@
             try
             {
                 var result = await this._surveyTemplateService.Delete(id);
+                if (result.StartsWith("Không thể"))
+                {
+                    response.Type = GlobalConstants.Error;
+                }
+
                 response.Message = result;
                 return response;
             }

@@ -34,5 +34,7 @@
         public string? JobTitle { get; set; }
 
         public virtual ICollection<StudentAchievement>? StudentAchievements { get; set; }
+
+        public virtual ICollection<Contribute>? Contributes { get; set; }
     }
 }

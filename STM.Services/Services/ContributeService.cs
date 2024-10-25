@@ -26,7 +26,7 @@
         {
             var queryContribute = await this._unitOfWork.GetRepositoryReadOnlyAsync<Contribute>().QueryAll();
 
-            queryContribute = queryContribute.Include(x => x.Student);
+            queryContribute = queryContribute.Include(x => x.Student).ThenInclude(x => x.User);
 
             if (!string.IsNullOrEmpty(dto.FullName))
             {
@@ -41,7 +41,7 @@
 
             if (dto.Amount.HasValue)
             {
-                queryContribute = queryContribute.Where(x => x.Amount == dto.Amount);
+                queryContribute = queryContribute.Where(x => x.Amount <= dto.Amount);
             }
 
             if (dto.Status.HasValue)
@@ -53,6 +53,9 @@
             {
                 Id = x.Id,
                 Status = x.Status,
+                Type = x.Type,
+                Amount = x.Amount,
+                FullName = x.Student.User.IsAdmin ? "Admin" : x.Student.FullName,
                 CreatedAt = x.CreatedAt,
             });
 

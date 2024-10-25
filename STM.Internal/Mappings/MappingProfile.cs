@@ -91,10 +91,12 @@
             this.CreateMap<MajorDto, MajorResponseDto>();
 
             // Student
+            this.CreateMap<StudentContributeDto, StudentContributeResponseDto>();
             this.CreateMap<StudentSaveRequestDto, StudentSaveDto>();
             this.CreateMap<StudentSearchRequestDto, StudentSearchDto>();
             this.CreateMap<Student, StudentDto>().ForMember(x => x.MajorName, m => m.MapFrom(s => s.MajorId.HasValue ? s.Major.Name : string.Empty))
-                .ForMember(x => x.CountArchievement, opt => opt.MapFrom(x => x.StudentAchievements.Count));
+                .ForMember(x => x.CountArchievement, opt => opt.MapFrom(x => x.StudentAchievements.Count))
+                .ForMember(x => x.CountContribute, opt => opt.MapFrom(x => x.Contributes.Count));
             this.CreateMap<StudentDto, StudentResponseDto>();
 
             // Student achievement

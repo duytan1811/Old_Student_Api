@@ -231,6 +231,7 @@
             student.Email = dto.Email;
 
             await studentRep.Update(student);
+
             var result = await this._userManager.UpdateAsync(user);
             await this._unitOfWork.SaveChangesAsync();
 

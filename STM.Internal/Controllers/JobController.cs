@@ -41,6 +41,7 @@
                 }
 
                 var searchDto = this.Mapper.Map<JobSearchDto>(request.SearchParams);
+                searchDto.Column = ColumnNames.CreatedAt;
                 searchDto.CurrentUserId = this.UserLogin.Id;
 
                 var allItems = await this._jobService.Search(searchDto);

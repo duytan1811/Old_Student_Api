@@ -12,5 +12,8 @@
 
         [Display(Name = "Chương trình từ thiện", Order = 3)]
         CharityProgram = 3,
+
+        [Display(Name = "Khen thưởng", Order = 4)]
+        Reward = 4,
     }
 }

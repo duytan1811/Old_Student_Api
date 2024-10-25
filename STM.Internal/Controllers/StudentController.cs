@@ -88,6 +88,34 @@
             }
         }
 
+        [HttpGet("{id}/contributes")]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        public async Task<BaseResponse<List<StudentContributeResponseDto>>> GetContributes(Guid id)
+        {
+            var response = new BaseResponse<List<StudentContributeResponseDto>>();
+
+            try
+            {
+                var result = await this._studentService.GetContributes(id);
+
+                if (result == null)
+                {
+                    response.Message = Messages.NotFound;
+                    return response;
+                }
+
+                response.Data = this.Mapper.Map<List<StudentContributeResponseDto>>(result);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, ex.Message);
+                response.Type = GlobalConstants.Error;
+                response.Message = Messages.Exception;
+                return response;
+            }
+        }
+
         [HttpPost]
         [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Create })]
         public async Task<BaseResponse<string>> Create(StudentSaveRequestDto request)
