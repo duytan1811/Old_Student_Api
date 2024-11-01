@@ -5,7 +5,6 @@
 
     public class StudentDto : BaseDto
     {
-
         public Guid? UserId { get; set; }
 
         public Guid? MajorId { get; set; }
@@ -30,7 +29,9 @@
 
         public string? JobTitle { get; set; }
 
-        public string MajorName { get; set; }
+        public string? MajorName { get; set; }
+
+        public string? AvatarBase64 { get; set; }
 
         public int? CountArchievement { get; set; }
 

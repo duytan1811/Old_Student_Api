@@ -1,9 +1,11 @@
 ﻿namespace STM.Services.Services
 {
     using AutoMapper;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using STM.Common.Constants;
     using STM.Common.Enums;
+    using STM.Common.Utilities;
     using STM.DataTranferObjects.Students;
     using STM.Entities.Models;
     using STM.Repositories;
@@ -13,13 +15,16 @@
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public StudentService(
             IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor)
         {
             this._unitOfWork = unitOfWork;
             this._mapper = mapper;
+            this._httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IQueryable<StudentDto>> Search(StudentSearchDto dto)
@@ -58,15 +63,18 @@
                 queryStudent = queryStudent.Where(x => x.Status == dto.Status);
             }
 
+            var hostName = this.GetHostName();
             var query = queryStudent.OrderBy(x => x.CreatedAt).Select(x => new StudentDto
             {
                 Id = x.Id,
+                Avatar = x.Avatar,
                 FullName = x.FullName,
                 Phone = x.Phone,
                 MajorName = x.MajorId.HasValue ? x.Major.Name : string.Empty,
                 SchoolYear = x.SchoolYear,
                 YearOfGraduation = x.YearOfGraduation,
                 Status = x.Status,
+                AvatarBase64 = !string.IsNullOrEmpty(x.Avatar) ? Utils.ConvertToBase64(x.Avatar) : string.Empty,
                 CreatedAt = x.CreatedAt,
                 CountArchievement = x.StudentAchievements.Count(),
                 CountContribute = x.Contributes.Count(),
@@ -90,6 +98,11 @@
             }
 
             var result = this._mapper.Map<StudentDto>(student);
+            if (!string.IsNullOrEmpty(student.Avatar))
+            {
+                result.AvatarBase64 = Utils.ConvertToBase64(student.Avatar);
+            }
+
             result.CountArchievement = student.StudentAchievements.Count;
 
             return result;
@@ -171,6 +184,16 @@
             student.Status = dto.Status;
             student.JobTitle = dto.JobTitle;
 
+            if (!string.IsNullOrEmpty(dto.FileBase64))
+            {
+                var folderPath = $"{GlobalConstants.ResourceFolder}/{GlobalConstants.UploadAvatar}";
+                Utils.CreateFolder(folderPath);
+                var filePath = $"{folderPath}/{dto.FileName}";
+                student.Avatar = filePath;
+
+                Utils.ConvertBase64ToFile(dto.FileBase64, filePath);
+            }
+
             DateTime birthday;
             if (!string.IsNullOrEmpty(dto.BirthdayFormat) && DateTime.TryParse(dto.BirthdayFormat, out birthday))
             {
@@ -204,6 +227,13 @@
             await this._unitOfWork.SaveChangesAsync();
 
             return string.Format(Messages.DeleteSuccess, GlobalConstants.Menu.Student);
+        }
+
+        private string? GetHostName()
+        {
+            var context = this._httpContextAccessor.HttpContext;
+            var hostName = context?.Request.Host.Value;
+            return hostName ?? null;
         }
     }
 }

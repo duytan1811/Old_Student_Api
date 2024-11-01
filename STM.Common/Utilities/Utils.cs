@@ -7,6 +7,7 @@
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
 
     public static class Utils
@@ -180,13 +181,23 @@
             return Convert.ToBase64String(bytes);
         }
 
+        public static string? ConvertToBase64(string? filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return null;
+            }
+
+            byte[] bytes = File.ReadAllBytes(filePath);
+            return Convert.ToBase64String(bytes);
+        }
+
         public static void CreateFolder(string folderPath)
         {
             if (!Directory.Exists(folderPath))
             {
                 DirectoryInfo dir = Directory.CreateDirectory(folderPath);
 
-                // Set full access permissions for "Everyone"
                 DirectorySecurity security = dir.GetAccessControl();
                 security.AddAccessRule(new FileSystemAccessRule(
                     "Everyone",

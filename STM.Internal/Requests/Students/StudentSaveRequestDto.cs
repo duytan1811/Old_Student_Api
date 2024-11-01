@@ -12,8 +12,6 @@
 
         public int? Gender { get; set; }
 
-        public string? Avatar { get; set; }
-
         public string? Email { get; set; }
 
         public string? Phone { get; set; }
@@ -25,5 +23,9 @@
         public string? CurrentCompany { get; set; }
 
         public string? JobTitle { get; set; }
+
+        public string? FileName { get; set; }
+
+        public string? FileBase64 { get; set; }
     }
 }
