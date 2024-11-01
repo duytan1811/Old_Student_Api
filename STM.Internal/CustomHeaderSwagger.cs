@@ -1,6 +1,5 @@
 ﻿namespace STM.API
 {
-    using Microsoft.OpenApi.Any;
     using Microsoft.OpenApi.Models;
     using STM.Common.Constants;
     using Swashbuckle.AspNetCore.SwaggerGen;
@@ -21,18 +20,6 @@
             {
                 operation.Parameters = new List<OpenApiParameter>();
             }
-
-            operation.Parameters.Add(new OpenApiParameter
-            {
-                Name = configAPIKey,
-                In = ParameterLocation.Header,
-                Required = true,
-                Schema = new OpenApiSchema
-                {
-                    Type = "string",
-                    Default = new OpenApiString(configAPIKeyValue),
-                },
-            });
         }
     }
 }

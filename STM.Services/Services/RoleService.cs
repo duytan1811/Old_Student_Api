@@ -183,7 +183,7 @@
             return ActionStatusEnum.Success;
         }
 
-        public async Task<bool> HasPermission(Guid userId, string menuKey, string permission)
+        public async Task<bool> HasPermission(Guid userId, string claimType, string claimValue)
         {
             var user = await this._unitOfWork.GetRepositoryReadOnlyAsync<User>().Single(i => i.Id == userId);
 
@@ -198,10 +198,13 @@
             }
 
             var queryRole = await this._unitOfWork.GetRepositoryReadOnlyAsync<Role>().QueryAll();
+            var queryRoleClaim = await this._unitOfWork.GetRepositoryReadOnlyAsync<RoleClaim>().QueryAll();
             var queryUserRole = await this._unitOfWork.GetRepositoryReadOnlyAsync<UserRole>().QueryCondition(i => i.UserId == user.Id && i.IsActive == true);
 
             var query = from r in queryRole
                         join ur in queryUserRole on r.Id equals ur.RoleId
+                        join rc in queryRoleClaim on r.Id equals rc.RoleId
+                        where rc.ClaimType == claimType && rc.ClaimValue == claimValue
                         select new
                         {
                             Id = r.Id,

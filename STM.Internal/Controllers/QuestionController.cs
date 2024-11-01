@@ -28,7 +28,7 @@
         }
 
         [HttpPost("search")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Question), PermissionConstants.View })]
         public async Task<BaseTableResponse<QuestionResponseDto>> Search(BaseSearchRequest<QuestionSearchRequestDto> request)
         {
             var response = new BaseTableResponse<QuestionResponseDto>();
@@ -61,7 +61,7 @@
         }
 
         [HttpGet("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Question), PermissionConstants.View })]
         public async Task<BaseResponse<QuestionResponseDto>> FindById(Guid id)
         {
             var response = new BaseResponse<QuestionResponseDto>();
@@ -89,7 +89,7 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Create })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Question), PermissionConstants.Create })]
         public async Task<BaseResponse<string>> Create(QuestionSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
@@ -111,7 +111,7 @@
         }
 
         [HttpPut("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Question), PermissionConstants.Edit })]
         public async Task<BaseResponse<string>> Update(string id, QuestionSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
@@ -135,7 +135,7 @@
         }
 
         [HttpDelete("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Question), PermissionConstants.Delete })]
         public async Task<BaseResponse<string>> Delete(Guid id)
         {
             var response = new BaseResponse<string>();

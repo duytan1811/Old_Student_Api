@@ -17,15 +17,15 @@
     {
         private readonly ILogger<PermissionFilter> _logger;
         private readonly IRoleService _roleService;
-        private readonly string _menuKey;
-        private readonly string _permission;
+        private readonly string _claimType;
+        private readonly string _claimValue;
 
-        public PermissionFilter(ILogger<PermissionFilter> logger, IRoleService roleService, string menuKey, string permission)
+        public PermissionFilter(ILogger<PermissionFilter> logger, IRoleService roleService, string claimType, string claimValue)
         {
             this._logger = logger;
             this._roleService = roleService;
-            this._menuKey = menuKey;
-            this._permission = permission;
+            this._claimType = claimType;
+            this._claimValue = claimValue;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -37,7 +37,7 @@
             try
             {
                 var tokenEncodedString = context.HttpContext.Request.Headers["Authorization"].ToString();
-                var token = new JwtSecurityToken(tokenEncodedString.Substring(7)); // trim 'Bearer ' from the start since its just a prefix for the token string
+                var token = new JwtSecurityToken(tokenEncodedString.Substring(7));
                 var userInfo = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
 
                 if (string.IsNullOrEmpty(userInfo))
@@ -48,14 +48,14 @@
 
                 CurrentUserViewModel userInfoViewModel = JsonConvert.DeserializeObject<CurrentUserViewModel>(userInfo);
 
-                var hasPermission = this._roleService.HasPermission(userInfoViewModel.Id, this._menuKey, this._permission).GetAwaiter().GetResult();
+                var hasPermission = this._roleService.HasPermission(userInfoViewModel.Id, this._claimType, this._claimValue).GetAwaiter().GetResult();
 
                 if (!hasPermission)
                 {
                     context.Result = new JsonResult(new BaseResponse<bool>
                     {
                         Type = GlobalConstants.Error,
-                        Message = "AccessDenied",
+                        Message = "Bạn chưa có quyền truy cập",
                     });
                 }
             }

@@ -29,7 +29,7 @@
         }
 
         [HttpPost("search")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.User, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.User), PermissionConstants.View })]
         public async Task<BaseTableResponse<UserResponse>> Search(BaseSearchRequest<UserSearchRequest> request)
         {
             var response = new BaseTableResponse<UserResponse>();
@@ -60,7 +60,7 @@
         }
 
         [HttpGet("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.User, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.User), PermissionConstants.View })]
         public async Task<BaseResponse<UserResponse>> FindById(string id)
         {
             var response = new BaseResponse<UserResponse>();
@@ -89,7 +89,7 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.User, PermissionConstants.Create })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.User), PermissionConstants.Create })]
         public async Task<BaseResponse<ActionStatusEnum>> Create(UserSaveRequest request)
         {
             var response = new BaseResponse<ActionStatusEnum>();
@@ -126,7 +126,7 @@
         }
 
         [HttpPut("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.User, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.User), PermissionConstants.Edit })]
         public async Task<BaseResponse<ActionStatusEnum>> Update(string id, UserSaveRequest request)
         {
             var response = new BaseResponse<ActionStatusEnum>();
@@ -157,7 +157,7 @@
         }
 
         [HttpDelete("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.User, PermissionConstants.Delete })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.User), PermissionConstants.Delete })]
         public async Task<BaseResponse<ActionStatusEnum>> Delete(Guid id)
         {
             var response = new BaseResponse<ActionStatusEnum>();
@@ -186,7 +186,7 @@
         }
 
         [HttpPost("{id}/change-password")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.User, PermissionConstants.Delete })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.User), PermissionConstants.Edit })]
         public async Task<BaseResponse<ActionStatusEnum>> ChangePassword(Guid id, ChangePasswordRequestDto request)
         {
             var response = new BaseResponse<ActionStatusEnum>();
@@ -230,7 +230,7 @@
         }
 
         [HttpGet("export-excel")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
         public async Task<BaseResponse<string>> ExportExcel([FromForm] BaseSearchRequest<UserSearchRequest> request)
         {
             var response = new BaseResponse<string>();

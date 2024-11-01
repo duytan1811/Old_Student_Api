@@ -28,7 +28,7 @@
         }
 
         [HttpPost("search")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.News), PermissionConstants.View })]
         public async Task<BaseTableResponse<NewsResponseDto>> Search(BaseSearchRequest<NewsSearchRequestDto> request)
         {
             var response = new BaseTableResponse<NewsResponseDto>();
@@ -61,7 +61,7 @@
         }
 
         [HttpGet("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.News), PermissionConstants.View })]
         public async Task<BaseResponse<NewsResponseDto>> FindById(Guid id)
         {
             var response = new BaseResponse<NewsResponseDto>();
@@ -89,7 +89,7 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Create })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.News), PermissionConstants.Create })]
         public async Task<BaseResponse<string>> Create(NewsSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
@@ -112,7 +112,7 @@
         }
 
         [HttpPut("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.News), PermissionConstants.Edit })]
         public async Task<BaseResponse<string>> Update(string id, NewsSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
@@ -136,7 +136,7 @@
         }
 
         [HttpGet("{id}/like")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.News), PermissionConstants.View })]
         public async Task<BaseResponse<string>> Like(Guid id)
         {
             var response = new BaseResponse<string>();
@@ -159,7 +159,7 @@
         }
 
         [HttpPost("{id}/comments/search")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.News), PermissionConstants.Edit })]
         public async Task<BaseTableResponse<CommentResponseDto>> GetComments(BaseSearchRequest<CommentSearchRequestDto> request)
         {
             var response = new BaseTableResponse<CommentResponseDto>();
@@ -192,7 +192,7 @@
         }
 
         [HttpPost("{id}/comments")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.News), PermissionConstants.Edit })]
         public async Task<BaseResponse<string>> Comment(CommentSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
@@ -218,7 +218,7 @@
         }
 
         [HttpGet("{id}/confirm")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.News), PermissionConstants.Edit })]
         public async Task<BaseResponse<string>> Confirm(Guid id)
         {
             var response = new BaseResponse<string>();
@@ -240,7 +240,7 @@
         }
 
         [HttpDelete("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.News), PermissionConstants.Delete })]
         public async Task<BaseResponse<string>> Delete(Guid id)
         {
             var response = new BaseResponse<string>();
@@ -261,7 +261,7 @@
         }
 
         [HttpGet("export-excel")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.News), PermissionConstants.View })]
         public async Task<BaseResponse<string>> ExportExcel([FromForm] BaseSearchRequest<NewsSearchRequestDto> request)
         {
             var response = new BaseResponse<string>();

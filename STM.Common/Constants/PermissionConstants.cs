@@ -2,9 +2,9 @@
 {
     public static class PermissionConstants
     {
-        public const string View = "view";
-        public const string Create = "create";
-        public const string Edit = "edit";
-        public const string Delete = "delete";
+        public const string View = "1";
+        public const string Create = "2";
+        public const string Edit = "3";
+        public const string Delete = "4";
     }
 }

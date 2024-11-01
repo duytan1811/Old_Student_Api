@@ -28,7 +28,7 @@
         }
 
         [HttpPost("search")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Student), PermissionConstants.View })]
         public async Task<BaseTableResponse<StudentAchievementResponseDto>> Search(BaseSearchRequest<StudentAchievementSearchRequestDto> request)
         {
             var response = new BaseTableResponse<StudentAchievementResponseDto>();
@@ -61,7 +61,7 @@
         }
 
         [HttpGet("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Student), PermissionConstants.View })]
         public async Task<BaseResponse<StudentAchievementResponseDto>> FindById(Guid id)
         {
             var response = new BaseResponse<StudentAchievementResponseDto>();
@@ -89,7 +89,7 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Create })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Student), PermissionConstants.Create })]
         public async Task<BaseResponse<string>> Create(StudentAchievementSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
@@ -111,7 +111,7 @@
         }
 
         [HttpPut("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Student), PermissionConstants.Edit })]
         public async Task<BaseResponse<string>> Update(string id, StudentAchievementSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
@@ -135,7 +135,7 @@
         }
 
         [HttpDelete("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Student), PermissionConstants.Delete })]
         public async Task<BaseResponse<string>> Delete(Guid id)
         {
             var response = new BaseResponse<string>();

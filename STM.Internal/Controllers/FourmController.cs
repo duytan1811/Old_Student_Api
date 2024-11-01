@@ -28,7 +28,7 @@
         }
 
         [HttpPost("search")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Forum), PermissionConstants.View })]
         public async Task<BaseTableResponse<FourmResponseDto>> Search(BaseSearchRequest<FourmSearchRequestDto> request)
         {
             var response = new BaseTableResponse<FourmResponseDto>();

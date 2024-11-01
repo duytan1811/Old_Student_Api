@@ -28,7 +28,7 @@
         }
 
         [HttpPost("search")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Job), PermissionConstants.View })]
         public async Task<BaseTableResponse<JobResponseDto>> Search(BaseSearchRequest<JobSearchRequestDto> request)
         {
             var response = new BaseTableResponse<JobResponseDto>();
@@ -63,7 +63,7 @@
         }
 
         [HttpPost("{id}/user-applies")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Job), PermissionConstants.View })]
         public async Task<BaseTableResponse<UserApplyResponseDto>> GetUserApplies(Guid id, BaseSearchRequest<UserApplySearchRequestDto> request)
         {
             var response = new BaseTableResponse<UserApplyResponseDto>();
@@ -96,7 +96,7 @@
         }
 
         [HttpGet("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Job), PermissionConstants.View })]
         public async Task<BaseResponse<JobResponseDto>> FindById(Guid id)
         {
             var response = new BaseResponse<JobResponseDto>();
@@ -124,7 +124,7 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Create })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Job), PermissionConstants.Create })]
         public async Task<BaseResponse<string>> Create(JobSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
@@ -146,7 +146,7 @@
         }
 
         [HttpPut("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Job), PermissionConstants.Edit })]
         public async Task<BaseResponse<string>> Update(Guid id, JobSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
@@ -170,7 +170,7 @@
         }
 
         [HttpDelete("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Job), PermissionConstants.Delete })]
         public async Task<BaseResponse<string>> Delete(Guid id)
         {
             var response = new BaseResponse<string>();
@@ -191,7 +191,7 @@
         }
 
         [HttpPost("{id}/apply-job")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Job), PermissionConstants.Create })]
         public async Task<BaseResponse<string>> ApplyJob(Guid id, ApplyJobSaveRequestDto request)
         {
             var response = new BaseResponse<string>();

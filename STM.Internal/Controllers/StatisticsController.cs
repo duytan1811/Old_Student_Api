@@ -25,7 +25,7 @@
         }
 
         [HttpGet("event-by-month")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.StatisticsEvents), PermissionConstants.View })]
         public async Task<BaseResponse<List<EventByMonthResponseDto>>> GetEventByMonth()
         {
             var response = new BaseResponse<List<EventByMonthResponseDto>>();
@@ -47,7 +47,7 @@
         }
 
         [HttpGet("member-by-month")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.StatisticsMembers), PermissionConstants.View })]
         public async Task<BaseResponse<List<MemberByMonthResponseDto>>> GetMemberByMonth()
         {
             var response = new BaseResponse<List<MemberByMonthResponseDto>>();
@@ -69,7 +69,7 @@
         }
 
         [HttpGet("news-by-month")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.News), PermissionConstants.View })]
         public async Task<BaseResponse<List<NewsByMonthResponseDto>>> GetNewsByMonth()
         {
             var response = new BaseResponse<List<NewsByMonthResponseDto>>();
@@ -91,7 +91,7 @@
         }
 
         [HttpGet("student-by-major")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.StatisticsMembers), PermissionConstants.View })]
         public async Task<BaseResponse<List<StudentByMajorResponseDto>>> GetStudentByMajor()
         {
             var response = new BaseResponse<List<StudentByMajorResponseDto>>();
@@ -113,7 +113,7 @@
         }
 
         [HttpGet("student-by-year")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.StatisticsMembers), PermissionConstants.View })]
         public async Task<BaseResponse<List<StudentByYearResponseDto>>> GetStudentByYear()
         {
             var response = new BaseResponse<List<StudentByYearResponseDto>>();

@@ -28,7 +28,7 @@
         }
 
         [HttpPost("search")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Survey), PermissionConstants.View })]
         public async Task<BaseTableResponse<SurveyResponseDto>> Search(BaseSearchRequest<SurveySearchRequestDto> request)
         {
             var response = new BaseTableResponse<SurveyResponseDto>();
@@ -62,7 +62,7 @@
         }
 
         [HttpPost("{surveyId}/survey-results")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Survey), PermissionConstants.View })]
         public async Task<BaseTableResponse<SurveyResultResponseDto>> SearchSurveyResults(Guid surveyId, BaseSearchRequest<SurveyResultSearchRequestDto> request)
         {
             var response = new BaseTableResponse<SurveyResultResponseDto>();
@@ -97,7 +97,7 @@
         }
 
         [HttpGet("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Survey), PermissionConstants.View })]
         public async Task<BaseResponse<SurveyResponseDto>> FindById(Guid id)
         {
             var response = new BaseResponse<SurveyResponseDto>();
@@ -125,7 +125,7 @@
         }
 
         [HttpGet("{surveyId}/survey-results/{userId}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.View })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Survey), PermissionConstants.View })]
         public async Task<BaseResponse<SurveyResultDetailResponseDto>> GetSurveyDetail(Guid surveyId, Guid userId)
         {
             var response = new BaseResponse<SurveyResultDetailResponseDto>();
@@ -153,7 +153,7 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Create })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Survey), PermissionConstants.Create })]
         public async Task<BaseResponse<string>> Create(SurveySaveRequestDto request)
         {
             var response = new BaseResponse<string>();
@@ -175,7 +175,7 @@
         }
 
         [HttpPut("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Edit })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Survey), PermissionConstants.Edit })]
         public async Task<BaseResponse<string>> Update(string id, SurveySaveRequestDto request)
         {
             var response = new BaseResponse<string>();
@@ -199,7 +199,7 @@
         }
 
         [HttpDelete("{id}")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Survey), PermissionConstants.Delete })]
         public async Task<BaseResponse<string>> Delete(Guid id)
         {
             var response = new BaseResponse<string>();
@@ -225,7 +225,7 @@
         }
 
         [HttpPost("{id}/survey-result")]
-        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { MenuConstants.Setting, PermissionConstants.Delete })]
+        [TypeFilter(typeof(PermissionFilter), Arguments = new object[] { nameof(MenuConstants.Survey), PermissionConstants.Edit })]
         public async Task<BaseResponse<string>> SaveSurveyResult(Guid id, SurveyResultSaveRequestDto request)
         {
             var response = new BaseResponse<string>();
